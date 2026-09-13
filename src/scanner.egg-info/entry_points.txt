@@ -1,0 +1,3 @@
+[console_scripts]
+scanner = scanner.interfaces.cli:app
+scanner-ui = scanner.ui.streamlit_app:main

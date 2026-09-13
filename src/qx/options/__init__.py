@@ -1,0 +1,1 @@
+"""Options idea generation modules."""

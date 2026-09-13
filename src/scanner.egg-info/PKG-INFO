@@ -1,0 +1,167 @@
+Metadata-Version: 2.4
+Name: scanner
+Version: 0.1.0
+Summary: Modular scanner application
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: beautifulsoup4>=4.12
+Requires-Dist: numpy>=1.26
+Requires-Dist: pandas>=2.2
+Requires-Dist: plotly>=5.24
+Requires-Dist: pydantic>=2.7
+Requires-Dist: pydantic-settings>=2.2
+Requires-Dist: requests>=2.31
+Requires-Dist: typer>=0.12
+Requires-Dist: yfinance>=0.2
+Provides-Extra: app
+Requires-Dist: streamlit>=1.38; extra == "app"
+Provides-Extra: web
+Requires-Dist: fastapi>=0.115; extra == "web"
+Requires-Dist: uvicorn>=0.30; extra == "web"
+Provides-Extra: dev
+Requires-Dist: pandas-stubs>=2.2; extra == "dev"
+Requires-Dist: pytest>=8.2; extra == "dev"
+Requires-Dist: ruff>=0.5; extra == "dev"
+Requires-Dist: mypy>=1.10; extra == "dev"
+
+# Scanner
+
+Architecture-first stock breakout scanner project.
+
+This directory is the self-contained Scanner application within the CleanProject
+repository. Review `src/scanner/`, `tests/`, and `docs/` for the implementation.
+Local credentials, market data, databases, logs, and generated audit reports are
+excluded from version control. Use `.env.example` for configuration placeholders.
+
+For the current implementation status and known gaps, start with
+[Redesign progress](docs/redesign-progress.md). Passing tests are not evidence of
+trading profitability or complete live-provider coverage.
+
+## Purpose
+
+SCANNER is designed to identify stocks forming constructive rectangle bases that may be close to a breakout. The first target pattern is a 4 to 12-week consolidation with price compression, repeated support/resistance interaction, volume contraction, and proximity to resistance.
+
+This is research and tooling, not financial advice. Scanner output should be treated as a watchlist candidate generator, not a buy signal by itself.
+
+## Project Layout
+
+```text
+SCANNER/
+  src/scanner/          Application source code
+  tests/                Unit and integration tests
+  configs/              Environment and runtime configuration
+  docs/                 Requirements, architecture, and strategy notes
+  scripts/              Developer and operational scripts
+  data/                 Local input/output working data
+```
+
+## Core Boundaries
+
+- `interfaces/`: user-facing entry points such as CLI, API, and future UI.
+- `core/`: scanner orchestration, rule evaluation, and scoring workflow.
+- `processing/`: price, volume, volatility, and pattern feature extraction.
+- `adapters/`: market data providers, brokerage/charting exports, storage, and notifications.
+- `models/`: typed data structures shared across layers.
+
+## Key Docs
+
+- [Requirements](docs/requirements.md)
+- [Breakout Scanner Knowledge Base](docs/knowledge-base.md)
+- [ThinkScript Design](docs/thinkscript-design.md)
+- [Breakout Trigger Study](docs/breakout-trigger-study.md)
+- [Local Agent Architecture](docs/local-agent-architecture.md)
+- [Portability Plan](docs/portability.md)
+- [Deployment Plan](docs/deployment.md)
+- [Roadmap](docs/roadmap.md)
+- [Architecture](docs/architecture.md)
+- [UI Extension Guide](docs/ui-extension-guide.md)
+- [UI Design Standards](docs/ui-design-standards.md)
+- [Options Quality Engine](docs/options-quality-engine.md)
+- [QuantX Project Suite v5 Review](docs/reference/quantx_project_suite_v5/SCANNER_REVIEW.md)
+
+## ThinkScript Reference
+
+- [QX Institutional Rectangle Breakout Scanner](scripts/thinkscript/qx_institutional_rectangle_breakout_scanner.ts)
+- [QX Breakout Trigger Study](scripts/thinkscript/qx_breakout_trigger_study.ts)
+
+## Getting Started
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -e ".[dev]"
+pytest
+```
+
+## Run Locally
+
+Default data policy:
+
+- Schwab is the preferred market data source when credentials and token are configured.
+- yfinance remains the automatic fallback for daily bars and a cached fallback for fundamentals where Schwab does not expose the required field.
+- The rectangle scanner rules stay deterministic and provider-agnostic.
+
+CLI:
+
+```powershell
+scanner scan-yfinance AAPL MSFT NVDA
+```
+
+Classic rectangle profile:
+
+```powershell
+scanner scan-yfinance AAPL MSFT NVDA --period 2y --profile "Classic rectangle" --lookback 40 --max-range-pct 0.25
+```
+
+S&P 500 universe:
+
+```powershell
+scanner scan-universe --universe sp500 --period 2y --profile "Classic rectangle" --lookback 40 --max-range-pct 0.25 --min-score 0.60 --limit 50
+```
+
+Overnight cache preload:
+
+```powershell
+scanner warm-cache --universe sp500 --period 2y --refresh
+```
+
+Preload every supported universe:
+
+```powershell
+scanner warm-cache --universe all --period 2y --refresh
+```
+
+Check local cache coverage:
+
+```powershell
+scanner cache-status --universe sp500 --period 2y
+```
+
+CLI with exports:
+
+```powershell
+scanner scan-yfinance AAPL MSFT NVDA `
+  --output-csv data/exports/latest_scan.csv `
+  --output-scanner-results data/exports/scanner_results.csv `
+  --output-json data/exports/latest_scan.json `
+  --chart-dir data/exports/charts `
+  --database data/scanner.db
+```
+
+Backtest:
+
+```powershell
+scanner backtest-yfinance AAPL --period 2y --profile "Classic rectangle" --max-range-pct 0.25
+scanner backtest-universe --universe sp100 --period 2y --profile "Classic rectangle" --limit 25
+```
+
+Optional dashboard:
+
+```powershell
+pip install -e ".[app]"
+streamlit run src/scanner/ui/streamlit_app.py
+```
+
+Schwab setup and token lifecycle notes:
+
+- [Schwab OAuth Token Lifecycle](docs/reference/schwab-oauth-token-lifecycle.md)

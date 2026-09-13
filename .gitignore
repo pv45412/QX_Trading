@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Schwab tokens and secrets
+data/secrets/*
+!data/secrets/.gitkeep
+.env
+.env.local
+
+# Node
+node_modules/
+dist/
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+data/logs/
+data/cache/*
+!data/cache/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/exports/*
+!data/exports/.gitkeep
+
+# Databases & local cache stores
+*.db
+*.sqlite
+*.sqlite3
+data/*.db
+
+

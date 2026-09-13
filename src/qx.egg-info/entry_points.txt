@@ -1,0 +1,3 @@
+[console_scripts]
+qx-ui = qx.ui.streamlit_app:main
+scanner = qx.interfaces.cli:app

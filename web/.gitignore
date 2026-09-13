@@ -1,0 +1,12 @@
+node_modules/
+dist/
+
+# Local Playwright screenshots and structured browser-audit output.
+ai-audit/
+futures-audit/
+navigation-audit/
+refresh-audit/
+today-ai-audit/
+workspace-audit/
+*.png
+tests/*.png

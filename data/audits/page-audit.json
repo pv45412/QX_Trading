@@ -1,0 +1,369 @@
+[
+  {
+    "page": "Scanner",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Run Scan"
+    ],
+    "seconds": 31.46
+  },
+  {
+    "page": "Daily Workflow",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Build workflow"
+    ],
+    "seconds": 0.05
+  },
+  {
+    "page": "Command Center",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 5,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Check cache readiness",
+      "Refresh live",
+      "Run prep pipeline"
+    ],
+    "seconds": 0.15
+  },
+  {
+    "page": "Broad Watchlist",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Build Watchlist"
+    ],
+    "seconds": 0.02
+  },
+  {
+    "page": "Pipeline Control",
+    "views": [],
+    "errors": [],
+    "warnings": 1,
+    "error_messages": [],
+    "tables": 1,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Run full pipeline"
+    ],
+    "seconds": 0.04
+  },
+  {
+    "page": "Sector Rotation",
+    "views": [
+      {
+        "view": "Overview",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Money Flow Map",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Rotation Matrix",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Flow Map",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Breadth",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Heavyweights",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Sector Watchlist",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Heatmap",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "History",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Diagnostics",
+        "errors": [],
+        "error_messages": []
+      }
+    ],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 2,
+    "charts": 1,
+    "actions_not_clicked": [
+      "Refresh Sector Dashboard"
+    ],
+    "seconds": 3.32
+  },
+  {
+    "page": "Workflow History",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 2,
+    "charts": 0,
+    "actions_not_clicked": [],
+    "seconds": 0.13
+  },
+  {
+    "page": "Command Snapshots",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 7,
+    "charts": 0,
+    "actions_not_clicked": [],
+    "seconds": 0.27
+  },
+  {
+    "page": "Automation Control",
+    "views": [],
+    "errors": [],
+    "warnings": 1,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Run morning snapshot now",
+      "Run overnight workflow now",
+      "Create/update 4:30 AM task",
+      "Refresh task status"
+    ],
+    "seconds": 3.09
+  },
+  {
+    "page": "SPX / NQ Futures",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Build Dashboard"
+    ],
+    "seconds": 0.02
+  },
+  {
+    "page": "Liquidity Map",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Build Map"
+    ],
+    "seconds": 0.04
+  },
+  {
+    "page": "Options Ideas",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Build Ideas"
+    ],
+    "seconds": 0.04
+  },
+  {
+    "page": "Ticker History",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Load Ticker History"
+    ],
+    "seconds": 0.02
+  },
+  {
+    "page": "Options Flow",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Analyze Flow"
+    ],
+    "seconds": 0.19
+  },
+  {
+    "page": "Performance",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 2,
+    "charts": 0,
+    "actions_not_clicked": [],
+    "seconds": 0.03
+  },
+  {
+    "page": "Schwab API",
+    "views": [],
+    "errors": [],
+    "warnings": 1,
+    "error_messages": [],
+    "tables": 1,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Save Schwab credentials",
+      "Save Schwab token",
+      "Run Schwab health check"
+    ],
+    "seconds": 0.05
+  },
+  {
+    "page": "Strategy Rules",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 1,
+    "charts": 0,
+    "actions_not_clicked": [],
+    "seconds": 0.02
+  },
+  {
+    "page": "Strategy Lab",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Run strategy comparison"
+    ],
+    "seconds": 0.03
+  },
+  {
+    "page": "Data Cache",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 1,
+    "charts": 0,
+    "actions_not_clicked": [],
+    "seconds": 5.09
+  },
+  {
+    "page": "History",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 2,
+    "charts": 0,
+    "actions_not_clicked": [],
+    "seconds": 0.44
+  },
+  {
+    "page": "Morning Report",
+    "views": [
+      {
+        "view": "Top Candidates",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "New Candidates",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Improving Candidates",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Near Breakout",
+        "errors": [],
+        "error_messages": []
+      },
+      {
+        "view": "Extended Leaders",
+        "errors": [],
+        "error_messages": []
+      }
+    ],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 3,
+    "charts": 0,
+    "actions_not_clicked": [],
+    "seconds": 2.84
+  },
+  {
+    "page": "Heatmap",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 1,
+    "charts": 1,
+    "actions_not_clicked": [],
+    "seconds": 1.4
+  },
+  {
+    "page": "Backtest",
+    "views": [],
+    "errors": [],
+    "warnings": 0,
+    "error_messages": [],
+    "tables": 0,
+    "charts": 0,
+    "actions_not_clicked": [
+      "Run backtest"
+    ],
+    "seconds": 0.03
+  }
+]

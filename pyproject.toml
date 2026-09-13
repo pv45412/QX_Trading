@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qx"
+version = "0.1.0"
+description = "Modular scanner application"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "beautifulsoup4>=4.12",
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "pandas-market-calendars>=5,<6",
+  "plotly>=5.24",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.2",
+  "requests>=2.31",
+  "typer>=0.12",
+  "yfinance>=0.2",
+]
+
+[project.optional-dependencies]
+app = [
+  "streamlit>=1.38",
+]
+web = ["fastapi>=0.115", "uvicorn>=0.30"]
+dev = [
+  "pandas-stubs>=2.2",
+  "pytest>=8.2",
+  "ruff>=0.5",
+  "mypy>=1.10",
+]
+
+[project.scripts]
+scanner = "qx.interfaces.cli:app"
+qx-ui = "qx.ui.streamlit_app:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+scanner = ["ui/assets/*.js"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
