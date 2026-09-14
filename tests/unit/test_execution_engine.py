@@ -24,6 +24,8 @@ def test_order_submission_and_market_autofill():
         side=OrderSide.BUY,
         order_type=OrderType.MARKET,
         quantity=100.0,
+        publication_state="VERIFIED",
+        executable=True,
     )
     order = router.submit_order(req, current_market_price=150.0)
 
@@ -43,6 +45,8 @@ def test_limit_order_submission_and_manual_fill():
         order_type=OrderType.LIMIT,
         quantity=50.0,
         limit_price=120.0,
+        publication_state="VERIFIED",
+        executable=True,
     )
     order = router.submit_order(req)
     assert order.status == OrderStatus.SUBMITTED
@@ -61,6 +65,8 @@ def test_order_cancellation():
         order_type=OrderType.LIMIT,
         quantity=20.0,
         limit_price=400.0,
+        publication_state="VERIFIED",
+        executable=True,
     )
     order = router.submit_order(req)
     canceled = router.cancel_order(order.order_id)

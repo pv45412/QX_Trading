@@ -714,7 +714,17 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
                 },
             }
         except Exception as exc:
-            raise HTTPException(503, f"SPX Dashboard data unavailable: {exc}") from exc
+            session_info = get_current_market_session()
+            return {
+                "publication_state": "BLOCKED",
+                "executable": False,
+                "evidence_reason": f"SPX Dashboard market data unavailable: {exc}",
+                "as_of": session_info["as_of"],
+                "date": session_info["date"],
+                "timestamp_et": session_info["timestamp_et"],
+                "market_session": session_info["session"],
+                "session_label": session_info["session_label"],
+            }
 
     @app.get("/api/news-stream")
     def get_news_stream(symbol: str = "SPX") -> dict[str, Any]:

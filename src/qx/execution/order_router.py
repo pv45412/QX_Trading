@@ -65,20 +65,32 @@ class OrderRouter:
         return normalize_es_target_to_spx(es_target, live_basis)
 
     def validate_execution_eligibility(self, trade_object: dict[str, Any] | Any) -> tuple[bool, str]:
-        """Centralized execution rule: only VERIFIED trade objects can become executable order proposals."""
+        """Centralized fail-closed execution rule: only VERIFIED trade objects with executable=True can become executable order proposals.
+        
+        Fail-closed requirements:
+        - Missing publication_state => REJECT
+        - publication_state != VERIFIED => REJECT
+        - executable is not True => REJECT
+        """
         pub_state = None
-        executable = True
+        executable = None
+
         if isinstance(trade_object, dict):
             pub_state = trade_object.get("publication_state") or trade_object.get("state")
-            executable = trade_object.get("executable", True)
+            executable = trade_object.get("executable")
         elif hasattr(trade_object, "publication_state"):
-            pub_state = getattr(trade_object, "publication_state")
-            executable = getattr(trade_object, "executable", True)
+            pub_state = getattr(trade_object, "publication_state", None)
+            executable = getattr(trade_object, "executable", None)
 
-        if pub_state is not None and str(pub_state).upper() != "VERIFIED":
-            return False, f"Trade object is non-executable: publication_state is '{pub_state}'. Only VERIFIED trade objects are eligible for order execution."
-        if executable is False:
-            return False, "Trade object is explicitly marked executable=False. Only executable trade objects can become order proposals."
+        if not pub_state:
+            return False, "Order proposal rejected: publication_state is missing. Only VERIFIED trade objects are eligible for order execution."
+
+        if str(pub_state).strip().upper() != "VERIFIED":
+            return False, f"Order proposal rejected: publication_state is '{pub_state}' (must be 'VERIFIED'). Only VERIFIED trade objects are eligible for order execution."
+
+        if executable is not True:
+            return False, f"Order proposal rejected: executable flag is {executable} (must be True). Only VERIFIED trade objects with executable=True can become order proposals."
+
         return True, ""
 
     def submit_order(

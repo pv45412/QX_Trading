@@ -9,11 +9,22 @@ venv/
 ENV/
 env/
 
-# Schwab tokens and secrets
+# Schwab tokens, secrets, and credentials
+.env
+.env.*
+!.env.example
 data/secrets/*
 !data/secrets/.gitkeep
-.env
-.env.local
+schwab_token.json
+schwab_tokens.json
+tokens.json
+.schwab_tokens.json
+*.token
+*.secret
+*.pem
+*.key
+credentials.json
+
 
 # Node
 node_modules/

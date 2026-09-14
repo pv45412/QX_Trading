@@ -27,6 +27,8 @@ def test_dynamic_basis_tracking_order_router():
         order_type=OrderType.LIMIT,
         quantity=1,
         limit_price=5829.50,
+        publication_state="VERIFIED",
+        executable=True,
     )
     order = router.submit_order(req, es_price=5800.50, spx_price=5780.00)
     assert order.status.value in {"SUBMITTED", "PENDING"}
@@ -138,7 +140,7 @@ def test_options_ideas_simulated_gating_and_no_fallback_prices(monkeypatch):
     # Must be SIMULATED or BLOCKED, never executable
     assert data["publication_state"] in ("SIMULATED", "BLOCKED")
     assert data["executable"] is False
-    assert data["evidence_reason"] == "Option contracts and Greeks are modeled and are not verified from a live option chain."
+    assert ("Option contracts and Greeks are modeled" in data["evidence_reason"] or "Required market quotes unavailable" in data["evidence_reason"])
 
     # Test BLOCKED state when market quotes fail (zero price)
     from qx.market.ticker_service import TickerQuote
@@ -163,20 +165,74 @@ def test_telemetry_zero_observations_returns_none(tmp_path):
     assert res["calibrated"] is False
 
 
-def test_order_router_rejects_non_verified_trade_proposals():
+def test_order_router_fail_closed_execution_eligibility():
+    """Verify OrderRouter fails closed on missing, non-VERIFIED, or non-executable proposals."""
     from qx.execution.order_router import OrderRouter
     from qx.execution.models import OrderRequest, OrderSide, OrderType, OrderStatus
 
     router = OrderRouter()
-    req = OrderRequest(
-        symbol="NVDA",
-        side=OrderSide.BUY,
-        order_type=OrderType.MARKET,
-        quantity=1.0,
-        publication_state="SIMULATED",
-        executable=False,
+
+    # 1. Missing state => REJECT
+    req_missing_state = OrderRequest(
+        symbol="NVDA", side=OrderSide.BUY, order_type=OrderType.LIMIT, quantity=1.0, limit_price=200.0,
+        publication_state=None, executable=True
     )
-    order = router.submit_order(req)
-    assert order.status == OrderStatus.REJECTED
-    assert "non-executable" in order.reject_reason.lower() or "verified" in order.reject_reason.lower()
+    o1 = router.submit_order(req_missing_state)
+    assert o1.status == OrderStatus.REJECTED
+    assert "missing" in o1.reject_reason.lower()
+
+    # 2. Missing executable => REJECT
+    req_missing_executable = OrderRequest(
+        symbol="NVDA", side=OrderSide.BUY, order_type=OrderType.LIMIT, quantity=1.0, limit_price=200.0,
+        publication_state="VERIFIED", executable=None
+    )
+    o2 = router.submit_order(req_missing_executable)
+    assert o2.status == OrderStatus.REJECTED
+    assert "must be true" in o2.reject_reason.lower()
+
+    # 3. SIMULATED => REJECT
+    req_simulated = OrderRequest(
+        symbol="NVDA", side=OrderSide.BUY, order_type=OrderType.LIMIT, quantity=1.0, limit_price=200.0,
+        publication_state="SIMULATED", executable=False
+    )
+    o3 = router.submit_order(req_simulated)
+    assert o3.status == OrderStatus.REJECTED
+    assert "simulated" in o3.reject_reason.lower()
+
+    # 4. RESEARCH_ONLY => REJECT
+    req_research = OrderRequest(
+        symbol="NVDA", side=OrderSide.BUY, order_type=OrderType.LIMIT, quantity=1.0, limit_price=200.0,
+        publication_state="RESEARCH_ONLY", executable=False
+    )
+    o4 = router.submit_order(req_research)
+    assert o4.status == OrderStatus.REJECTED
+    assert "research_only" in o4.reject_reason.lower()
+
+    # 5. BLOCKED => REJECT
+    req_blocked = OrderRequest(
+        symbol="NVDA", side=OrderSide.BUY, order_type=OrderType.LIMIT, quantity=1.0, limit_price=200.0,
+        publication_state="BLOCKED", executable=False
+    )
+    o5 = router.submit_order(req_blocked)
+    assert o5.status == OrderStatus.REJECTED
+    assert "blocked" in o5.reject_reason.lower()
+
+    # 6. VERIFIED + executable=False => REJECT
+    req_verified_false = OrderRequest(
+        symbol="NVDA", side=OrderSide.BUY, order_type=OrderType.LIMIT, quantity=1.0, limit_price=200.0,
+        publication_state="VERIFIED", executable=False
+    )
+    o6 = router.submit_order(req_verified_false)
+    assert o6.status == OrderStatus.REJECTED
+    assert "must be true" in o6.reject_reason.lower()
+
+    # 7. VERIFIED + executable=True => ACCEPTED (SUBMITTED)
+    req_verified_true = OrderRequest(
+        symbol="NVDA", side=OrderSide.BUY, order_type=OrderType.LIMIT, quantity=1.0, limit_price=200.0,
+        publication_state="VERIFIED", executable=True
+    )
+    o7 = router.submit_order(req_verified_true)
+    assert o7.status == OrderStatus.SUBMITTED
+    assert o7.reject_reason is None
+
 

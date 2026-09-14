@@ -9,6 +9,8 @@ from decimal import Decimal, InvalidOperation, ROUND_HALF_UP, localcontext
 from pathlib import Path
 from uuid import uuid4
 
+from qx.storage.connection import connect_sqlite
+
 
 RECORD_TYPES = ("research", "paper", "live")
 _DECIMAL_FIELDS = ("entry_price", "exit_price", "quantity", "multiplier", "fees")
@@ -159,7 +161,7 @@ class SQLiteJournalRepository:
             for name in _ENTRY_COLUMNS
         )
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with closing(sqlite3.connect(self.database_path, timeout=10)) as connection:
+        with closing(connect_sqlite(self.database_path, timeout=10.0)) as connection:
             with connection:
                 connection.execute("""
                     CREATE TABLE IF NOT EXISTS journal_entries (
