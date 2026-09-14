@@ -47,6 +47,9 @@ class OrderRequest(BaseModel):
     bracket: BracketParameters | None = Field(default=None, description="Bracket stop-loss and take-profit parameters")
     time_in_force: Literal["DAY", "GTC", "IOC", "FOK"] = "DAY"
     notes: str | None = None
+    publication_state: str | None = None
+    executable: bool | None = None
+
 
 
 class ExecutionFill(BaseModel):

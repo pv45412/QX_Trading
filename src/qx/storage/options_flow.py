@@ -3,6 +3,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from qx.options_flow.models import OptionFlowAnalysis, OptionFlowTrade
+from qx.storage.connection import connect_sqlite
 
 
 class SQLiteOptionFlowRepository:
@@ -11,7 +12,7 @@ class SQLiteOptionFlowRepository:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS qx_option_flow_event (
@@ -41,7 +42,7 @@ class SQLiteOptionFlowRepository:
     def save_analysis(self, analysis: OptionFlowAnalysis) -> int:
         self.initialize()
         created_at = datetime.now(UTC).isoformat()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.executemany(
                 """
                 INSERT INTO qx_option_flow_event
@@ -88,7 +89,7 @@ class SQLiteOptionFlowRepository:
 
     def latest_trades(self, ticker: str, *, limit: int = 100) -> list[OptionFlowTrade]:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 """
                 SELECT payload_json

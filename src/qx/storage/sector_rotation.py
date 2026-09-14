@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from qx.market.sector_rotation import SectorRotationResult
+from qx.storage.connection import connect_sqlite
 
 
 @dataclass(frozen=True)
@@ -39,7 +40,7 @@ class SQLiteSectorRotationRepository:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS sector_rotation_snapshots (
@@ -70,7 +71,7 @@ class SQLiteSectorRotationRepository:
             "failures": result.failures,
             "extras": extras or {},
         }
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             cursor = connection.execute(
                 """
                 INSERT INTO sector_rotation_snapshots
@@ -96,7 +97,7 @@ class SQLiteSectorRotationRepository:
 
     def list_snapshots(self, limit: int = 10) -> list[StoredSectorRotationSnapshot]:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 """
                 SELECT id, created_at, source, period, data_source, leaders, payload_json

@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from qx.reports.daily_workflow import DailyWorkflowReport
+from qx.storage.connection import connect_sqlite
 
 
 @dataclass(frozen=True)
@@ -39,7 +40,7 @@ class SQLiteWorkflowRepository:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS workflow_runs (
@@ -57,7 +58,7 @@ class SQLiteWorkflowRepository:
     def save(self, report: DailyWorkflowReport) -> int:
         self.initialize()
         payload = workflow_report_payload(report)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             cursor = connection.execute(
                 """
                 INSERT INTO workflow_runs
@@ -79,7 +80,7 @@ class SQLiteWorkflowRepository:
 
     def list_runs(self, limit: int = 10) -> list[StoredWorkflowRun]:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 """
                 SELECT id, created_at, regime_label, risk_level, top_sectors, top_symbols, payload_json

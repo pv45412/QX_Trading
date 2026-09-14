@@ -1,10 +1,12 @@
 import json
 import sqlite3
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime, time
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-from zoneinfo import ZoneInfo
+
+from qx.command_center.models import CommandCenter
+from qx.storage.connection import connect_sqlite
 
 from qx.reports.command_center import CommandCenter
 
@@ -58,7 +60,7 @@ class SQLiteCommandCenterSnapshotRepository:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS command_center_snapshots (
@@ -89,7 +91,7 @@ class SQLiteCommandCenterSnapshotRepository:
         payload = command_center_payload(center, metadata)
         created_at = datetime.now(UTC).isoformat()
         option_ideas_count = len(center.option_ideas) + len(center.directional_option_ideas)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             cursor = connection.execute(
                 """
                 INSERT INTO command_center_snapshots (
@@ -145,7 +147,7 @@ class SQLiteCommandCenterSnapshotRepository:
             clauses.append("id < ?")
             values.append(before_id)
         where = " WHERE " + " AND ".join(clauses) if clauses else ""
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 f"""
                 SELECT

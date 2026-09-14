@@ -10,6 +10,7 @@ import pandas as pd
 from qx.models.market import BarDataRequest
 from qx.options.ideas import OptionIdea
 from qx.data.providers import MarketDataProvider
+from qx.storage.connection import connect_sqlite
 
 
 @dataclass(frozen=True)
@@ -46,7 +47,7 @@ class SQLiteOptionIdeaRepository:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS option_ideas (
@@ -82,7 +83,7 @@ class SQLiteOptionIdeaRepository:
     def save_ideas(self, ideas: list[OptionIdea], *, status: str = "Watch") -> int:
         self.initialize()
         created_at = datetime.now(UTC).isoformat()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.executemany(
                 """
                 INSERT INTO option_ideas (
@@ -113,7 +114,7 @@ class SQLiteOptionIdeaRepository:
     def tracking_counts(self) -> dict[str, int]:
         """Count saved IDs and snapshots independently of the displayed page."""
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             row = connection.execute(
                 """
                 SELECT (SELECT COUNT(*) FROM option_ideas),
@@ -141,7 +142,7 @@ class SQLiteOptionIdeaRepository:
         else:
             params = (limit, offset)
         query += " ORDER BY id DESC LIMIT ? OFFSET ?"
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(query, params).fetchall()
         return [
             StoredOptionIdea(
@@ -163,7 +164,7 @@ class SQLiteOptionIdeaRepository:
 
     def mark_status(self, idea_id: int, status: str) -> None:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute("UPDATE option_ideas SET status = ? WHERE id = ?", (status, idea_id))
 
     def update_performance(
@@ -194,7 +195,7 @@ class SQLiteOptionIdeaRepository:
                     price_results.append(result)
 
         updated = 0
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             for idea, latest_price in price_results:
                 return_pct = (latest_price / idea.entry_underlying_price) - 1.0
                 now = datetime.now(UTC).isoformat()
@@ -236,7 +237,7 @@ class SQLiteOptionIdeaRepository:
         else:
             params = (limit, offset)
         query += " ORDER BY id DESC LIMIT ? OFFSET ?"
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(query, params).fetchall()
         return [
             StoredOptionIdeaPerformance(

@@ -3,9 +3,11 @@ from __future__ import annotations
 import json
 import sqlite3
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
+
+from qx.storage.connection import connect_sqlite
 
 
 @dataclass(frozen=True)
@@ -43,7 +45,7 @@ class SQLiteWatchlistRepository:
         now = _utc_now()
         status_value = (status or "").strip()
         context_json = _context_json(context)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 INSERT INTO watchlist_symbols (
@@ -70,7 +72,7 @@ class SQLiteWatchlistRepository:
         return [entry.symbol for entry in self.list_entries(list_name=list_name, limit=limit)]
 
     def list_entries(self, *, list_name: str = "scanner_review", limit: int = 250) -> list[StoredWatchlistSymbol]:
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 """
                 SELECT id, list_name, symbol, source, status, notes, context_json, created_at, updated_at
@@ -97,7 +99,7 @@ class SQLiteWatchlistRepository:
         ]
 
     def _init_schema(self) -> None:
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS watchlist_symbols (

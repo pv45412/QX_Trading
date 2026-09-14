@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 from qx.models.scan import RectangleScanParameters, ScanCandidate
+from qx.storage.connection import connect_sqlite
 
 FEATURE_CACHE_VERSION = "rectangle-v5-valid-proximity"
 
@@ -28,7 +29,7 @@ class SQLiteFeatureCache:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS rectangle_features (
@@ -45,7 +46,7 @@ class SQLiteFeatureCache:
 
     def get(self, key: FeatureCacheKey) -> ScanCandidate | None:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             row = connection.execute(
                 """
                 SELECT candidate_json
@@ -63,7 +64,7 @@ class SQLiteFeatureCache:
 
     def set(self, key: FeatureCacheKey, candidate: ScanCandidate) -> None:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 INSERT OR REPLACE INTO rectangle_features
@@ -82,7 +83,7 @@ class SQLiteFeatureCache:
 
     def count(self) -> int:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             row = connection.execute("SELECT COUNT(*) FROM rectangle_features").fetchone()
         return int(row[0]) if row else 0
 

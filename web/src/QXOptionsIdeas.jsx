@@ -96,9 +96,14 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
               <span style={{ fontSize: '13px', color: '#9ca3af' }}>
                 Bi-Directional Multi-Gate Screener for LEAPs (PMCC), Downside Puts, and Value Spreads
               </span>
-              <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-                📅 DATA PROVENANCE: {new Date().toISOString().split('T')[0]} Live Session (Verified Schwab Bar Engine)
-              </span>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
+                <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                  📊 EQUITY PRICE PROVENANCE: Verified Schwab Bar Engine (Live Session)
+                </span>
+                <span style={{ fontSize: '11px', background: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                  🧪 OPTION CONTRACT & GREEKS PROVENANCE: Modeled / Simulated (Non-Executable)
+                </span>
+              </div>
             </div>
           </div>
         </div>

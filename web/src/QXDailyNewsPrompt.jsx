@@ -6,18 +6,9 @@ export default function QXDailyNewsPrompt({ symbol = 'SPX' }) {
   const [copied, setCopied] = useState(false);
   const [generating, setGenerating] = useState(false);
   
-  // Ticker base price lookup for symbol alignment
+  // Ticker base price lookup for symbol alignment (null if unverified live quote)
   const getSymbolPrice = (sym) => {
-    switch (sym) {
-      case 'XLK': return 232.50;
-      case 'SPY': return 764.29;
-      case 'QQQ': return 714.88;
-      case 'NVDA': return 218.29;
-      case 'TSLA': return 365.44;
-      case 'AAPL': return 332.27;
-      case 'AMD': return 516.13;
-      default: return 7656.98;
-    }
+    return null; // Missing live quote must never silently render as a believable historical price
   };
 
   const basePrice = getSymbolPrice(symbol);

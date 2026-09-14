@@ -1,65 +1,69 @@
-# Final P0 Financial Truth Hardening Implementation Plan
+# Implementation Plan: QX Truth Contract Consolidation & Execution Gating
 
-Close the remaining financial-truth gating and stale fallback quote issues across endpoints, telemetry, and frontend components.
+Consolidate publication metadata contracts across the QX Platform, enforce centralized order execution gating, separate underlying equity price from option contract provenance in the UI, purge/label frontend demo prices, migrate remaining SQLite write paths to the WAL connection helper, and regenerate project walkthrough documentation.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Simulated Scanner Gating**: `/api/options-scanner/ideas` will explicitly emit `publication_state = SIMULATED`, `executable = false`, and `evidence_reason = "Option contracts and Greeks are modeled and are not verified from a live option chain."`
-> - **Stale Quote Fallback Elimination**: Hard-coded fallback price defaults (`p_nvda = quote_nvda.price or 218.29`, `332.27`, `448.20`, `365.44`, `516.13`) and fallback date strings (`"2026-09-11 Verified Daily Close"`) are completely deleted. Missing quotes will produce `publication_state = BLOCKED`, `executable = false`, and block trade generation.
-> - **Telemetry Zero Sample Null**: `TelemetryService.calculate_calibrated_win_rate()` with zero completed outcomes will return `empirical_win_rate_pct = None` (`null` in JSON) instead of defaulting to `55.0`.
-> - **UI Research Only Indicator**: `QXOptionsIdeas.jsx` will display a prominent `[SIMULATED / RESEARCH ONLY]` warning banner.
+> **Zero New Trading Features**: This work strictly consolidates financial truth, execution eligibility, frontend metadata, and database connection safety.
+> **Order Routing Rejection**: Any order proposal submitted with `publication_state != "VERIFIED"` or `executable = False` will now be explicitly rejected by `OrderRouter` with `OrderStatus.REJECTED`.
 
 ## Proposed Changes
 
 ---
 
-### Backend Endpoints & Market Ticker Service
+### Truth Contract & Execution Control
+
+#### [MODIFY] [publication.py](file:///c:/Project/2026/src/qx/models/publication.py)
+- Extend `PublicationMetadata` with `to_dict()` and `from_dict()` serialization helpers for unified API responses.
+
+#### [MODIFY] [order_router.py](file:///c:/Project/2026/src/qx/execution/order_router.py)
+- Enforce execution eligibility rule in `submit_order()`: reject non-`VERIFIED` or non-`executable` trade requests with `OrderStatus.REJECTED` and explicit error reason.
 
 #### [MODIFY] [web.py](file:///c:/Project/2026/src/qx/interfaces/web.py)
-- Update `/api/options-scanner/ideas`:
-  - Remove all hard-coded price fallbacks (`quote_nvda.price or 218.29`, `332.27`, `448.20`, `365.44`, `516.13`) and fallback date string `"2026-09-11 Verified Daily Close"`.
-  - Filter out symbols where market quote price is unavailable (`<= 0`).
-  - Emit `publication_state = "SIMULATED"`, `executable = False`, and `evidence_reason = "Option contracts and Greeks are modeled and are not verified from a live option chain."`
-  - If all quotes fail, set `publication_state = "BLOCKED"` and return no actionable trade ideas.
-
-#### [MODIFY] [ticker_service.py](file:///c:/Project/2026/src/qx/market/ticker_service.py)
-- Delete `REAL_SYMBOL_BASELINES` hard-coded price fallbacks in quote resolution. Unresolved ticker quotes return `price = 0.0` and `as_of = "BLOCKED: Market Quote Unavailable"`.
+- Integrate `PublicationMetadata` across endpoints emitting signals, analytics, and trade candidates.
 
 ---
 
-### Telemetry Calibration
-
-#### [MODIFY] [service.py](file:///c:/Project/2026/src/qx/telemetry/service.py)
-- In `calculate_calibrated_win_rate()`, when `not filtered` (zero completed outcomes), return `empirical_win_rate_pct = None` (`null` in JSON) and `calibrated = False`.
-
----
-
-### Frontend React Display
+### Frontend Data Provenance & Demo Price Purge
 
 #### [MODIFY] [QXOptionsIdeas.jsx](file:///c:/Project/2026/web/src/QXOptionsIdeas.jsx)
-- Render a prominent `[SIMULATED / RESEARCH ONLY]` warning banner indicating option contracts are modeled and live execution is blocked.
+- Separate underlying equity price provenance (`Verified Schwab Bar Engine`) from option contract & Greeks provenance (`SIMULATED / Modeled Research Prompt`).
+
+#### [MODIFY] [QXDailyNewsPrompt.jsx](file:///c:/Project/2026/web/src/QXDailyNewsPrompt.jsx)
+#### [MODIFY] [QXTradingSuite.jsx](file:///c:/Project/2026/web/src/QXTradingSuite.jsx)
+#### [MODIFY] [QXInstitutionalScanner.jsx](file:///c:/Project/2026/web/src/QXInstitutionalScanner.jsx)
+#### [MODIFY] [QXDayTraderTerminal.jsx](file:///c:/Project/2026/web/src/QXDayTraderTerminal.jsx)
+- Remove silent hardcoded fallback prices (`218.29`, `332.27`, `448.20`, `365.44`, `516.13`) or visibly label missing quotes (`[DEMO FALLBACK]` / `N/A (Quote Unavailable)`).
 
 ---
 
-### Regression Unit Tests & Verification
+### Database Infrastructure
+
+#### [MODIFY] [sector_rotation.py](file:///c:/Project/2026/src/qx/storage/sector_rotation.py)
+#### [MODIFY] [workflow.py](file:///c:/Project/2026/src/qx/storage/workflow.py)
+#### [MODIFY] [watchlist.py](file:///c:/Project/2026/src/qx/storage/watchlist.py)
+#### [MODIFY] [options_flow.py](file:///c:/Project/2026/src/qx/storage/options_flow.py)
+#### [MODIFY] [options.py](file:///c:/Project/2026/src/qx/storage/options.py)
+#### [MODIFY] [feature_cache.py](file:///c:/Project/2026/src/qx/storage/feature_cache.py)
+#### [MODIFY] [command_center.py](file:///c:/Project/2026/src/qx/storage/command_center.py)
+- Migrate direct `sqlite3.connect` calls to centralized `connect_sqlite()` WAL helper from `qx.storage.connection`.
+
+---
+
+### Tests & Documentation
 
 #### [MODIFY] [test_phase2_hardening.py](file:///c:/Project/2026/tests/unit/test_phase2_hardening.py)
-- Add regression unit tests proving:
-  1. Options scanner response is `SIMULATED` and `executable = False`.
-  2. No hard-coded fallback prices (`218.29`, etc.) are substituted when quotes fail.
-  3. Missing/failed quotes result in `publication_state = BLOCKED`.
-  4. Zero telemetry observations return `empirical_win_rate_pct = None`.
+- Add test verifying that `OrderRouter` rejects non-VERIFIED order proposals.
 
----
+#### [MODIFY] [02_walkthrough.md](file:///c:/Project/2026/02_walkthrough.md)
+- Update walkthrough with exact environment details, dependency-install command, commit SHA, pytest command, and test counts (9 tests in Phase 2 suite, 1691 full suite).
 
 ## Verification Plan
 
 ### Automated Tests
-- Ripgrep audit: `rg "218\.29|332\.27|448\.20|365\.44|516\.13" src/qx/` (must return zero matches).
-- Pytest suite: `.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py`
-- Full test suite: `.\.venv\Scripts\python.exe -m pytest -q`
-- React test suite: `npm test -- --run` in `web/`
+- `.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py -v`
+- `rg "218\.29|332\.27|448\.20|365\.44|516\.13" web/src/`
 
 ### Manual Verification
-- Verify `02_walkthrough.md` is updated after all tests pass with zero failures.
+- Verify React UI components load and display proper provenance separation and demo fallback labels.

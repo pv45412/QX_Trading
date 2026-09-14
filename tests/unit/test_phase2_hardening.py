@@ -161,3 +161,22 @@ def test_telemetry_zero_observations_returns_none(tmp_path):
     assert res["sample_size"] == 0
     assert res["empirical_win_rate_pct"] is None
     assert res["calibrated"] is False
+
+
+def test_order_router_rejects_non_verified_trade_proposals():
+    from qx.execution.order_router import OrderRouter
+    from qx.execution.models import OrderRequest, OrderSide, OrderType, OrderStatus
+
+    router = OrderRouter()
+    req = OrderRequest(
+        symbol="NVDA",
+        side=OrderSide.BUY,
+        order_type=OrderType.MARKET,
+        quantity=1.0,
+        publication_state="SIMULATED",
+        executable=False,
+    )
+    order = router.submit_order(req)
+    assert order.status == OrderStatus.REJECTED
+    assert "non-executable" in order.reject_reason.lower() or "verified" in order.reject_reason.lower()
+

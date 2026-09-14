@@ -29,22 +29,22 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
   };
 
   const [tickers, setTickers] = useState([
-    { symbol: 'SPX', price: 7656.98, change: '+0.84%', gexRegime: 'Long Gamma (Volatility Suppressed)' },
-    { symbol: 'XLK', price: 232.50, change: '+1.12%', gexRegime: 'Constructive Accumulation' },
-    { symbol: 'SPY', price: 764.29, change: '+0.82%', gexRegime: 'Constructive / Risk-On' },
-    { symbol: 'QQQ', price: 714.88, change: '+0.87%', gexRegime: 'Short Gamma (High Momentum)' },
-    { symbol: 'NVDA', price: 218.29, change: '-0.03%', gexRegime: 'Short Gamma (Volatility Accelerated)' },
-    { symbol: 'TSLA', price: 365.44, change: '+0.52%', gexRegime: 'Gamma Flip Near ($360.00)' },
-    { symbol: 'AMD', price: 516.13, change: '+2.49%', gexRegime: 'Long Gamma (Breakout Range)' },
-    { symbol: 'AAPL', price: 332.27, change: '+1.75%', gexRegime: 'Long Gamma (Mean Reverting)' },
+    { symbol: 'SPX', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
+    { symbol: 'XLK', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
+    { symbol: 'SPY', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
+    { symbol: 'QQQ', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
+    { symbol: 'NVDA', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
+    { symbol: 'TSLA', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
+    { symbol: 'AMD', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
+    { symbol: 'AAPL', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
   ]);
 
   const [detailData, setDetailData] = useState({
     symbol: 'SPX',
-    price: 7656.98,
-    change_dollar: 63.85,
-    change_pct: 0.84,
-    gex_regime: 'Long Gamma (Volatility Suppressed)',
+    price: null,
+    change_dollar: 0.0,
+    change_pct: 0.0,
+    gex_regime: 'Fetching Live Session...',
     as_of: `${new Date().toISOString().split('T')[0]} Live Session`,
     ai_signals: [],
     level2_asks: [],
@@ -93,7 +93,7 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
 
   const currentTickerObj = tickers.find(t => t.symbol === selectedTicker) || {
     symbol: selectedTicker,
-    price: selectedTicker === 'XLK' ? 232.50 : selectedTicker === 'SPY' ? 764.29 : selectedTicker === 'QQQ' ? 714.88 : selectedTicker === 'NVDA' ? 218.29 : selectedTicker === 'TSLA' ? 365.44 : 7656.98
+    price: null
   };
   
   const activePrice = (detailData.symbol === selectedTicker && detailData.price) ? detailData.price : currentTickerObj.price;

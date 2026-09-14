@@ -64,6 +64,23 @@ class OrderRouter:
         live_basis = basis_info["basis"] if basis_info["is_valid"] else 0.0
         return normalize_es_target_to_spx(es_target, live_basis)
 
+    def validate_execution_eligibility(self, trade_object: dict[str, Any] | Any) -> tuple[bool, str]:
+        """Centralized execution rule: only VERIFIED trade objects can become executable order proposals."""
+        pub_state = None
+        executable = True
+        if isinstance(trade_object, dict):
+            pub_state = trade_object.get("publication_state") or trade_object.get("state")
+            executable = trade_object.get("executable", True)
+        elif hasattr(trade_object, "publication_state"):
+            pub_state = getattr(trade_object, "publication_state")
+            executable = getattr(trade_object, "executable", True)
+
+        if pub_state is not None and str(pub_state).upper() != "VERIFIED":
+            return False, f"Trade object is non-executable: publication_state is '{pub_state}'. Only VERIFIED trade objects are eligible for order execution."
+        if executable is False:
+            return False, "Trade object is explicitly marked executable=False. Only executable trade objects can become order proposals."
+        return True, ""
+
     def submit_order(
         self,
         request: OrderRequest,
@@ -93,6 +110,17 @@ class OrderRouter:
         )
         if notes:
             order.reject_reason = None  # preserve notes in order structure
+
+        # Pre-trade publication eligibility check
+        is_eligible, elig_reason = self.validate_execution_eligibility({
+            "publication_state": request.publication_state,
+            "executable": request.executable,
+        })
+        if not is_eligible:
+            order.status = OrderStatus.REJECTED
+            order.reject_reason = elig_reason
+            self._orders[order.order_id] = order
+            return order
 
         # Pre-trade validation check
         if request.order_type in {OrderType.LIMIT, OrderType.STOP_LIMIT} and request.limit_price is None:

@@ -23,8 +23,8 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
     return () => { isMounted = false; };
   }, [symbol]);
 
-  // Compute dynamic levels based on live price or baseline
-  const price = liveData?.price || (symbol === 'SPX' ? 7656.98 : symbol === 'XLK' ? 232.50 : symbol === 'SPY' ? 764.29 : symbol === 'QQQ' ? 714.88 : symbol === 'NVDA' ? 218.29 : symbol === 'TSLA' ? 365.44 : 332.27);
+  // Compute dynamic levels based on live price or mark as missing
+  const price = liveData?.price || null;
   const isIndex = symbol === 'SPX';
 
   
