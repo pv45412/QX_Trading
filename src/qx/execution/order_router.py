@@ -16,27 +16,42 @@ class OrderRouter:
 
     def calculate_live_basis(self, es_price: float, spx_price: float) -> dict[str, Any]:
         """Calculate live basis spread (es_price - spx_price) at the instant of order generation."""
-        from qx.market.futures_evidence import calculate_es_spx_basis
+        from qx.market.price_normalization import calculate_es_spx_basis
         return calculate_es_spx_basis(es_price, spx_price)
 
-    def get_atomic_basis_from_quotes(self, market_data_provider: Any, symbols: tuple[str, str] = ("/ES", "$SPX")) -> dict[str, Any]:
-        """Fetch /ES futures and SPX cash quotes atomically in a single multi-ticker batch request.
+    def get_batch_basis_snapshot(self, market_data_provider: Any, symbols: tuple[str, str] = ("/ES", "$SPX")) -> dict[str, Any]:
+        """Fetch /ES futures and SPX cash quotes together in a batch request, preserving quote timestamps.
         
-        Eliminates 150ms-300ms network latency skew between sequential quote HTTP calls.
+        Eliminates network latency skew between sequential quote calls and captures quote timestamps.
         """
         sym_es, sym_spx = symbols
+        ts_es, ts_spx = None, None
+        p_es, p_spx = 0.0, 0.0
+
         if hasattr(market_data_provider, "get_quotes"):
             quotes = market_data_provider.get_quotes([sym_es, sym_spx])
             q_es = quotes.get(sym_es) or quotes.get("ES=F")
             q_spx = quotes.get(sym_spx) or quotes.get("SPX")
             p_es = float(getattr(q_es, "last_price", getattr(q_es, "last", 0.0))) if q_es else 0.0
             p_spx = float(getattr(q_spx, "last_price", getattr(q_spx, "last", 0.0))) if q_spx else 0.0
-            return self.calculate_live_basis(p_es, p_spx)
-        q_es = market_data_provider.get_quote(sym_es)
-        q_spx = market_data_provider.get_quote(sym_spx)
-        p_es = float(getattr(q_es, "last_price", getattr(q_es, "last", 0.0))) if q_es else 0.0
-        p_spx = float(getattr(q_spx, "last_price", getattr(q_spx, "last", 0.0))) if q_spx else 0.0
-        return self.calculate_live_basis(p_es, p_spx)
+            ts_es = getattr(q_es, "timestamp", getattr(q_es, "quote_time", None))
+            ts_spx = getattr(q_spx, "timestamp", getattr(q_spx, "quote_time", None))
+        else:
+            q_es = market_data_provider.get_quote(sym_es)
+            q_spx = market_data_provider.get_quote(sym_spx)
+            p_es = float(getattr(q_es, "last_price", getattr(q_es, "last", 0.0))) if q_es else 0.0
+            p_spx = float(getattr(q_spx, "last_price", getattr(q_spx, "last", 0.0))) if q_spx else 0.0
+            ts_es = getattr(q_es, "timestamp", getattr(q_es, "quote_time", None))
+            ts_spx = getattr(q_spx, "timestamp", getattr(q_spx, "quote_time", None))
+
+        res = self.calculate_live_basis(p_es, p_spx)
+        res["es_timestamp"] = str(ts_es) if ts_es else None
+        res["spx_timestamp"] = str(ts_spx) if ts_spx else None
+        return res
+
+    def get_atomic_basis_from_quotes(self, market_data_provider: Any, symbols: tuple[str, str] = ("/ES", "$SPX")) -> dict[str, Any]:
+        """Backwards compatibility alias for get_batch_basis_snapshot."""
+        return self.get_batch_basis_snapshot(market_data_provider, symbols)
 
     def get_live_spx_strike(self, es_target: float, es_price: float, spx_price: float) -> float:
         """Convert /ES trigger target level to SPX cash strike using instantaneous live basis.
@@ -44,7 +59,7 @@ class OrderRouter:
         Formula: live_basis = es_price - spx_price
         target_spx_cash = trigger_es_level - live_basis (since /ES trades at a premium to cash SPX).
         """
-        from qx.market.futures_evidence import calculate_es_spx_basis, normalize_es_target_to_spx
+        from qx.market.price_normalization import calculate_es_spx_basis, normalize_es_target_to_spx
         basis_info = calculate_es_spx_basis(es_price, spx_price)
         live_basis = basis_info["basis"] if basis_info["is_valid"] else 0.0
         return normalize_es_target_to_spx(es_target, live_basis)

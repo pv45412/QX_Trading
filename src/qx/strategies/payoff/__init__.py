@@ -41,7 +41,7 @@ def generate_strategy_payoff(
     )
 
     breakevens = calculate_breakevens(prices, pnls)
-    max_risk_dollars, max_profit_dollars, rr_ratio = calculate_risk_reward(pnls)
+    max_risk_dollars, max_profit_dollars, rr_ratio = calculate_risk_reward(pnls, legs=legs)
 
     return StrategyPayoffResult(
         strategy_name=strategy_name,

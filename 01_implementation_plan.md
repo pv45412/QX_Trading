@@ -1,51 +1,69 @@
-# Phase 2 Hardening Implementation Plan
+# P0 Financial Integrity & Architecture Remediation Plan
 
-Remediate the three remaining architecture hardening items across execution, gamma exposure options modeling, and frontend-backend data contracts.
+Close the remaining P0 financial-integrity issues and architectural decoupling items identified in the platform review.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> - **Execution Layer**: Dynamic basis tracking will compute `live_basis = es_price - spx_price` directly inside order generation routines, overriding static/cached basis values.
-> - **GEX Modeling**: SPXW (PM-settled weeklies/0DTE) and SPX (AM-settled monthlies) will be segregated when computing gamma walls to prevent false pinning strike levels.
-> - **Data Contracts**: Property key alignment and fallback null-checks will be enforced between Python backend responses and React frontend utilities.
+> - **Truth Control**: Options Scanner ideas with modeled/simulated options flow will explicitly emit `publication_state = SIMULATED` and `executable = False` until backed by verified live chains.
+> - **Stale Price Removal**: Hard-coded price fallbacks (e.g. `218.29`) are eliminated. Unavailable market quotes produce `publication_state = BLOCKED` / `None`.
+> - **Put Credit Spread Math**: Constructing a put credit spread without a valid lower-strike long put returns `None` (full stop). Invention of fallback spread widths is deleted.
+> - **Payoff Topology**: `generate_strategy_payoff` will pass `legs` into `calculate_risk_reward(pnls, legs=legs)` so analytical tail risk (unlimited upside/downside) is evaluated mathematically rather than bounded by grid sampling windows.
+> - **Decoupled Basis Math**: Pure arithmetic for `/ES` to `SPX` basis will be moved to a zero-dependency module `price_normalization.py`, eliminating yfinance/broker import failures during unit tests.
 
 ## Proposed Changes
 
 ---
 
-### Execution Layer
+### Core Data & Truth Gating
+
+#### [NEW] [price_normalization.py](file:///c:/Project/2026/src/qx/market/price_normalization.py)
+- Pure math functions with zero external/provider dependencies:
+  - `calculate_es_spx_basis(es_price: float, spx_price: float) -> dict[str, Any]`
+  - `es_to_spx(es_target: float, basis: float) -> float`
 
 #### [MODIFY] [order_router.py](file:///c:/Project/2026/src/qx/execution/order_router.py)
-- Enhance `OrderRouter` with instantaneous basis tracking:
-  - Add `calculate_live_basis(es_price: float, spx_price: float) -> dict[str, Any]` to calculate `live_basis = es_price - spx_price` at the instant of order creation.
-  - Add dynamic `es_target_to_spx_strike()` target conversion inside order request processing to ensure strike selection uses live market ticks rather than cached offsets.
+- Consume `price_normalization.py` for basis math.
+- Add `get_batch_basis_snapshot(market_data_provider)` to retrieve `/ES` and `$SPX` quotes together and preserve quote timestamps.
+
+#### [MODIFY] [ticker_service.py](file:///c:/Project/2026/src/qx/market/ticker_service.py)
+- Remove hardcoded default price substitutions (`218.29`, etc.) when fetching quotes; return `price = None` / explicit unavailable state when market bars are unavailable.
 
 ---
 
-### Options & Volatility Analytics
+### Options Scanner & Strategy Trade Construction
+
+#### [MODIFY] [trade_constructor.py](file:///c:/Project/2026/src/qx/options_scanner/services/trade_constructor.py)
+- Enforce strict 2-leg spread validation for Put Credit Spreads:
+  - If `long_puts` is empty or no valid lower-strike, same-expiration long put is found, return `None`.
+  - Remove `long_put = short_put` fallback and remove `width = round(...) or 5.0` width invention.
+
+#### [MODIFY] [web.py](file:///c:/Project/2026/src/qx/interfaces/web.py)
+- Ensure `/api/options-scanner/ideas` returns `publication_state = SIMULATED` and `executable = False` whenever option contracts are modeled or simulated.
+
+---
+
+### Payoff Engine & Risk Topology
+
+#### [MODIFY] [payoff/__init__.py](file:///c:/Project/2026/src/qx/strategies/payoff/__init__.py)
+- Pass `legs` to `calculate_risk_reward(pnls, legs=legs)` inside `generate_strategy_payoff()`, connecting analytical unlimited tail risk classification to the main payoff evaluation path.
+
+---
+
+### Options Analytics & Settlement Provenance
 
 #### [MODIFY] [gex.py](file:///c:/Project/2026/src/qx/options/gex.py)
-- Update `calculate_gamma_exposure()` to support AM/PM settlement segregation:
-  - Detect `settlement_type` or symbol classification (`SPXW` vs `SPX`).
-  - Separate PM-settled 0DTE/weekly contracts from AM-settled monthly contracts during strike-level gamma aggregation.
-  - Return segregated gamma walls (`top_call_gamma_strike`, `top_put_gamma_strike`, `gamma_flip_price`) to prevent false pinning levels.
+- Add structured settlement provenance tracking:
+  - `settlement_source`: `EXPLICIT_PROVIDER`, `SERIES_ROOT`, `EXPIRATION_METADATA`, `HEURISTIC_DTE`, `UNKNOWN`
+  - `settlement_confidence`: `VERIFIED`, `HIGH`, `HEURISTIC`, `UNVERIFIED`
+- Tag `dte == 0` fallbacks as `HEURISTIC` confidence rather than assuming verified PM settlement.
 
 ---
 
-### Data Contracts & Web Layer
+### Test Suite & Verification
 
-#### [MODIFY] [data_contracts.py](file:///c:/Project/2026/src/qx/market/data_contracts.py)
-- Add payload key schemas and validation helpers matching React frontend dashboard properties for `/api/spx-calendars`, `/api/gex-snapshot`, and `/api/news-stream`.
-
-#### [MODIFY] [data-utils.js](file:///c:/Project/2026/web/src/data-utils.js)
-- Add safety null-checks, defensive property getters (`safeGet()`, fallback defaults for missing numeric metrics), and payload contract validation helpers.
-
----
-
-### Test Suite
-
-#### [NEW] [test_phase2_hardening.py](file:///c:/Project/2026/tests/unit/test_phase2_hardening.py)
-- Unit tests verifying dynamic basis tracking in `order_router.py`, AM/PM GEX segregation in `gex.py`, and data contract compatibility.
+#### [MODIFY] [test_phase2_hardening.py](file:///c:/Project/2026/tests/unit/test_phase2_hardening.py)
+- Add unit tests for `price_normalization.py`, Put Credit Spread `None` return on missing long put, payoff topology `legs` analytical risk calculation, and GEX settlement provenance.
 
 ---
 
@@ -57,4 +75,5 @@ Remediate the three remaining architecture hardening items across execution, gam
 - System preflight checks: `.\.venv\Scripts\python.exe -m qx.tools.run_preflight_checks`
 
 ### Manual Verification
-- Verify preflight output and ensure 100% test pass rate across all 1,640+ repository unit tests.
+- Verify 100% pass across all unit tests without yfinance or provider import errors.
+- Regenerate `walkthrough.md` with actual test count and results.

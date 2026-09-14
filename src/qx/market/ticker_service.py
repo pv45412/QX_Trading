@@ -57,10 +57,9 @@ def fetch_ticker_quote(symbol: str, provider=None) -> TickerQuote:
     if provider is None:
         provider = build_market_data_provider("schwab")
 
-    default_price, default_prior = REAL_SYMBOL_BASELINES.get(symbol_upper, (764.29, 757.85))
-    price = default_price
-    prior = default_prior
-    as_of = "Live Cache"
+    price = 0.0
+    prior = 0.0
+    as_of = "BLOCKED: Market Quote Unavailable"
 
     target = "SPY" if symbol_upper == "SPX" else symbol_upper
 

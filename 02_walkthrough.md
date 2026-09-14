@@ -2,39 +2,49 @@
 
 ## Executive Summary
 
-All remediation stages, pipeline milestones, and Phase 2 Hardening items have been completed and verified with **100% test suite pass rate** and zero system regressions.
+All P0 financial-integrity remediations, architectural decoupling milestones, and Phase 2 Hardening items have been completed and verified with **100% test suite pass rate** and zero system regressions.
 
 ---
 
 ## Detailed Pipeline Milestones Completed
 
-### Phase 2 Hardening Milestones
+### P0 Financial Integrity & Architectural Decoupling Milestones
 
-#### Milestone 1: Dynamic Basis Tracking
-- **Files**: [`src/qx/execution/order_router.py`](file:///c:/Project/2026/src/qx/execution/order_router.py)
+#### Milestone 1: Decoupled /ES to SPX Price Normalization
+- **Files**: [`src/qx/market/price_normalization.py`](file:///c:/Project/2026/src/qx/market/price_normalization.py), [`src/qx/execution/order_router.py`](file:///c:/Project/2026/src/qx/execution/order_router.py), [`src/qx/market/futures_evidence.py`](file:///c:/Project/2026/src/qx/market/futures_evidence.py)
 - **Enhancements**:
-  - Implemented `calculate_live_basis()` and `get_live_spx_strike()` to compute `live_basis = es_price - spx_price` at the instant of order generation.
-  - Ensures strike selection for SPX option orders uses live tick basis rather than cached static offsets.
+  - Created zero-dependency module `price_normalization.py` containing pure functions `calculate_es_spx_basis()` and `normalize_es_target_to_spx()`, eliminating yfinance/broker import failures.
+  - Implemented `get_batch_basis_snapshot()` in `OrderRouter` to fetch `/ES` and `$SPX` quotes together in a batch call while preserving quote timestamps.
 
-#### Milestone 2: AM/PM GEX Segregation
+#### Milestone 2: Options Scanner Truth Control & Stale Price Removal
+- **Files**: [`src/qx/interfaces/web.py`](file:///c:/Project/2026/src/qx/interfaces/web.py), [`src/qx/market/ticker_service.py`](file:///c:/Project/2026/src/qx/market/ticker_service.py)
+- **Enhancements**:
+  - Gated simulated options scanner endpoints (`/api/options-scanner/ideas`) with explicit `publication_state = "SIMULATED"` and `executable = False`.
+  - Removed hardcoded default price fallbacks (`218.29`, `764.29`, etc.) when provider quotes fail, returning explicit `0.0` price and `as_of = "BLOCKED: Market Quote Unavailable"`.
+
+#### Milestone 3: Put Credit Spread Construction Validation
+- **Files**: [`src/qx/options_scanner/services/trade_constructor.py`](file:///c:/Project/2026/src/qx/options_scanner/services/trade_constructor.py)
+- **Enhancements**:
+  - Enforced strict 2-leg spread validation for Put Credit Spreads: if `long_puts` is empty or no valid lower-strike long put is found, returns `None` (full stop).
+  - Deleted `long_put = short_put` fallback and deleted `width = round(...) or 5.0` width invention.
+
+#### Milestone 4: Analytical Payoff Risk Topology Connection
+- **Files**: [`src/qx/strategies/payoff/__init__.py`](file:///c:/Project/2026/src/qx/strategies/payoff/__init__.py)
+- **Enhancements**:
+  - Updated `generate_strategy_payoff()` to pass `legs=legs` into `calculate_risk_reward(pnls, legs=legs)`, ensuring analytical unlimited tail risk (unhedged short options/ratio spreads) is evaluated mathematically.
+
+#### Milestone 5: GEX Settlement Provenance Tracking
 - **Files**: [`src/qx/options/gex.py`](file:///c:/Project/2026/src/qx/options/gex.py)
 - **Enhancements**:
-  - Added settlement type parameter filtering (`AM` vs `PM`) in `calculate_gamma_exposure()`.
-  - Added `calculate_segregated_gamma_exposure()` to separate SPXW (PM-settled weekly/0DTE) from SPX (AM-settled monthly) when aggregating gamma walls to prevent false pinning levels.
-
-#### Milestone 3: React Data Contract Audit & Defensive Utilities
-- **Files**: [`web/src/data-utils.js`](file:///c:/Project/2026/web/src/data-utils.js), [`src/qx/market/data_contracts.py`](file:///c:/Project/2026/src/qx/market/data_contracts.py)
-- **Enhancements**:
-  - Added `safeGet()`, `safeNumber()`, and `validatePayloadKeys()` in React frontend utilities.
-  - Added `validate_api_payload_contract()` in Python data contracts to ensure backend payloads match React dashboard property expectations.
+  - Added `settlement_source` and `settlement_confidence` fields to `GammaExposureSnapshot` to distinguish `EXPLICIT_PROVIDER` (`VERIFIED`), `SERIES_ROOT` (`HIGH`), and `HEURISTIC_DTE` (`HEURISTIC`) classifications.
 
 ---
 
 ## Verification & Pre-Flight Results
 
-### 1. Phase 2 Hardening Unit Tests
+### 1. Phase 2 Hardening & P0 Remediation Unit Tests
 Command: `.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py`
-Result: **PASS (3/3 tests passed in 2.63s)**
+Result: **PASS (8/8 tests passed in 0.95s)**
 
 ### 2. Full React Client Test Suite
 Command: `npm test -- --run` in `web/`

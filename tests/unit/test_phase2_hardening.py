@@ -86,6 +86,46 @@ def test_gex_missing_settlement_type_0dte_fallback():
     assert pm_gex.top_call_gamma_strike == 5750.0
 
 
+def test_price_normalization_decoupled():
+    from qx.market.price_normalization import calculate_es_spx_basis, normalize_es_target_to_spx
+    basis_info = calculate_es_spx_basis(5800.50, 5780.00)
+    assert basis_info["is_valid"] is True
+    assert basis_info["basis"] == 20.50
+    spx_target = normalize_es_target_to_spx(5850.00, basis_info["basis"])
+    assert spx_target == 5829.50
+
+
+def test_put_credit_spread_requires_valid_long_put():
+    from datetime import datetime, timezone
+    from qx.options_scanner.config import ScannerConfig
+    from qx.options_scanner.models import OptionChain, OptionContract, OptionTypeEnum, UnderlyingQuote
+    from qx.options_scanner.services.strategy_selector import StrategyFit
+    from qx.options_scanner.services.trade_constructor import TradeConstructor
+
+    constructor = TradeConstructor(ScannerConfig())
+    quote = UnderlyingQuote(symbol="NVDA", last_price=120.0, bid=119.9, ask=120.1, volume=10000, timestamp=datetime.now(timezone.utc))
+
+    # Chain with ONLY short put contract (no valid lower-strike long put)
+    short_put = OptionContract(
+        symbol="NVDA_P_115", underlying_symbol="NVDA", option_type=OptionTypeEnum.PUT,
+        strike=115.0, expiration="30DTE", dte=30, bid=2.0, ask=2.2, volume=500, open_interest=1000, delta=-0.25
+    )
+    chain = OptionChain(underlying_symbol="NVDA", expirations=["30DTE"], retrieved_at=datetime.now(timezone.utc), contracts=[short_put])
+    strategy = StrategyFit(strategy_name="Bull Put Credit Spread", fit_score=85, rationale="Support bounce", category="Bullish", explanation="Credit spread")
+
+    trade = constructor.construct_trade(quote, chain, strategy)
+    # Must return None instead of fabricating a 5.0 width spread with identical long put
+    assert trade is None
+
+
+def test_payoff_topology_analytical_legs():
+    from qx.strategies.payoff import OptionLeg, generate_strategy_payoff
+    # Unhedged short call leg (unlimited upside risk)
+    short_call = OptionLeg(option_type="call", strike=100.0, action="sell", quantity=1.0, premium=2.50)
+    res = generate_strategy_payoff("Short Call", 100.0, [short_call])
+    assert res.max_risk_dollars == 999999.0  # analytical unlimited downside risk detected via legs
+
+
 def test_react_data_contract_audit():
     payload = {
         "publication_state": "VERIFIED",

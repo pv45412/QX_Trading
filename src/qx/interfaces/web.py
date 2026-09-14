@@ -286,7 +286,11 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             chain=chain,
             account_equity=payload.account_equity,
         )
-        return res.model_dump()
+        data = res.model_dump()
+        data["publication_state"] = "SIMULATED"
+        data["executable"] = False
+        data["evidence_note"] = "Simulated option chain model. Live order routing requires verified provider chain."
+        return data
 
     @app.get("/api/telemetry/signals")
     def list_signal_telemetry(limit: int = 50) -> list[dict[str, Any]]:

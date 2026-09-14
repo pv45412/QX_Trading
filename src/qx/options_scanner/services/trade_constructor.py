@@ -168,9 +168,15 @@ class TradeConstructor:
             return None
         
         long_puts = [p for p in puts if p.strike < short_put.strike and p.expiration == short_put.expiration]
-        long_put = self.find_best_strike(long_puts, 0.10) if long_puts else short_put
+        if not long_puts:
+            return None
+        long_put = self.find_best_strike(long_puts, 0.10)
+        if not long_put or long_put.strike >= short_put.strike:
+            return None
 
-        width = round(abs(short_put.strike - long_put.strike), 2) or 5.0
+        width = round(short_put.strike - long_put.strike, 2)
+        if width <= 0:
+            return None
         net_credit = round(short_put.mid_price - long_put.mid_price, 2)
         if net_credit <= 0:
             return None

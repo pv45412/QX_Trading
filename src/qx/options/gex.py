@@ -22,34 +22,33 @@ class GammaExposureSnapshot:
     top_put_gamma_strike: float
     zero_dte_volume_ratio: float
     call_put_gamma_ratio: float
+    settlement_source: str = "EXPLICIT_PROVIDER"  # EXPLICIT_PROVIDER | SERIES_ROOT | HEURISTIC_DTE | UNKNOWN
+    settlement_confidence: str = "VERIFIED"       # VERIFIED | HIGH | HEURISTIC | UNVERIFIED
 
 
-def _is_pm_settled(row: pd.Series | dict) -> bool:
-    """Determine if an option contract is PM-settled (weekly/0DTE).
-    
-    Robust fallback handling for provider feeds (e.g. Schwab) that omit explicit
-    settlementType attributes on quote summaries:
-    1. Check explicit settlementType / settlement_type attribute if present ('PM' vs 'AM').
-    2. Check symbol for 'SPXW', 'WEEKL', or '0DTE' root indicators.
-    3. Heuristic: On 0DTE trading session (dte == 0), AM contracts expire at 9:30 AM ET
-       and are inactive; all active trading intraday contracts are PM-settled.
-    """
+def _classify_settlement(row: pd.Series | dict) -> tuple[bool, str, str]:
+    """Classify PM settlement with explicit provenance and confidence score."""
     settlement = row.get("settlementType") if isinstance(row, dict) else (row.get("settlement_type") if "settlement_type" in row.index else row.get("settlementType"))
     if settlement is not None and not (isinstance(settlement, float) and pd.isna(settlement)):
         st_str = str(settlement).strip().upper()
         if st_str in {"PM", "AM"}:
-            return st_str == "PM"
+            return st_str == "PM", "EXPLICIT_PROVIDER", "VERIFIED"
 
     symbol = str(row.get("symbol") or (row.get("root_symbol") if hasattr(row, "get") and "root_symbol" in row else "") or "")
     if "SPXW" in symbol.upper() or "WEEKL" in symbol.upper() or "0DTE" in symbol.upper():
-        return True
+        return True, "SERIES_ROOT", "HIGH"
 
     # Heuristic: If 0DTE on trading day, active intraday contracts are PM settled
     dte = row.get("dte") if isinstance(row, dict) else (row.get("dte") if "dte" in row.index else row.get("daysToExpiration"))
     if dte is not None and not (isinstance(dte, float) and pd.isna(dte)) and float(dte) == 0:
-        return True
+        return True, "HEURISTIC_DTE", "HEURISTIC"
 
-    return False
+    return False, "UNKNOWN", "UNVERIFIED"
+
+
+def _is_pm_settled(row: pd.Series | dict) -> bool:
+    is_pm, _, _ = _classify_settlement(row)
+    return is_pm
 
 
 def calculate_gamma_exposure(
@@ -125,6 +124,13 @@ def calculate_gamma_exposure(
     total_vol = float(df["volume"].sum()) if "volume" in df.columns else 1.0
     zero_dte_ratio = zero_dte_vol / total_vol if total_vol > 0 else 0.0
 
+    settlement_source = "UNKNOWN"
+    settlement_confidence = "UNVERIFIED"
+    if not df.empty:
+        _, src, conf = _classify_settlement(df.iloc[0])
+        settlement_source = src
+        settlement_confidence = conf
+
     return GammaExposureSnapshot(
         symbol=symbol.upper(),
         current_price=round(current_price, 2),
@@ -137,6 +143,8 @@ def calculate_gamma_exposure(
         top_put_gamma_strike=round(top_put_strike, 2),
         zero_dte_volume_ratio=round(zero_dte_ratio, 4),
         call_put_gamma_ratio=round(cp_ratio, 2),
+        settlement_source=settlement_source,
+        settlement_confidence=settlement_confidence,
     )
 
 
