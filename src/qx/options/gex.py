@@ -24,6 +24,34 @@ class GammaExposureSnapshot:
     call_put_gamma_ratio: float
 
 
+def _is_pm_settled(row: pd.Series | dict) -> bool:
+    """Determine if an option contract is PM-settled (weekly/0DTE).
+    
+    Robust fallback handling for provider feeds (e.g. Schwab) that omit explicit
+    settlementType attributes on quote summaries:
+    1. Check explicit settlementType / settlement_type attribute if present ('PM' vs 'AM').
+    2. Check symbol for 'SPXW', 'WEEKL', or '0DTE' root indicators.
+    3. Heuristic: On 0DTE trading session (dte == 0), AM contracts expire at 9:30 AM ET
+       and are inactive; all active trading intraday contracts are PM-settled.
+    """
+    settlement = row.get("settlementType") if isinstance(row, dict) else (row.get("settlement_type") if "settlement_type" in row.index else row.get("settlementType"))
+    if settlement is not None and not (isinstance(settlement, float) and pd.isna(settlement)):
+        st_str = str(settlement).strip().upper()
+        if st_str in {"PM", "AM"}:
+            return st_str == "PM"
+
+    symbol = str(row.get("symbol") or (row.get("root_symbol") if hasattr(row, "get") and "root_symbol" in row else "") or "")
+    if "SPXW" in symbol.upper() or "WEEKL" in symbol.upper() or "0DTE" in symbol.upper():
+        return True
+
+    # Heuristic: If 0DTE on trading day, active intraday contracts are PM settled
+    dte = row.get("dte") if isinstance(row, dict) else (row.get("dte") if "dte" in row.index else row.get("daysToExpiration"))
+    if dte is not None and not (isinstance(dte, float) and pd.isna(dte)) and float(dte) == 0:
+        return True
+
+    return False
+
+
 def calculate_gamma_exposure(
     symbol: str,
     current_price: float,
@@ -44,21 +72,11 @@ def calculate_gamma_exposure(
     # AM vs PM settlement segregation if specified or detected
     if settlement_type is not None:
         st_upper = settlement_type.strip().upper()
-        # Helper mask checking settlement_type / settlementType column
-        st_col = next((c for c in ("settlement_type", "settlementType") if c in df.columns), None)
-        sym_col = next((c for c in ("symbol", "root_symbol") if c in df.columns), None)
-        
+        pm_mask = df.apply(_is_pm_settled, axis=1)
         if st_upper == "PM":
-            mask_st = (df[st_col].astype(str).str.upper() == "PM") if st_col else pd.Series(False, index=df.index)
-            mask_sym = (df[sym_col].astype(str).str.contains("SPXW|WEEKL|0DTE", case=False, na=False)) if sym_col else pd.Series(False, index=df.index)
-            mask_pm = mask_st | mask_sym
-            if not mask_pm.any() and "is_pm_settled" in df.columns:
-                mask_pm = df["is_pm_settled"] == True
-            df = df[mask_pm] if mask_pm.any() else df[df[st_col].astype(str).str.upper() == "PM"] if st_col else df
+            df = df[pm_mask]
         elif st_upper == "AM":
-            mask_st_am = (df[st_col].astype(str).str.upper() == "AM") if st_col else pd.Series(True, index=df.index)
-            mask_sym_am = (~df[sym_col].astype(str).str.contains("SPXW|WEEKL|0DTE", case=False, na=False)) if sym_col else pd.Series(True, index=df.index)
-            df = df[mask_st_am & mask_sym_am]
+            df = df[~pm_mask]
 
     if df.empty:
         return _empty_gex_snapshot(f"{symbol}_{settlement_type}" if settlement_type else symbol, current_price)

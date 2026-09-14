@@ -53,6 +53,39 @@ def test_ampm_gex_segregation():
     assert am_gex.top_call_gamma_strike == 5800.0
 
 
+def test_atomic_basis_from_quotes():
+    class MockQuote:
+        def __init__(self, price):
+            self.last_price = price
+
+    class MockProvider:
+        def get_quotes(self, symbols):
+            return {
+                "/ES": MockQuote(5800.50),
+                "$SPX": MockQuote(5780.00),
+            }
+
+    router = OrderRouter()
+    provider = MockProvider()
+    atomic_basis = router.get_atomic_basis_from_quotes(provider)
+    assert atomic_basis["is_valid"] is True
+    assert atomic_basis["basis"] == 20.50
+
+
+def test_gex_missing_settlement_type_0dte_fallback():
+    # 0DTE monthly contract missing settlementType attribute (Schwab quote summary pattern)
+    chain = pd.DataFrame([
+        {"strike": 5750, "option_type": "call", "open_interest": 300, "volume": 100, "dte": 0, "symbol": "SPX260914C05750000"},  # root $SPX, missing settlementType, dte=0
+        {"strike": 5850, "option_type": "call", "open_interest": 500, "volume": 200, "dte": 30, "symbol": "SPX261016C05850000"},  # monthly dte=30, missing settlementType
+    ])
+
+    segregated = calculate_segregated_gamma_exposure("SPX", 5750.0, chain)
+    pm_gex = segregated["PM_WEEKLY"]
+    
+    # 0DTE active intraday contract (dte=0) should be included in PM_WEEKLY despite missing settlementType
+    assert pm_gex.top_call_gamma_strike == 5750.0
+
+
 def test_react_data_contract_audit():
     payload = {
         "publication_state": "VERIFIED",
