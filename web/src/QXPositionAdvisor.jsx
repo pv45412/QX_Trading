@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, ShieldAlert, AlertTriangle, ArrowUpRight, TrendingUp, DollarSign, Activity, Target, Zap } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, AlertTriangle, ArrowUpRight, TrendingUp, DollarSign, Activity, Target, Zap, RefreshCw, Layers } from 'lucide-react';
 
 const POSITION_TYPES = [
   'Long Shares',
@@ -9,6 +9,22 @@ const POSITION_TYPES = [
   'Bull Call Spread',
   'Bear Put Spread',
 ];
+
+function mapPosTypeToEngine(typeStr) {
+  switch (typeStr) {
+    case 'Long Call':
+    case 'Bull Call Spread':
+      return 'long_call';
+    case 'Long Put':
+    case 'Bear Put Spread':
+      return 'long_put';
+    case 'Short Shares':
+      return 'short_call';
+    case 'Long Shares':
+    default:
+      return 'long_stock';
+  }
+}
 
 export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
   const [symbol, setSymbol] = useState(defaultSymbol);
@@ -21,6 +37,7 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [report, setReport] = useState(null);
+  const [rollPlan, setRollPlan] = useState(null);
 
   useEffect(() => {
     evaluatePosition(symbol, posType, entryPrice, quantity, targetPrice, stopLoss);
@@ -47,6 +64,38 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
       }
       const data = await res.json();
       setReport(data);
+
+      // Fetch Roll Plan evaluation
+      try {
+        const rollRes = await fetch('/api/position-advisor/roll-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            symbol: sym.trim().toUpperCase(),
+            underlying_price: data.current_price || parseFloat(entry),
+            position_type: mapPosTypeToEngine(type),
+            current_strike: parseFloat(entry),
+            current_dte: 30,
+            current_premium: 3.50,
+            iv: 0.30,
+            trend_score: data.action_verdict === 'HOLD' ? 80 : 45,
+            structure_score: data.action_verdict === 'HOLD' ? 75 : 45,
+            invalidation_distance_pct: data.action_verdict === 'CLOSE / EXIT' ? 0.0 : 4.0,
+            reward_remaining_pct: 45.0,
+            momentum_score: 60.0,
+            volatility_score: 60.0,
+            stop_breached: data.action_verdict === 'CLOSE / EXIT',
+            assignment_imminent: false
+          })
+        });
+        if (rollRes.ok) {
+          const rollData = await rollRes.json();
+          setRollPlan(rollData);
+        }
+      } catch (rErr) {
+        console.warn('Roll plan fetch deferred:', rErr);
+      }
+
     } catch (err) {
       setError(err.message || 'Could not load position research report');
     } finally {
@@ -205,6 +254,81 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
               </div>
             </div>
           </div>
+
+          {/* ROLL & ADJUSTMENT RECOMMENDATION ENGINE CARD */}
+          {rollPlan && rollPlan.recommendation && (
+            <div style={{
+              background: '#0f172a',
+              border: '1px solid #1e293b',
+              borderRadius: '10px',
+              padding: '16px',
+              marginTop: '16px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '10px' }}>
+                <h3 style={{ margin: 0, fontSize: '15px', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <RefreshCw size={16} /> 🔄 Position Adjustment & Roll Engine Plan
+                </h3>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span style={{ fontSize: '11px', background: '#1e293b', color: '#cbd5e1', padding: '4px 8px', borderRadius: '4px', border: '1px solid #334155' }}>
+                    Health Score: <b>{rollPlan.composite_health} / 100</b>
+                  </span>
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                    padding: '4px 10px',
+                    borderRadius: '4px',
+                    background: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(56, 189, 248, 0.15)',
+                    color: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? '#10b981' : '#38bdf8',
+                    border: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(56, 189, 248, 0.4)'
+                  }}>
+                    {rollPlan.recommendation.roll_type}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ fontSize: '13px', color: '#cbd5e1', marginBottom: '14px', lineHeight: '1.5' }}>
+                📌 <b>Rationale:</b> {rollPlan.recommendation.rationale}
+              </div>
+
+              {rollPlan.recommendation.recommended_legs && rollPlan.recommendation.recommended_legs.length > 0 ? (
+                <div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <Layers size={14} /> Execution Order Legs:
+                  </div>
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+                      <thead>
+                        <tr style={{ background: '#1e293b', textAlign: 'left', color: '#94a3b8', fontSize: '11px' }}>
+                          <th style={{ padding: '8px', borderRadius: '4px 0 0 4px' }}>ACTION</th>
+                          <th style={{ padding: '8px' }}>TYPE</th>
+                          <th style={{ padding: '8px' }}>STRIKE ($)</th>
+                          <th style={{ padding: '8px' }}>TARGET DTE</th>
+                          <th style={{ padding: '8px', textAlign: 'right', borderRadius: '0 4px 4px 0' }}>EST. PREMIUM</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rollPlan.recommendation.recommended_legs.map((leg, idx) => (
+                          <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                            <td style={{ padding: '8px', fontWeight: 'bold', color: leg.action.startsWith('BUY') ? '#38bdf8' : '#f59e0b' }}>
+                              {leg.action}
+                            </td>
+                            <td style={{ padding: '8px', textTransform: 'uppercase', color: '#e2e8f0' }}>{leg.option_type}</td>
+                            <td style={{ padding: '8px', color: '#fff', fontWeight: 'bold' }}>${leg.strike.toFixed(2)}</td>
+                            <td style={{ padding: '8px', color: '#94a3b8' }}>{leg.dte} Days</td>
+                            <td style={{ padding: '8px', textAlign: 'right', color: '#fff', fontWeight: 'bold' }}>${leg.estimated_premium.toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic', background: '#1e293b', padding: '10px', borderRadius: '6px' }}>
+                  ✓ Position health is strong. No leg execution adjustment required.
+                </div>
+              )}
+            </div>
+          )}
 
           {/* 4-CARD DIAGNOSTICS GRID */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginTop: '16px' }}>

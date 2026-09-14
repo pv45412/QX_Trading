@@ -31,6 +31,7 @@ from qx.market.stock_evidence import (
 
 
 from qx.positions.health import calculate_position_health
+from qx.positions.roll import evaluate_position_roll, PositionRollRequest
 from qx.market.structure.structure_engine import analyze_market_structure
 from qx.telemetry.telemetry_service import TelemetryService
 from qx.options_scanner.services.signal_service import SignalService
@@ -174,6 +175,11 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             assignment_imminent=payload.assignment_imminent,
         )
         return result.model_dump()
+
+    @app.post("/api/position-advisor/roll-plan")
+    def evaluate_roll_plan(payload: PositionRollRequest) -> dict[str, Any]:
+        plan = evaluate_position_roll(payload)
+        return plan.model_dump()
 
     @app.post("/api/options-scanner/scan")
     def run_options_scan(payload: OptionsScanRequest) -> dict[str, Any]:
