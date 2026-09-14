@@ -44,17 +44,21 @@ def calculate_gamma_exposure(
     # AM vs PM settlement segregation if specified or detected
     if settlement_type is not None:
         st_upper = settlement_type.strip().upper()
-        if "settlement_type" in df.columns:
-            df = df[df["settlement_type"].str.upper() == st_upper]
-        elif "is_pm_settled" in df.columns:
-            target_pm = (st_upper == "PM")
-            df = df[df["is_pm_settled"] == target_pm]
-        elif "root_symbol" in df.columns or "symbol" in df.columns:
-            sym_col = "root_symbol" if "root_symbol" in df.columns else "symbol"
-            if st_upper == "PM":
-                df = df[df[sym_col].str.contains("SPXW|WEEKL|0DTE|PM", case=False, na=False)]
-            elif st_upper == "AM":
-                df = df[~df[sym_col].str.contains("SPXW|WEEKL|0DTE|PM", case=False, na=False)]
+        # Helper mask checking settlement_type / settlementType column
+        st_col = next((c for c in ("settlement_type", "settlementType") if c in df.columns), None)
+        sym_col = next((c for c in ("symbol", "root_symbol") if c in df.columns), None)
+        
+        if st_upper == "PM":
+            mask_st = (df[st_col].astype(str).str.upper() == "PM") if st_col else pd.Series(False, index=df.index)
+            mask_sym = (df[sym_col].astype(str).str.contains("SPXW|WEEKL|0DTE", case=False, na=False)) if sym_col else pd.Series(False, index=df.index)
+            mask_pm = mask_st | mask_sym
+            if not mask_pm.any() and "is_pm_settled" in df.columns:
+                mask_pm = df["is_pm_settled"] == True
+            df = df[mask_pm] if mask_pm.any() else df[df[st_col].astype(str).str.upper() == "PM"] if st_col else df
+        elif st_upper == "AM":
+            mask_st_am = (df[st_col].astype(str).str.upper() == "AM") if st_col else pd.Series(True, index=df.index)
+            mask_sym_am = (~df[sym_col].astype(str).str.contains("SPXW|WEEKL|0DTE", case=False, na=False)) if sym_col else pd.Series(True, index=df.index)
+            df = df[mask_st_am & mask_sym_am]
 
     if df.empty:
         return _empty_gex_snapshot(f"{symbol}_{settlement_type}" if settlement_type else symbol, current_price)

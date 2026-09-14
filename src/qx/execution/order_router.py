@@ -20,7 +20,11 @@ class OrderRouter:
         return calculate_es_spx_basis(es_price, spx_price)
 
     def get_live_spx_strike(self, es_target: float, es_price: float, spx_price: float) -> float:
-        """Convert /ES target level to SPX cash strike using instantaneous live basis."""
+        """Convert /ES trigger target level to SPX cash strike using instantaneous live basis.
+        
+        Formula: live_basis = es_price - spx_price
+        target_spx_cash = trigger_es_level - live_basis (since /ES trades at a premium to cash SPX).
+        """
         from qx.market.futures_evidence import calculate_es_spx_basis, normalize_es_target_to_spx
         basis_info = calculate_es_spx_basis(es_price, spx_price)
         live_basis = basis_info["basis"] if basis_info["is_valid"] else 0.0

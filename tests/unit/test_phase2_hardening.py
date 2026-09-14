@@ -14,9 +14,11 @@ def test_dynamic_basis_tracking_order_router():
     assert basis_info["is_valid"] is True
     assert basis_info["basis"] == 20.50
 
-    # Convert ES target to SPX strike
-    spx_strike = router.get_live_spx_strike(es_target=5850.00, es_price=5800.50, spx_price=5780.00)
-    assert spx_strike == 5829.50  # 5850.00 - 20.50
+    # Convert ES trigger level to SPX cash strike (cash = trigger_es - live_basis)
+    trigger_es = 5850.00
+    expected_spx_cash = round(trigger_es - basis_info["basis"], 2)
+    spx_strike = router.get_live_spx_strike(es_target=trigger_es, es_price=5800.50, spx_price=5780.00)
+    assert spx_strike == expected_spx_cash  # 5850.00 - 20.50 = 5829.50
 
     # Submit order with dynamic basis parameters
     req = OrderRequest(

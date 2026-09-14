@@ -47,3 +47,19 @@ export function validatePayloadKeys(payload, requiredKeys = []) {
   return { valid: missing.length === 0, missing };
 }
 
+export function normalizeGexSnapshot(obj) {
+  if (obj == null || typeof obj !== 'object') return null;
+  const flip = safeNumber(obj, 'gamma_flip_level', safeNumber(obj, 'gamma_flip_price', 0.0));
+  const putWall = safeNumber(obj, 'put_wall_strike', safeNumber(obj, 'top_put_gamma_strike', 0.0));
+  const callWall = safeNumber(obj, 'call_wall_strike', safeNumber(obj, 'top_call_gamma_strike', 0.0));
+  return {
+    ...obj,
+    gamma_flip_level: flip,
+    gamma_flip_price: flip,
+    put_wall_strike: putWall,
+    top_put_gamma_strike: putWall,
+    call_wall_strike: callWall,
+    top_call_gamma_strike: callWall,
+  };
+}
+
