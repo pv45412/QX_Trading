@@ -11,10 +11,11 @@ from fastapi import FastAPI, HTTPException, BackgroundTasks, Request, WebSocket,
 from fastapi.responses import PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
-from qx.data.cache import _read_cached_bars, _cache_symbol
+from qx.data.cache import _read_cached_bars, _cache_symbol, CachedMarketDataProvider
 from qx.data.dashboard_refresh import DashboardRefresh, RefreshLockUnavailable
 from qx.data.stock_refresh import StockRefresh
-from qx.data.factory import build_market_data_provider
+from qx.data.factory import build_market_data_provider, build_fallback_market_data_provider
+from qx.models.market import BarDataRequest
 from qx.data.holdings import cached_top_holdings
 from qx.market.dashboard_metrics import DASHBOARD_ETFS, metrics
 from qx.market.holding_analytics import enrich_holdings
@@ -41,9 +42,9 @@ from qx.options_scanner.services.signal_service import SignalService
 from qx.options_scanner.models import UnderlyingQuote, OptionChain, OptionContract, OptionTypeEnum
 from qx.execution import OrderRouter, OrderRequest, Order
 from qx.streaming import ConnectionManager
-from qx.ops import HealthChecker, MetricsExporter
-from qx.portfolio import evaluate_portfolio_summary, calculate_portfolio_greeks, PortfolioPosition
-from qx.options_flow import analyze_option_flow, OptionFlowTrade, UnderlyingContext, MarketRegimeContext
+from qx.ops import HealthChecker, MetricsExporter, SystemHealthReport
+from qx.portfolio import evaluate_portfolio_summary, calculate_portfolio_greeks, PortfolioPosition, PortfolioSummary, PortfolioGreeks
+from qx.options_flow import analyze_option_flow, OptionFlowTrade, UnderlyingContext, MarketRegimeContext, OptionFlowAnalysis
 
 order_router_instance = OrderRouter()
 ws_manager_instance = ConnectionManager()
@@ -981,18 +982,18 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             }
 
     @app.post("/api/execution/orders")
-    def submit_execution_order(request: OrderRequest):
+    def submit_execution_order(request: OrderRequest) -> Order:
         try:
             return order_router_instance.submit_order(request)
         except Exception as e:
             raise HTTPException(status_code=400, detail=str(e))
 
     @app.get("/api/execution/orders")
-    def list_execution_orders(symbol: str | None = None):
+    def list_execution_orders(symbol: str | None = None) -> list[Order]:
         return order_router_instance.list_orders(symbol=symbol)
 
     @app.delete("/api/execution/orders/{order_id}")
-    def cancel_execution_order(order_id: str):
+    def cancel_execution_order(order_id: str) -> Order:
         try:
             return order_router_instance.cancel_order(order_id)
         except KeyError:
@@ -1001,7 +1002,7 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             raise HTTPException(status_code=400, detail=str(e))
 
     @app.websocket("/ws")
-    async def websocket_endpoint(websocket: WebSocket):
+    async def websocket_endpoint(websocket: WebSocket) -> None:
         await ws_manager_instance.connect(websocket)
         try:
             while True:
@@ -1027,23 +1028,23 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             ws_manager_instance.disconnect(websocket)
 
     @app.get("/api/ops/health")
-    def get_system_ops_health():
+    def get_system_ops_health() -> SystemHealthReport:
         return health_checker_instance.audit_system_health()
 
     @app.get("/api/ops/metrics", response_class=PlainTextResponse)
-    def get_system_prometheus_metrics():
+    def get_system_prometheus_metrics() -> str:
         return metrics_exporter_instance.export_prometheus_metrics()
 
     @app.post("/api/portfolio/summary")
-    def get_portfolio_summary_api(positions: list[PortfolioPosition]):
+    def get_portfolio_summary_api(positions: list[PortfolioPosition]) -> PortfolioSummary:
         return evaluate_portfolio_summary(positions)
 
     @app.post("/api/portfolio/greeks")
-    def get_portfolio_greeks_api(positions: list[PortfolioPosition]):
+    def get_portfolio_greeks_api(positions: list[PortfolioPosition]) -> PortfolioGreeks:
         return calculate_portfolio_greeks(positions)
 
     @app.post("/api/options_flow/analyze")
-    def analyze_options_flow_api(request: OptionFlowAnalysisRequest):
+    def analyze_options_flow_api(request: OptionFlowAnalysisRequest) -> OptionFlowAnalysis:
         return analyze_option_flow(
             trades=request.trades,
             underlying=request.underlying,
