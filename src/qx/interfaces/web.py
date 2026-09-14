@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 from datetime import datetime, timezone
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from qx.data.cache import _read_cached_bars, _cache_symbol
@@ -39,8 +39,10 @@ from qx.telemetry.telemetry_service import TelemetryService
 from qx.options_scanner.services.signal_service import SignalService
 from qx.options_scanner.models import UnderlyingQuote, OptionChain, OptionContract, OptionTypeEnum
 from qx.execution import OrderRouter, OrderRequest, Order
+from qx.streaming import ConnectionManager
 
 order_router_instance = OrderRouter()
+ws_manager_instance = ConnectionManager()
 
 
 class OptionsScanRequest(BaseModel):
@@ -1220,6 +1222,32 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             raise HTTPException(status_code=404, detail="Order not found")
         except ValueError as e:
             raise HTTPException(status_code=400, detail=str(e))
+
+    @app.websocket("/ws")
+    async def websocket_endpoint(websocket: WebSocket):
+        await ws_manager_instance.connect(websocket)
+        try:
+            while True:
+                data = await websocket.receive_json()
+                action = data.get("action")
+                if action == "subscribe":
+                    topics = data.get("topics", [])
+                    ws_manager_instance.subscribe(websocket, topics)
+                    await ws_manager_instance.send_personal_message(
+                        {"status": "subscribed", "active_topics": list(topics)}, websocket
+                    )
+                elif action == "unsubscribe":
+                    topics = data.get("topics", [])
+                    ws_manager_instance.unsubscribe(websocket, topics)
+                    await ws_manager_instance.send_personal_message(
+                        {"status": "unsubscribed", "removed_topics": list(topics)}, websocket
+                    )
+                elif action == "ping":
+                    await ws_manager_instance.send_personal_message({"type": "pong"}, websocket)
+        except WebSocketDisconnect:
+            ws_manager_instance.disconnect(websocket)
+        except Exception:
+            ws_manager_instance.disconnect(websocket)
 
     return app
 
