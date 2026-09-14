@@ -43,11 +43,19 @@ from qx.execution import OrderRouter, OrderRequest, Order
 from qx.streaming import ConnectionManager
 from qx.ops import HealthChecker, MetricsExporter
 from qx.portfolio import evaluate_portfolio_summary, calculate_portfolio_greeks, PortfolioPosition
+from qx.options_flow import analyze_option_flow, OptionFlowTrade, UnderlyingContext, MarketRegimeContext
 
 order_router_instance = OrderRouter()
 ws_manager_instance = ConnectionManager()
 health_checker_instance = HealthChecker()
 metrics_exporter_instance = MetricsExporter()
+
+
+class OptionFlowAnalysisRequest(BaseModel):
+    trades: list[OptionFlowTrade]
+    underlying: UnderlyingContext
+    regime: MarketRegimeContext | None = None
+    event_risk: bool = False
 
 
 class OptionsScanRequest(BaseModel):
@@ -1269,6 +1277,15 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
     @app.post("/api/portfolio/greeks")
     def get_portfolio_greeks_api(positions: list[PortfolioPosition]):
         return calculate_portfolio_greeks(positions)
+
+    @app.post("/api/options_flow/analyze")
+    def analyze_options_flow_api(request: OptionFlowAnalysisRequest):
+        return analyze_option_flow(
+            trades=request.trades,
+            underlying=request.underlying,
+            regime=request.regime,
+            event_risk=request.event_risk,
+        )
 
     return app
 
