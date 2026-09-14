@@ -33,6 +33,7 @@ from qx.market.stock_evidence import (
 from qx.positions.health import calculate_position_health
 from qx.positions.roll import evaluate_position_roll, PositionRollRequest
 from qx.options.pricing import evaluate_option_pricing, OptionPricingRequest
+from qx.backtesting import backtest_rectangle_breakouts
 from qx.market.structure.structure_engine import analyze_market_structure
 from qx.telemetry.telemetry_service import TelemetryService
 from qx.options_scanner.services.signal_service import SignalService
@@ -186,6 +187,22 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
     def calculate_greeks_endpoint(payload: OptionPricingRequest) -> dict[str, Any]:
         result = evaluate_option_pricing(payload)
         return result.model_dump()
+
+    @app.post("/api/backtest/run")
+    def run_backtest_endpoint(payload: dict[str, Any]) -> dict[str, Any]:
+        symbol = str(payload.get("symbol", "VST")).upper()
+        clean_sym = _cache_symbol(symbol)
+        cache_file = cache_dir / f"{clean_sym}_1y.csv"
+        if not cache_file.exists():
+            cache_file = cache_dir / f"{clean_sym}_year.csv"
+        if not cache_file.exists():
+            raise HTTPException(404, f"No historical bar data available for symbol {symbol}")
+        try:
+            bars = _read_cached_bars(cache_file)
+            result = backtest_rectangle_breakouts(symbol=symbol, bars=bars)
+            return result.model_dump()
+        except Exception as exc:
+            raise HTTPException(500, f"Backtest execution failed: {exc}") from exc
 
     @app.post("/api/options-scanner/scan")
     def run_options_scan(payload: OptionsScanRequest) -> dict[str, Any]:
