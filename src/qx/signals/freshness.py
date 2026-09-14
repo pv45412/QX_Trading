@@ -92,3 +92,43 @@ class FreshnessChecker:
                 is_executable=False,
                 reason=f"Quote age {age:.2f}s exceeds maximum stale threshold {max_age * 2}s.",
             )
+
+    def check_dual_freshness(
+        self,
+        symbol: str,
+        quote_timestamp: datetime,
+        signal_timestamp: datetime,
+        mode: str = "swing",
+        now: Optional[datetime] = None,
+    ) -> FreshnessResult:
+        """Evaluate dual timestamp freshness for both market quote and computed technical signal."""
+        now_dt = now or datetime.now(timezone.utc)
+        q_res = self.check_freshness(symbol, quote_timestamp, mode=mode, now=now_dt)
+        s_res = self.check_freshness(symbol, signal_timestamp, mode=mode, now=now_dt)
+
+        if not q_res.is_executable or not s_res.is_executable:
+            blocking_reason = q_res.reason if not q_res.is_executable else s_res.reason
+            return FreshnessResult(
+                symbol=symbol,
+                quote_age_seconds=q_res.quote_age_seconds,
+                max_threshold_seconds=q_res.max_threshold_seconds,
+                status=FreshnessStatus.STALE_BLOCKED,
+                is_executable=False,
+                reason=f"Dual Freshness BLOCKED: {blocking_reason}",
+            )
+
+        worst_status = (
+            FreshnessStatus.WARN_LATENCY
+            if (q_res.status == FreshnessStatus.WARN_LATENCY or s_res.status == FreshnessStatus.WARN_LATENCY)
+            else FreshnessStatus.FRESH
+        )
+
+        return FreshnessResult(
+            symbol=symbol,
+            quote_age_seconds=max(q_res.quote_age_seconds, s_res.quote_age_seconds),
+            max_threshold_seconds=q_res.max_threshold_seconds,
+            status=worst_status,
+            is_executable=True,
+            reason=f"Dual Freshness PASSED [{worst_status.value}]: Quote age {q_res.quote_age_seconds}s, Signal age {s_res.quote_age_seconds}s.",
+        )
+

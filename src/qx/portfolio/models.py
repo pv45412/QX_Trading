@@ -40,3 +40,32 @@ class PortfolioSummary(BaseModel):
     greeks: PortfolioGreeks
     sector_allocations: list[SectorAllocation] = Field(default_factory=list)
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+from enum import Enum
+
+
+class FreshnessState(str, Enum):
+    FRESH = "FRESH"
+    STALE_WARNED = "STALE_WARNED"
+    STALE_BLOCKED = "STALE_BLOCKED"
+
+
+class AccountSnapshot(BaseModel):
+    account_id_hash: str
+    account_equity: float = Field(..., gt=0, description="Total net liquidation equity")
+    cash_balance: float = Field(..., ge=0)
+    buying_power: float = Field(..., ge=0)
+    as_of: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class PortfolioSnapshot(BaseModel):
+    account: AccountSnapshot
+    positions: list[PortfolioPosition] = Field(default_factory=list)
+    open_orders_count: int = 0
+    greeks: PortfolioGreeks = Field(default_factory=PortfolioGreeks)
+    sector_allocations: list[SectorAllocation] = Field(default_factory=list)
+    source: str = "schwab_read_only"
+    as_of: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    freshness_state: str = "FRESH"
+

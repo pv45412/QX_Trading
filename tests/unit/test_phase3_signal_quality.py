@@ -74,9 +74,10 @@ def test_portfolio_sector_risk_veto() -> None:
     assert res_ok.passed is True
 
     # Exceeds limit
+    from qx.options_scanner.models import VetoReasonEnum
     res_fail = veto.check_portfolio_risk("NVDA", current_sector_exposure_pct=30.0, max_sector_limit_pct=25.0)
     assert res_fail.passed is False
-    assert res_fail.details["veto_type"] == "PORTFOLIO_SECTOR_LIMIT_EXCEEDED"
+    assert res_fail.reason == VetoReasonEnum.SECTOR_CONCENTRATION
 
 
 def test_trade_lifecycle_state_transitions() -> None:

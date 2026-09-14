@@ -142,19 +142,47 @@ class VetoService:
         self,
         symbol: str,
         current_sector_exposure_pct: float,
+        proposed_addition_pct: float = 0.0,
         max_sector_limit_pct: float = 25.0,
+        is_duplicate_open_trade: bool = False,
+        portfolio_freshness_state: str = "FRESH",
     ) -> VetoResult:
-        """Veto trade idea if portfolio sector exposure exceeds risk limits."""
-        if current_sector_exposure_pct > max_sector_limit_pct:
+        """Veto trade candidate against portfolio risk and concentration constraints."""
+        if portfolio_freshness_state == "STALE_BLOCKED":
             return VetoResult(
                 passed=False,
-                reason=VetoReasonEnum.DATA_STALE,  # Reuse or fail closed on risk limit
+                reason=VetoReasonEnum.PORTFOLIO_DATA_STALE,
+                details={
+                    "symbol": symbol,
+                    "freshness_state": portfolio_freshness_state,
+                    "reason": "Cached portfolio snapshot is stale beyond maximum operational threshold.",
+                },
+            )
+
+        if is_duplicate_open_trade:
+            return VetoResult(
+                passed=False,
+                reason=VetoReasonEnum.DUPLICATE_RISK,
+                details={
+                    "symbol": symbol,
+                    "reason": f"Active trade position or open QX proposal already exists for {symbol}.",
+                },
+            )
+
+        projected_exposure = current_sector_exposure_pct + proposed_addition_pct
+        if projected_exposure > max_sector_limit_pct:
+            return VetoResult(
+                passed=False,
+                reason=VetoReasonEnum.SECTOR_CONCENTRATION,
                 details={
                     "symbol": symbol,
                     "current_sector_exposure_pct": current_sector_exposure_pct,
+                    "proposed_addition_pct": proposed_addition_pct,
+                    "projected_exposure_pct": projected_exposure,
                     "max_sector_limit_pct": max_sector_limit_pct,
-                    "veto_type": "PORTFOLIO_SECTOR_LIMIT_EXCEEDED",
                 },
             )
+
         return VetoResult(passed=True)
+
 
