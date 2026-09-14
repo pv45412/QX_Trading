@@ -8,6 +8,7 @@ from typing import Any
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request, WebSocket, WebSocketDisconnect
+from fastapi.responses import PlainTextResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from qx.data.cache import _read_cached_bars, _cache_symbol
@@ -40,9 +41,12 @@ from qx.options_scanner.services.signal_service import SignalService
 from qx.options_scanner.models import UnderlyingQuote, OptionChain, OptionContract, OptionTypeEnum
 from qx.execution import OrderRouter, OrderRequest, Order
 from qx.streaming import ConnectionManager
+from qx.ops import HealthChecker, MetricsExporter
 
 order_router_instance = OrderRouter()
 ws_manager_instance = ConnectionManager()
+health_checker_instance = HealthChecker()
+metrics_exporter_instance = MetricsExporter()
 
 
 class OptionsScanRequest(BaseModel):
@@ -1248,6 +1252,14 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             ws_manager_instance.disconnect(websocket)
         except Exception:
             ws_manager_instance.disconnect(websocket)
+
+    @app.get("/api/ops/health")
+    def get_system_ops_health():
+        return health_checker_instance.audit_system_health()
+
+    @app.get("/api/ops/metrics", response_class=PlainTextResponse)
+    def get_system_prometheus_metrics():
+        return metrics_exporter_instance.export_prometheus_metrics()
 
     return app
 
