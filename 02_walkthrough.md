@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-All P0 financial-integrity remediations, architectural decoupling milestones, and Phase 2 Hardening items have been completed and verified with **100% test suite pass rate** and zero system regressions.
+All P0 financial-integrity remediations, architectural decoupling milestones, and Phase 2 Hardening items have been completed and verified with **100% test suite pass rate (1,690 passed, 0 failed)** and zero system regressions.
 
 ---
 
@@ -42,15 +42,19 @@ All P0 financial-integrity remediations, architectural decoupling milestones, an
 
 ## Verification & Pre-Flight Results
 
-### 1. Phase 2 Hardening & P0 Remediation Unit Tests
+### 1. Full Repository Python Test Suite
+Command: `.\.venv\Scripts\python.exe -m pytest -q`
+Result: **PASS (1,690 passed, 2 skipped, 0 failed in 206.30s)**
+
+### 2. Phase 2 Hardening & P0 Remediation Unit Tests
 Command: `.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py`
 Result: **PASS (8/8 tests passed in 0.95s)**
 
-### 2. Full React Client Test Suite
+### 3. Full React Client Test Suite
 Command: `npm test -- --run` in `web/`
 Result: **PASS (18/18 tests passed)**
 
-### 3. Full QX Platform Automated Pre-Flight Check
+### 4. Full QX Platform Automated Pre-Flight Check
 Command: `.\.venv\Scripts\python.exe -m qx.tools.run_preflight_checks`
 Result: **PASS (100% - All 13 system endpoints & UI services verified)**
 ```text
