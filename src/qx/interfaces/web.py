@@ -42,6 +42,7 @@ from qx.options_scanner.models import UnderlyingQuote, OptionChain, OptionContra
 from qx.execution import OrderRouter, OrderRequest, Order
 from qx.streaming import ConnectionManager
 from qx.ops import HealthChecker, MetricsExporter
+from qx.portfolio import evaluate_portfolio_summary, calculate_portfolio_greeks, PortfolioPosition
 
 order_router_instance = OrderRouter()
 ws_manager_instance = ConnectionManager()
@@ -1260,6 +1261,14 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
     @app.get("/api/ops/metrics", response_class=PlainTextResponse)
     def get_system_prometheus_metrics():
         return metrics_exporter_instance.export_prometheus_metrics()
+
+    @app.post("/api/portfolio/summary")
+    def get_portfolio_summary_api(positions: list[PortfolioPosition]):
+        return evaluate_portfolio_summary(positions)
+
+    @app.post("/api/portfolio/greeks")
+    def get_portfolio_greeks_api(positions: list[PortfolioPosition]):
+        return calculate_portfolio_greeks(positions)
 
     return app
 
