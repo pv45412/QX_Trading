@@ -66,6 +66,20 @@ def test_full_signal_pipeline_end_to_end(tmp_path):
             open_interest=500,
             volume=150,
             implied_volatility=0.23
+        ),
+        OptionContract(
+            symbol="AAPL260918P00205000",
+            underlying_symbol="AAPL",
+            strike=205.0,
+            expiration=exp_date,
+            dte=35,
+            option_type=OptionTypeEnum.PUT,
+            bid=1.8,
+            ask=2.0,
+            delta=-0.15,
+            open_interest=400,
+            volume=100,
+            implied_volatility=0.24
         )
     ]
 
