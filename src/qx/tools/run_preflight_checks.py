@@ -17,7 +17,7 @@ FRONTEND_URL = "http://127.0.0.1:5174"
 def check_url(url: str, is_json: bool = True) -> tuple[bool, Any]:
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "QX-PreFlight-Checker/1.0"})
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=30) as resp:
             if resp.status != 200:
                 return False, f"HTTP {resp.status}"
             content = resp.read().decode("utf-8")
