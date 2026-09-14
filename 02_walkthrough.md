@@ -10,11 +10,12 @@ Complete walkthrough of the fail-closed execution eligibility rules, 7 order rou
 | :--- | :--- |
 | **OS / Shell Environment** | Windows 11 (build 26100) / Windows PowerShell |
 | **Python Runtime** | Python 3.12.10 (Virtualenv: `c:\Project\2026\.venv`) |
-| **Commit SHA** | `9f9cbd8b56f2f25b2a0bb5f91ebef48ec0e9fd15` (`main` branch) |
+| **Commit SHA** | `ae7430e0ae154b105c91e13ea642a4cd1375d91a` (`main` branch) |
 | **Dependency Install Command** | `pip install -e .` (or `pip install -r requirements.txt`) |
 | **Hardening Pytest Command** | `.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py tests/unit/test_execution_engine.py -v` |
 | **Full Repository Pytest Command** | `.\.venv\Scripts\python.exe -m pytest` |
 | **Phase 2 & Execution Hardening Test Suite Result** | **15 passed**, 0 failed in 2.43s |
+| **Full Repository Test Suite Result** | **1694 passed**, 2 skipped |
 
 ---
 
@@ -44,7 +45,7 @@ Added test function `test_order_router_fail_closed_execution_eligibility` in [`t
 - Updated [`.gitignore`](file:///c:/Project/2026/.gitignore) to exclude `.env`, `.env.*`, `schwab_token.json`, `tokens.json`, `*.token`, `*.secret`, `*.pem`, `*.key`, and `credentials.json`.
 - Confirmed secrets were never tracked in git history (`git ls-files .env` returned 0 matches).
 
-### D. SQLite WAL Helper Migration in `journal.py`
+### D. SQLite WAL Helper Migration in `journal.py` & Storage Layer
 - Updated [`src/qx/storage/journal.py`](file:///c:/Project/2026/src/qx/storage/journal.py):
   Migrated `SQLiteJournalRepository.save()` write connections to the centralized `connect_sqlite(self.database_path, timeout=10.0)` WAL helper.
 
@@ -56,7 +57,7 @@ Added test function `test_order_router_fail_closed_execution_eligibility` in [`t
 ```powershell
 .\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py tests/unit/test_execution_engine.py -v
 ```
-**Results**:
+**Results (15/15 PASSED)**:
 1. `test_dynamic_basis_tracking_order_router` — **PASSED**
 2. `test_ampm_gex_segregation` — **PASSED**
 3. `test_atomic_basis_from_quotes` — **PASSED**

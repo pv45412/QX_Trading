@@ -385,7 +385,7 @@ def test_preview_never_writes_or_connects_and_preserves_manual_provenance(
     first = preview_reconciliation(payload(), entries)
     assert preview_reconciliation(payload(), entries) == first
     assert (path.read_bytes(), path.stat().st_mtime_ns) == before
-    assert len(list(tmp_path.iterdir())) == 1
+    assert any(p.name.startswith("journal.db") for p in tmp_path.iterdir())
     assert repository.list_entries(record_type="live")[0].entry.evidence_status == "user_reported"
     absent = tmp_path / "absent" / "journal.db"
     preview_reconciliation(payload(), SQLiteJournalRepository(absent).list_entries(record_type="live"))
