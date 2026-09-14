@@ -17,7 +17,7 @@ from qx.options_flow import analyze_option_flow, OptionFlowTrade, UnderlyingCont
 
 
 @pytest.fixture
-def client():
+def client() -> TestClient:
     app = create_app()
     # Warmup app initialization
     app.get("/api/ops/health")
@@ -25,7 +25,7 @@ def client():
 
 
 class TestPerformanceBenchmarks:
-    def test_api_market_snapshot_latency(self, client):
+    def test_api_market_snapshot_latency(self, client: TestClient) -> None:
         """API Benchmark: Warm Market Snapshot response latency < 250 ms."""
         # Warmup call
         client.get("/api/market/XLK/snapshot")
@@ -38,7 +38,7 @@ class TestPerformanceBenchmarks:
         assert elapsed_ms < 250.0, f"Market Snapshot API latency too high: {elapsed_ms:.2f} ms"
         print(f"\n[PERF BENCHMARK] Market Snapshot XLK: {elapsed_ms:.2f} ms")
 
-    def test_api_position_advisor_latency(self, client):
+    def test_api_position_advisor_latency(self, client: TestClient) -> None:
         """API Benchmark: Position Advisor response latency < 100 ms."""
         payload = {
             "symbol": "VST",
@@ -58,7 +58,7 @@ class TestPerformanceBenchmarks:
         assert elapsed_ms < 100.0, f"Position Advisor API latency too high: {elapsed_ms:.2f} ms"
         print(f"\n[PERF BENCHMARK] Position Advisor API: {elapsed_ms:.2f} ms")
 
-    def test_api_portfolio_greeks_latency(self, client):
+    def test_api_portfolio_greeks_latency(self, client: TestClient) -> None:
         """API Benchmark: Portfolio Greeks calculation latency < 150 ms."""
         payload = [
             {"symbol": "XLK", "asset_class": "STOCK", "quantity": 100, "entry_price": 140.0, "current_price": 148.5, "delta": 1.0},
@@ -75,7 +75,7 @@ class TestPerformanceBenchmarks:
         assert elapsed_ms < 150.0, f"Portfolio Greeks API latency too high: {elapsed_ms:.2f} ms"
         print(f"\n[PERF BENCHMARK] Portfolio Greeks API: {elapsed_ms:.2f} ms")
 
-    def test_api_ops_health_latency(self, client):
+    def test_api_ops_health_latency(self, client: TestClient) -> None:
         """API Benchmark: System Health Auditor latency < 150 ms."""
         # Warmup call
         client.get("/api/ops/health")
@@ -88,7 +88,7 @@ class TestPerformanceBenchmarks:
         assert elapsed_ms < 150.0, f"Ops Health API latency too high: {elapsed_ms:.2f} ms"
         print(f"\n[PERF BENCHMARK] Ops Health Check API: {elapsed_ms:.2f} ms")
 
-    def test_engine_options_pricing_speed(self):
+    def test_engine_options_pricing_speed(self) -> None:
         """Engine Benchmark: Black-Scholes pricing & Greeks calculation speed < 15 ms."""
         req = OptionPricingRequest(
             underlying_price=150.0,
@@ -106,7 +106,7 @@ class TestPerformanceBenchmarks:
         assert elapsed_ms < 15.0, f"Options Pricing engine speed too slow: {elapsed_ms:.2f} ms"
         print(f"\n[PERF BENCHMARK] Options Pricing Engine: {elapsed_ms:.2f} ms")
 
-    def test_engine_options_flow_speed(self):
+    def test_engine_options_flow_speed(self) -> None:
         """Engine Benchmark: Options Order Flow analyzer speed < 15 ms."""
         trades = [
             OptionFlowTrade(
