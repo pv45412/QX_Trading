@@ -38,6 +38,9 @@ from qx.market.structure.structure_engine import analyze_market_structure
 from qx.telemetry.telemetry_service import TelemetryService
 from qx.options_scanner.services.signal_service import SignalService
 from qx.options_scanner.models import UnderlyingQuote, OptionChain, OptionContract, OptionTypeEnum
+from qx.execution import OrderRouter, OrderRequest, Order
+
+order_router_instance = OrderRouter()
 
 
 class OptionsScanRequest(BaseModel):
@@ -1197,6 +1200,26 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
                 ],
                 "description": "Buys ITM/ATM Call and sells OTM Call to cap risk while capturing upside movement on bullish structure triggers."
             }
+
+    @app.post("/api/execution/orders")
+    def submit_execution_order(request: OrderRequest):
+        try:
+            return order_router_instance.submit_order(request)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=str(e))
+
+    @app.get("/api/execution/orders")
+    def list_execution_orders(symbol: str | None = None):
+        return order_router_instance.list_orders(symbol=symbol)
+
+    @app.delete("/api/execution/orders/{order_id}")
+    def cancel_execution_order(order_id: str):
+        try:
+            return order_router_instance.cancel_order(order_id)
+        except KeyError:
+            raise HTTPException(status_code=404, detail="Order not found")
+        except ValueError as e:
+            raise HTTPException(status_code=400, detail=str(e))
 
     return app
 
