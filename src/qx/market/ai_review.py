@@ -329,15 +329,7 @@ class AIReviewer:
                     raise ReviewUnavailable("AI configuration changed; no review was published")
                 credential = os.getenv("OPENAI_API_KEY", "").strip()
                 if not credential:
-                    obs_ids = [o["id"] for o in evidence.get("observations", [])]
-                    check_ids = ["live_quote", "events", "risk"]
-                    local_output = {
-                        "snapshot_id": evidence["snapshot_id"],
-                        "observations": obs_ids if obs_ids else ["relative_strength"],
-                        "checks": check_ids
-                    }
-                    result = validate_selection(evidence, local_output)
-                    return {**result, "model": status["model"] or "qx-local-ai", "mode": "local_evidence_synthesis"}
+                    raise ReviewUnavailable("OpenAI API key credential missing; review unavailable.")
                 self._last_attempt = time.monotonic()
                 response = requests.post("https://api.openai.com/v1/responses", json=payload,
                                          headers={"Authorization": f"Bearer {credential}"},

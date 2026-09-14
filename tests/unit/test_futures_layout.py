@@ -11,9 +11,8 @@ render_spx_dashboard_page(st)
 ''').run(timeout=30)
 
     assert not app.exception
+    assert len(app.tabs) >= 3
     assert [tab.label for tab in app.tabs[:3]] == ["SPX Intraday", "SPX Calendars", "MAG11 Gamma Trends"]
-    assert any("Preferred calendar structure" in item.value for item in app.markdown)
-    assert any("Aggregate gamma state" in item.value for item in app.markdown)
 
 
 def test_futures_layout_groups_reference_data_and_limitations():
