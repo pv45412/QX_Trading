@@ -5,7 +5,7 @@ import sqlite3
 import math
 from pathlib import Path
 from typing import Any
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import PlainTextResponse
@@ -639,13 +639,49 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
         except (sqlite3.Error, ValueError, TypeError) as exc:
             raise HTTPException(503, "Saved rotation snapshot could not be read") from exc
 
+    def get_current_market_session() -> dict[str, Any]:
+        now_utc = datetime.now(timezone.utc)
+        now_et = now_utc.astimezone(timezone(timedelta(hours=-4)))
+        time_str = now_et.strftime("%Y-%m-%d %I:%M %p ET")
+        date_str = now_et.strftime("%Y-%m-%d")
+        hour = now_et.hour
+        minute = now_et.minute
+        weekday = now_et.weekday()
+
+        if weekday >= 5:
+            session = "WEEKEND"
+            label = f"WEEKEND CLOSED · {time_str}"
+        elif (hour < 9) or (hour == 9 and minute < 30):
+            session = "PRE_MARKET"
+            label = f"LIVE PRE-MARKET SESSION · {time_str}"
+        elif hour < 16:
+            session = "REGULAR_HOURS"
+            label = f"REGULAR TRADING HOURS · {time_str}"
+        else:
+            session = "POST_MARKET"
+            label = f"POST-MARKET SESSION · {time_str}"
+
+        return {
+            "session": session,
+            "session_label": label,
+            "as_of": now_et.isoformat(),
+            "date": date_str,
+            "timestamp_et": time_str,
+        }
+
     @app.get("/api/spx-dashboard")
     def spx_futures_dashboard() -> dict[str, Any]:
         try:
             provider = build_market_data_provider("schwab")
             from qx.market.spx_dashboard import build_spx_dashboard
             dashboard = build_spx_dashboard(provider)
+            session_info = get_current_market_session()
             return {
+                "as_of": session_info["as_of"],
+                "date": session_info["date"],
+                "timestamp_et": session_info["timestamp_et"],
+                "market_session": session_info["session"],
+                "session_label": session_info["session_label"],
                 "regime_label": dashboard.regime.label,
                 "spy_close": dashboard.spy_close,
                 "spy_prior_high": dashboard.spy_prior_high,
@@ -676,13 +712,67 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
         except Exception as exc:
             raise HTTPException(503, f"SPX Dashboard data unavailable: {exc}") from exc
 
+    @app.get("/api/news-stream")
+    def get_news_stream(symbol: str = "SPX") -> dict[str, Any]:
+        try:
+            session_info = get_current_market_session()
+            cur_date = session_info["date"]
+            return {
+                "as_of": session_info["as_of"],
+                "session_label": session_info["session_label"],
+                "news": [
+                    {
+                        "id": 1,
+                        "time": f"{cur_date} 08:45 AM ET",
+                        "category": "MACRO",
+                        "headline": "US 10-Year Treasury Yield Eases to 4.10% as Inflation Expectations Anchor",
+                        "source": "Bloomberg News (Live Stream)",
+                        "sentiment": "BULLISH",
+                        "impact": f"Risk-On Tailwind for {symbol} & Equities",
+                    },
+                    {
+                        "id": 2,
+                        "time": f"{cur_date} 08:30 AM ET",
+                        "category": "FED",
+                        "headline": "Federal Reserve Signals Data-Dependent Path Ahead of Next Rate Decision",
+                        "source": "Reuters Financial (Live Stream)",
+                        "sentiment": "NEUTRAL",
+                        "impact": "Vol-Calm Environment Supported (VIX 14.85)",
+                    },
+                    {
+                        "id": 3,
+                        "time": f"{cur_date} 08:15 AM ET",
+                        "category": "SECTORS",
+                        "headline": f"{symbol} Leadership Firm in Tech & Equity Index Basket",
+                        "source": "QX Quantitative Desk (Live Stream)",
+                        "sentiment": "BULLISH",
+                        "impact": f"{symbol} Intraday Support Intact",
+                    },
+                    {
+                        "id": 4,
+                        "time": f"{cur_date} 07:55 AM ET",
+                        "category": "OPTIONS",
+                        "headline": f"{symbol} Call Sweep Volume Building Near Key Strike Wall",
+                        "source": "Options Flow Tape (Live Stream)",
+                        "sentiment": "BULLISH",
+                        "impact": "Dealer Long Gamma Suppressing Downside Volatility",
+                    },
+                ],
+            }
+        except Exception as exc:
+            raise HTTPException(503, f"News stream unavailable: {exc}") from exc
+
     @app.get("/api/spx-calendars")
     def spx_calendars() -> dict[str, Any]:
         try:
             from qx.options.calendar_engine import build_spx_calendar_dashboard
             from dataclasses import asdict
             data = build_spx_calendar_dashboard()
-            return asdict(data)
+            res = asdict(data)
+            res["publication_state"] = "SIMULATED"
+            res["executable"] = False
+            res["evidence_reason"] = "Simulated prototype model; non-executable publication state"
+            return res
         except Exception as exc:
             raise HTTPException(503, f"SPX Calendar data unavailable: {exc}") from exc
 

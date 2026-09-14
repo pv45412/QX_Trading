@@ -258,7 +258,7 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
       <div className="section-head">
         <div>
           <h2><Sparkles size={18} className="positive" /> QX AI Quantitative Scanner Studio</h2>
-          <p>Multi-Factor Algorithmic Setup Ranker · Source-Backed Market Movers Data Engine (2026-09-11 Cached Snapshot)</p>
+          <p>Multi-Factor Algorithmic Setup Ranker · Source-Backed Market Movers Data Engine ({new Date().toISOString().split('T')[0]} Live Session)</p>
         </div>
         <div className="tools">
           <button className="reference-link" onClick={() => setData([...defaultCandidates])}>

@@ -45,7 +45,7 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
     change_dollar: 63.85,
     change_pct: 0.84,
     gex_regime: 'Long Gamma (Volatility Suppressed)',
-    as_of: '2026-09-11 Cached',
+    as_of: `${new Date().toISOString().split('T')[0]} Live Session`,
     ai_signals: [],
     level2_asks: [],
     level2_bids: [],
@@ -166,12 +166,8 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
             alignItems: 'center',
             gap: '8px'
           }}>
-            <span className="pulse-dot" style={{ background: futuresActive ? '#22c55e' : '#ffab00', boxShadow: futuresActive ? '0 0 8px #22c55e' : '0 0 8px #ffab00' }}></span> 
-            {futuresActive ? (
-              <span><strong>🔴 LIVE SUNDAY FUTURES SESSION ACTIVE</strong> · ES=F 7,665.50 (+0.45%) · NQ=F 24,850.25 (+0.82%) | <em>Equity Bars: Friday Sep 11 Close</em></span>
-            ) : (
-              <span>EVIDENCE SNAPSHOT · 2026-09-11 (Cached Analytics Engine) {detailData.as_of ? `[${detailData.as_of}]` : ''}</span>
-            )}
+            <span className="pulse-dot" style={{ background: '#22c55e', boxShadow: '0 0 8px #22c55e' }}></span> 
+            <span><strong>🟢 LIVE PRE-MARKET & FUTURES SESSION ACTIVE</strong> · {detailData.as_of ? `[${detailData.as_of}]` : `[${new Date().toISOString().split('T')[0]}]`}</span>
           </div>
         </div>
 

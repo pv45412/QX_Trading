@@ -28,3 +28,22 @@ export function formatTimestampET(value) {
   const instant = new Date(`${match[1]}T${match[2]}:${match[3]}:${match[4]}${match[5] || ''}${match[6] || 'Z'}`);
   return Number.isFinite(instant.getTime()) ? easternTime.format(instant) : 'Unavailable';
 }
+
+export function safeGet(obj, key, fallback = null) {
+  if (obj == null || typeof obj !== 'object') return fallback;
+  const val = obj[key];
+  return val !== undefined && val !== null ? val : fallback;
+}
+
+export function safeNumber(obj, key, fallback = 0.0) {
+  const val = safeGet(obj, key, fallback);
+  const num = Number(val);
+  return Number.isFinite(num) ? num : fallback;
+}
+
+export function validatePayloadKeys(payload, requiredKeys = []) {
+  if (payload == null || typeof payload !== 'object') return { valid: false, missing: requiredKeys };
+  const missing = requiredKeys.filter(k => !(k in payload) || payload[k] === undefined);
+  return { valid: missing.length === 0, missing };
+}
+

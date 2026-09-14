@@ -42,3 +42,24 @@ class TelemetryService:
                     except json.JSONDecodeError:
                         continue
         return records[-limit:]
+
+    def calculate_calibrated_win_rate(self, symbol: str | None = None) -> dict[str, Any]:
+        """Compute empirical win rate from recorded trade outcome telemetry.
+
+        :param symbol: Optional ticker symbol filter
+        :return: Dict containing sample size, empirical win rate %, and calibration status
+        """
+        records = self.list_records(limit=1000)
+        filtered = [r for r in records if r.get("final_outcome") is not None]
+        if symbol:
+            filtered = [r for r in filtered if r.get("symbol") == symbol]
+        if not filtered:
+            return {"sample_size": 0, "empirical_win_rate_pct": 55.0, "calibrated": False}
+
+        wins = sum(1 for r in filtered if str(r.get("final_outcome")).upper() in ("WIN", "PROFIT", "SUCCESS"))
+        rate = round((wins / len(filtered)) * 100.0, 1)
+        return {
+            "sample_size": len(filtered),
+            "empirical_win_rate_pct": rate,
+            "calibrated": True,
+        }

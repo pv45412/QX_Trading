@@ -78,7 +78,7 @@ def evaluate_position(
 
     # Calculate P&L
     if pos.option_mark and pos.option_mark > 0 and ("Call" in pos.position_type or "Put" in pos.position_type or "Spread" in pos.position_type):
-        multiplier = 100.0 if quantity <= 10 else 1.0
+        multiplier = 100.0
         unrealized_pnl = (pos.option_mark - entry_price) * quantity * multiplier
         unrealized_pnl_pct = (pos.option_mark - entry_price) / entry_price if entry_price > 0 else 0.0
     elif is_short:

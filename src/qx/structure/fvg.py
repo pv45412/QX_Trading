@@ -15,6 +15,7 @@ def detect_fair_value_gaps(
     high: pd.Series,
     low: pd.Series,
     min_gap_pct: float = 0.05,
+    require_closed_bars: bool = True,
 ) -> list[FairValueGap]:
     """Detect Fair Value Gaps (FVG) across 3-bar sequences.
 
@@ -28,7 +29,10 @@ def detect_fair_value_gaps(
     h = high.to_numpy()
     l = low.to_numpy()
 
-    for i in range(2, len(h)):
+    # If require_closed_bars is True, ignore forming intra-bar candle (last index)
+    end_idx = len(h) - 1 if require_closed_bars and len(h) > 3 else len(h)
+
+    for i in range(2, end_idx):
         # Bullish FVG
         if l[i] > h[i - 2]:
             gap_size = l[i] - h[i - 2]

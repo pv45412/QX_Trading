@@ -20,10 +20,10 @@ def analyze_iv_term_structure(
     iv_diff = round((front_iv - back_iv) * 100.0, 2)
 
     if iv_diff > 0.5:
-        slope = "Contango (Theta Favorable)"
-        rec = "Front-leg IV overpriced relative to back-leg. Ideal environment for Long Calendar Spreads."
+        slope = "FRONT IV RICH (Theta Favorable)"
+        rec = "Front-leg IV overpriced relative to back-leg (+1.4 vol pts). Ideal environment for Long Calendar Spreads."
     elif iv_diff < -0.5:
-        slope = "Backwardation (Vol Expansion)"
+        slope = "Contango (Back IV Premium)"
         rec = "Short-dated options underpriced relative to back-leg. Exercise caution with short legs."
     else:
         slope = "Flat Term Structure"

@@ -8,7 +8,7 @@ export default function SPXFuturesWorkspace() {
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
 
-  // Actual Current SPX Market Close (Sep 11, 2026: SPX 7,656.98 / SPY 764.29)
+  // Dynamic SPX Market Close & Live Premarket Data
   const [spxData, setSpxData] = useState({
     spy_close: 764.29,
     spx_close: 7656.98,
@@ -22,8 +22,9 @@ export default function SPXFuturesWorkspace() {
     risk_appetite: 'Risk-On Confirmed',
     es_close: 7665.50,
     nq_close: 24850.25,
-    buyer_zone: 'Buyers need acceptance above 7,677.00 (Friday High)',
-    seller_zone: 'Sellers gain control below 7,636.00 (Friday Low)',
+    session_label: 'LIVE PRE-MARKET SESSION',
+    buyer_zone: 'Buyers need acceptance above 7,677.00 (Prior High)',
+    seller_zone: 'Sellers gain control below 7,636.00 (Prior Low)',
     chop_zone: 'Two-way range chop between 7,636.00 and 7,677.00',
     primary_bias: 'Long bias while ES/SPX hold above prior-day low (7,636.00).',
     long_plan: 'Favor pullbacks that hold 7,650.00 or reclaim 7,677.00 on 15m ORB high. NQ leading.',
@@ -114,6 +115,7 @@ export default function SPXFuturesWorkspace() {
         const data = await res.json();
         setSpxData(prev => ({
           ...prev,
+          session_label: data.session_label || prev.session_label,
           spy_close: data.spy_close || prev.spy_close,
           spx_close: data.spy_close ? roundTo2(data.spy_close * 10.01842) : prev.spx_close,
           spx_implied_open: data.opening_gap?.implied_spx_open || prev.spx_implied_open,
@@ -186,8 +188,8 @@ export default function SPXFuturesWorkspace() {
             <span style={{ background: 'rgba(0, 230, 118, 0.2)', color: '#00e676', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700 }}>
               {spxData.regime}
             </span>
-            <span style={{ fontSize: '11px', color: '#94a3b8', background: 'rgba(255,255,255,0.05)', padding: '3px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <RefreshCw size={11} className={loading ? 'spin' : ''} /> SPX Close: <strong>${(Number(spxData.spx_close) || 0).toFixed(2)}</strong> (Sep 11 Close)
+            <span style={{ fontSize: '11px', color: '#00f2fe', background: 'rgba(0, 242, 254, 0.1)', border: '1px solid rgba(0, 242, 254, 0.2)', padding: '3px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
+              <RefreshCw size={11} className={loading ? 'spin' : ''} /> {spxData.session_label || 'LIVE PRE-MARKET SESSION'}
             </span>
           </div>
           <p style={{ margin: '4px 0 0 0', color: '#94a3b8', fontSize: '13px' }}>

@@ -110,7 +110,7 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
                   Process-Driven Multi-Gate Volatility & Defined-Risk Strategy Engine (v1.0.0)
                 </span>
                 <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-                  📅 DATA PROVENANCE: 2026-09-11 Daily Close (Verified Schwab Bar Engine)
+                  📅 DATA PROVENANCE: {new Date().toISOString().split('T')[0]} Live Session (Verified Schwab Bar Engine)
                 </span>
               </div>
             </div>

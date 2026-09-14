@@ -45,3 +45,14 @@ class AlertDispatcher:
     def get_history(self, limit: int = 50) -> list[AlertPayload]:
         """Retrieve recent alert history."""
         return self.history[-limit:]
+
+    def dispatch_gex_flip_alert(self, symbol: str, spot_price: float, gamma_flip_level: float, regime: str) -> AlertPayload:
+        """Dispatch alert when price crosses dealer gamma flip boundary."""
+        level = "WARNING" if spot_price < gamma_flip_level else "INFO"
+        msg = f"{symbol} (${spot_price:.2f}) crossed Dealer Gamma Flip level (${gamma_flip_level:.2f}). Current Regime: {regime}"
+        return self.dispatch_alert(level=level, source="GEX_FLIP_ENGINE", message=msg, metadata={"symbol": symbol, "spot": spot_price, "flip": gamma_flip_level})
+
+    def dispatch_orb_breakout_alert(self, symbol: str, spot_price: float, orb_high: float, orb_low: float, direction: str) -> AlertPayload:
+        """Dispatch alert on 15m Opening Range Breakout."""
+        msg = f"{symbol} 15m ORB {direction} Trigger! Price: ${spot_price:.2f} (ORB High: ${orb_high:.2f}, ORB Low: ${orb_low:.2f})"
+        return self.dispatch_alert(level="INFO", source="ORB_BREAKOUT_ENGINE", message=msg, metadata={"symbol": symbol, "spot": spot_price, "direction": direction})

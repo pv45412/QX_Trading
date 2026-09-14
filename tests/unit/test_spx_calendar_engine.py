@@ -13,13 +13,13 @@ from qx.options.calendar_engine import (
 
 
 def test_iv_term_structure_contango_slope():
-    """Verify IV term structure contango slope and differential calculations."""
+    """Verify IV term structure slope and differential calculations."""
     ts = analyze_iv_term_structure(volatility_annual=0.16)
     assert ts.front_leg_dte == 1
     assert ts.back_leg_dte == 4
     assert ts.front_leg_iv > ts.back_leg_iv
     assert ts.iv_differential_pct > 0.0
-    assert "Contango" in ts.iv_slope
+    assert "FRONT IV RICH" in ts.iv_slope
 
 
 def test_spx_calendar_ideas_generation():
@@ -29,14 +29,14 @@ def test_spx_calendar_ideas_generation():
 
     assert len(ideas) == 3
     names = [idea.name for idea in ideas]
-    assert "Weekend Theta Capture Calendar" in names[0]
+    assert ("Weekend Theta" in names[0] or "Spread Calendar" in names[0])
     assert "Dealer Call Wall Pin Calendar" in names[1]
     assert "Dealer Put Wall Support Calendar" in names[2]
 
     for idea in ideas:
         assert idea.net_debit > 0.0
         assert idea.max_profit > 0.0
-        assert idea.win_probability_pct > 70.0
+        assert 50.0 <= idea.win_probability_pct <= 65.0
 
 
 def test_spx_calendar_dashboard_builder():

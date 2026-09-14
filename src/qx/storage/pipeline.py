@@ -8,6 +8,7 @@ from typing import Any
 import pandas as pd
 
 from qx.processing.overnight_workflow import OvernightWorkflowResult
+from qx.storage.connection import connect_sqlite
 
 
 @dataclass(frozen=True)
@@ -50,7 +51,7 @@ class SQLitePipelineRepository:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS pipeline_runs (
@@ -78,7 +79,7 @@ class SQLitePipelineRepository:
     def save(self, result: OvernightWorkflowResult, metadata: PipelineRunMetadata) -> int:
         self.initialize()
         payload = _pipeline_payload(result, metadata)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             cursor = connection.execute(
                 """
                 INSERT INTO pipeline_runs
@@ -115,7 +116,7 @@ class SQLitePipelineRepository:
 
     def list_runs(self, limit: int = 10) -> list[StoredPipelineRun]:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 """
                 SELECT

@@ -133,3 +133,16 @@ def source_contract(key: str) -> SourceContract:
         if source.key == key:
             return source
     raise KeyError(f"Unknown data source: {key}")
+
+
+def validate_api_payload_contract(payload: Mapping[str, Any], required_keys: tuple[str, ...]) -> dict[str, Any]:
+    """Audit backend API response dictionary against required React frontend keys."""
+    if not isinstance(payload, Mapping):
+        return {"valid": False, "missing_keys": list(required_keys), "error": "Payload is not a dict"}
+    missing = [k for k in required_keys if k not in payload or payload[k] is None]
+    return {
+        "valid": len(missing) == 0,
+        "missing_keys": missing,
+        "checked_keys": list(required_keys),
+    }
+

@@ -24,17 +24,25 @@ def evaluate_portfolio_summary(
 
     total_value = 0.0
     total_cost = 0.0
+    unrealized_pnl = 0.0
     sector_values = defaultdict(float)
 
     for pos in pos_list:
         multiplier = 100.0 if pos.asset_class == "OPTION" else 1.0
         val = abs(pos.quantity) * pos.current_price * multiplier
         cost = abs(pos.quantity) * pos.entry_price * multiplier
+        
+        # Signed P&L handling for short vs long positions
+        if pos.quantity < 0:
+            pnl = (pos.entry_price - pos.current_price) * abs(pos.quantity) * multiplier
+        else:
+            pnl = (pos.current_price - pos.entry_price) * pos.quantity * multiplier
+
         total_value += val
         total_cost += cost
         sector_values[pos.sector] += val
+        unrealized_pnl += pnl
 
-    unrealized_pnl = total_value - total_cost
     unrealized_pnl_pct = (unrealized_pnl / total_cost * 100.0) if total_cost > 0 else 0.0
 
     allocations = []

@@ -121,7 +121,7 @@ class TradeConstructor:
                 )
 
             # Bull Call Debit Spread
-            short_calls = [c for c in calls if c.strike > long_call.strike]
+            short_calls = [c for c in calls if c.strike > long_call.strike and c.expiration == long_call.expiration]
             short_call = self.find_best_strike(short_calls, target_deltas.debit_short_delta) if short_calls else None
             if not short_call:
                 return None
@@ -129,7 +129,8 @@ class TradeConstructor:
             width = round(short_call.strike - long_call.strike, 2)
             net_debit = round(long_call.mid_price - short_call.mid_price, 2)
             if net_debit <= 0:
-                net_debit = 0.10
+                # Reject invalid market pricing instead of inserting synthetic fallback
+                return None
 
             max_loss = net_debit * 100.0
             max_profit = (width - net_debit) * 100.0
@@ -159,20 +160,20 @@ class TradeConstructor:
                 risk_reward_ratio=round(max_profit / max(1.0, max_loss), 2)
             )
 
-        # Fallback default trade layout for other strategies
+        # Fallback default trade layout for credit strategies
         if not puts:
             return None
         short_put = self.find_best_strike(puts, target_deltas.credit_short_delta)
         if not short_put:
             return None
         
-        long_puts = [p for p in puts if p.strike < short_put.strike]
+        long_puts = [p for p in puts if p.strike < short_put.strike and p.expiration == short_put.expiration]
         long_put = self.find_best_strike(long_puts, 0.10) if long_puts else short_put
 
         width = round(abs(short_put.strike - long_put.strike), 2) or 5.0
         net_credit = round(short_put.mid_price - long_put.mid_price, 2)
         if net_credit <= 0:
-            net_credit = 0.50
+            return None
 
         max_profit = net_credit * 100.0
         max_loss = (width - net_credit) * 100.0

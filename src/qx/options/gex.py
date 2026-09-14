@@ -29,15 +29,35 @@ def calculate_gamma_exposure(
     current_price: float,
     option_chain: pd.DataFrame,
     volatility_annual: float = 0.16,
+    settlement_type: str | None = None,
 ) -> GammaExposureSnapshot:
     """
     Calculate Net Gamma Exposure (GEX) and Dealer Positioning across option strikes.
     option_chain expected columns: ['strike', 'option_type', 'open_interest', 'volume', 'gamma', 'dte']
+    Supports settlement_type filtering ('AM' for AM-settled monthly SPX vs 'PM' for PM-settled weekly/0DTE SPXW).
     """
     if option_chain.empty or current_price <= 0:
         return _empty_gex_snapshot(symbol, current_price)
 
     df = option_chain.copy()
+
+    # AM vs PM settlement segregation if specified or detected
+    if settlement_type is not None:
+        st_upper = settlement_type.strip().upper()
+        if "settlement_type" in df.columns:
+            df = df[df["settlement_type"].str.upper() == st_upper]
+        elif "is_pm_settled" in df.columns:
+            target_pm = (st_upper == "PM")
+            df = df[df["is_pm_settled"] == target_pm]
+        elif "root_symbol" in df.columns or "symbol" in df.columns:
+            sym_col = "root_symbol" if "root_symbol" in df.columns else "symbol"
+            if st_upper == "PM":
+                df = df[df[sym_col].str.contains("SPXW|WEEKL|0DTE|PM", case=False, na=False)]
+            elif st_upper == "AM":
+                df = df[~df[sym_col].str.contains("SPXW|WEEKL|0DTE|PM", case=False, na=False)]
+
+    if df.empty:
+        return _empty_gex_snapshot(f"{symbol}_{settlement_type}" if settlement_type else symbol, current_price)
 
     # If gamma is not present in feed, estimate Black-Scholes gamma proxy
     if "gamma" not in df.columns or df["gamma"].isna().all():
@@ -122,3 +142,21 @@ def _empty_gex_snapshot(symbol: str, price: float) -> GammaExposureSnapshot:
         zero_dte_volume_ratio=0.0,
         call_put_gamma_ratio=1.0,
     )
+
+
+def calculate_segregated_gamma_exposure(
+    symbol: str,
+    current_price: float,
+    option_chain: pd.DataFrame,
+    volatility_annual: float = 0.16,
+) -> dict[str, GammaExposureSnapshot]:
+    """
+    Calculate segregated Net Gamma Exposure (GEX) separating PM-settled weekly/0DTE (SPXW)
+    from AM-settled monthly (SPX) gamma walls to prevent false pinning levels.
+    """
+    return {
+        "PM_WEEKLY": calculate_gamma_exposure(symbol, current_price, option_chain, volatility_annual, settlement_type="PM"),
+        "AM_MONTHLY": calculate_gamma_exposure(symbol, current_price, option_chain, volatility_annual, settlement_type="AM"),
+        "COMBINED": calculate_gamma_exposure(symbol, current_price, option_chain, volatility_annual, settlement_type=None),
+    }
+

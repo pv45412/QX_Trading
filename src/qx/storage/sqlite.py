@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from qx.models.scan import ScanCandidate, ScanRunResult
+from qx.storage.connection import connect_sqlite
 
 
 @dataclass(frozen=True)
@@ -33,7 +34,7 @@ class SQLiteScanRepository:
 
     def initialize(self) -> None:
         self.database_path.parent.mkdir(parents=True, exist_ok=True)
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             connection.execute(
                 """
                 CREATE TABLE IF NOT EXISTS scan_runs (
@@ -61,7 +62,7 @@ class SQLiteScanRepository:
 
     def save_scan_run(self, result: ScanRunResult) -> int:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             cursor = connection.execute(
                 """
                 INSERT INTO scan_runs (created_at, total_symbols, passed_symbols, failed_symbols)
@@ -98,7 +99,7 @@ class SQLiteScanRepository:
 
     def list_scan_runs(self, limit: int = 20) -> list[StoredScanRun]:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 """
                 SELECT id, created_at, total_symbols, passed_symbols, failed_symbols
@@ -121,7 +122,7 @@ class SQLiteScanRepository:
 
     def load_candidates(self, scan_run_id: int) -> list[ScanCandidate]:
         self.initialize()
-        with sqlite3.connect(self.database_path) as connection:
+        with connect_sqlite(self.database_path) as connection:
             rows = connection.execute(
                 """
                 SELECT payload_json
