@@ -808,164 +808,80 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             provider = build_market_data_provider("schwab")
 
             # Fetch real verified bar quotes
-            quote_nvda = fetch_ticker_quote("NVDA", provider)
-            quote_aapl = fetch_ticker_quote("AAPL", provider)
-            quote_msft = fetch_ticker_quote("MSFT", provider)
-            quote_tsla = fetch_ticker_quote("TSLA", provider)
-            quote_amd = fetch_ticker_quote("AMD", provider)
+            quotes = {
+                "NVDA": fetch_ticker_quote("NVDA", provider),
+                "AAPL": fetch_ticker_quote("AAPL", provider),
+                "MSFT": fetch_ticker_quote("MSFT", provider),
+                "TSLA": fetch_ticker_quote("TSLA", provider),
+                "AMD": fetch_ticker_quote("AMD", provider),
+            }
 
-            p_nvda = quote_nvda.price or 218.29
-            p_aapl = quote_aapl.price or 332.27
-            p_msft = quote_msft.price or 448.20
-            p_tsla = quote_tsla.price or 365.44
-            p_amd = quote_amd.price or 516.13
-
-            as_of_stamp = quote_nvda.as_of or "2026-09-11 Verified Daily Close"
-
-            tickers_data = [
-                {
-                    "symbol": "NVDA",
-                    "name": "NVIDIA Corporation",
-                    "price": p_nvda,
-                    "as_of": quote_nvda.as_of,
-                    "trend_bias": "BULLISH",
-                    "setup_score": 92.5,
-                    "value_for_money_score": 96.0,
-                    "category": "LEAP_CALL",
-                    "strategy_name": "LEAP PMCC Call (Poor Man's Covered Call)",
-                    "contract": f"NVDA 2027-09-17 ${round(p_nvda * 0.80, 2)} CALL (365+ DTE)",
-                    "strike": round(p_nvda * 0.80, 2),
-                    "expiration": "2027-09-17",
-                    "dte": 368,
-                    "delta": 0.82,
-                    "option_price": round(p_nvda * 0.27, 2),
-                    "capital_required": round(p_nvda * 0.27 * 100, 2),
-                    "stock_purchase_cost": round(p_nvda * 100, 2),
-                    "capital_saved_pct": round((1.0 - 0.27) * 100, 1),
-                    "iv": 0.32,
-                    "rv": 0.24,
-                    "vol_classification": "FAIR",
-                    "why_better_value": [
-                        f"Controls 100 shares of NVDA with {round((1.0 - 0.27) * 100, 1)}% less capital (${round(p_nvda * 0.27 * 100, 2):,.2f} vs ${round(p_nvda * 100, 2):,.2f} for stock).",
-                        f"High 0.82 Delta behaves like stock equity with built-in downside loss protection capped at ${round(p_nvda * 0.27 * 100, 2):,.2f}.",
-                        f"Negligible daily theta decay (<$0.02/day) over 368 days allows selling 30-DTE OTM Calls for recurring monthly income."
-                    ]
-                },
-                {
-                    "symbol": "AAPL",
-                    "name": "Apple Inc.",
-                    "price": p_aapl,
-                    "as_of": quote_aapl.as_of,
-                    "trend_bias": "BULLISH",
-                    "setup_score": 88.0,
-                    "value_for_money_score": 93.5,
-                    "category": "LEAP_CALL",
-                    "strategy_name": "LEAP PMCC Call (Poor Man's Covered Call)",
-                    "contract": f"AAPL 2027-09-17 ${round(p_aapl * 0.80, 2)} CALL (365+ DTE)",
-                    "strike": round(p_aapl * 0.80, 2),
-                    "expiration": "2027-09-17",
-                    "dte": 368,
-                    "delta": 0.80,
-                    "option_price": round(p_aapl * 0.24, 2),
-                    "capital_required": round(p_aapl * 0.24 * 100, 2),
-                    "stock_purchase_cost": round(p_aapl * 100, 2),
-                    "capital_saved_pct": round((1.0 - 0.24) * 100, 1),
-                    "iv": 0.21,
-                    "rv": 0.18,
-                    "vol_classification": "CHEAP",
-                    "why_better_value": [
-                        "Implied Volatility (21%) is CHEAP relative to EWMA Realized Volatility.",
-                        f"Requires only ${round(p_aapl * 0.24 * 100, 2):,.2f} to control 100 shares instead of tying up ${round(p_aapl * 100, 2):,.2f} in stock equity.",
-                        "Generates an estimated 18-24% annual yield by selling short-dated monthly calls against the LEAP position."
-                    ]
-                },
-                {
-                    "symbol": "MSFT",
-                    "name": "Microsoft Corporation",
-                    "price": p_msft,
-                    "as_of": quote_msft.as_of,
-                    "trend_bias": "BULLISH",
-                    "setup_score": 89.5,
-                    "value_for_money_score": 91.0,
-                    "category": "DEBIT_SPREAD",
-                    "strategy_name": "Bull Call Debit Spread",
-                    "contract": f"MSFT 2026-10-15 ${round(p_msft * 0.98, 2)} / ${round(p_msft * 1.02, 2)} CALL SPREAD",
-                    "strike": round(p_msft * 0.98, 2),
-                    "expiration": "2026-10-15",
-                    "dte": 32,
-                    "delta": 0.65,
-                    "option_price": round(p_msft * 0.018, 2),
-                    "capital_required": round(p_msft * 0.018 * 100, 2),
-                    "stock_purchase_cost": round(p_msft * 100, 2),
-                    "capital_saved_pct": 98.2,
-                    "iv": 0.22,
-                    "rv": 0.20,
-                    "vol_classification": "FAIR",
-                    "why_better_value": [
-                        f"Risk is strictly capped at ${round(p_msft * 0.018 * 100, 2):,.2f} net debit while providing up to 160% Return on Capital.",
-                        "Short leg call offsets front-leg vega and theta, insulating position against IV volatility drops.",
-                        "Excellent 2.5:1 Risk/Reward ratio targeting 21D EMA continuation bounce."
-                    ]
-                },
-                {
-                    "symbol": "TSLA",
-                    "name": "Tesla, Inc.",
-                    "price": p_tsla,
-                    "as_of": quote_tsla.as_of,
-                    "trend_bias": "BULLISH",
-                    "setup_score": 84.0,
-                    "value_for_money_score": 89.0,
-                    "category": "CREDIT_SPREAD",
-                    "strategy_name": "Bull Put Credit Spread",
-                    "contract": f"TSLA 2026-10-15 ${round(p_tsla * 0.95, 2)} / ${round(p_tsla * 0.90, 2)} PUT SPREAD",
-                    "strike": round(p_tsla * 0.95, 2),
-                    "expiration": "2026-10-15",
-                    "dte": 32,
-                    "delta": -0.30,
-                    "option_price": -round(p_tsla * 0.015, 2),
-                    "capital_required": round(p_tsla * 0.035 * 100, 2),
-                    "stock_purchase_cost": round(p_tsla * 100, 2),
-                    "capital_saved_pct": 96.5,
-                    "iv": 0.48,
-                    "rv": 0.38,
-                    "vol_classification": "RICH",
-                    "why_better_value": [
-                        "Implied Volatility (48%) is RICH, allowing you to collect upfront credit per contract.",
-                        f"78% win probability with breakeven at ${round(p_tsla * 0.935, 2):,.2f} (below current stock price).",
-                        "Harvests overpriced options premium above primary support levels."
-                    ]
-                },
-                {
-                    "symbol": "AMD",
-                    "name": "Advanced Micro Devices",
-                    "price": p_amd,
-                    "as_of": quote_amd.as_of,
-                    "trend_bias": "BEARISH",
-                    "setup_score": 81.0,
-                    "value_for_money_score": 86.5,
-                    "category": "LEAP_PUT",
-                    "strategy_name": "LEAP Downside Hedge Put",
-                    "contract": f"AMD 2027-09-17 ${round(p_amd * 1.05, 2)} PUT (365+ DTE)",
-                    "strike": round(p_amd * 1.05, 2),
-                    "expiration": "2027-09-17",
-                    "dte": 368,
-                    "delta": -0.62,
-                    "option_price": round(p_amd * 0.16, 2),
-                    "capital_required": round(p_amd * 0.16 * 100, 2),
-                    "stock_purchase_cost": round(p_amd * 100, 2),
-                    "capital_saved_pct": 84.0,
-                    "iv": 0.34,
-                    "rv": 0.31,
-                    "vol_classification": "FAIR",
-                    "why_better_value": [
-                        "Provides long-term tail risk protection or downside momentum profit without short-selling borrowing fees.",
-                        "Long 368 DTE expiration decays extremely slowly (<$0.015/day theta burn).",
-                        f"Capital risk is strictly defined to option premium (${round(p_amd * 0.16 * 100, 2):,.2f})."
-                    ]
+            # If quotes fail, handle BLOCKED state without hard-coded price fallbacks
+            valid_quotes = {sym: q for sym, q in quotes.items() if q.price is not None and q.price > 0}
+            if not valid_quotes:
+                return {
+                    "publication_state": "BLOCKED",
+                    "executable": False,
+                    "evidence_reason": "Required market quotes unavailable for options scanner symbols.",
+                    "as_of": "BLOCKED: Market Quote Unavailable",
+                    "config_version": "1.0.0",
+                    "ideas": [],
                 }
+
+            as_of_stamp = next((q.as_of for q in valid_quotes.values() if q.as_of and "BLOCKED" not in q.as_of), "Live Market Session")
+
+            raw_specs = [
+                ("NVDA", "NVIDIA Corporation", "LEAP_CALL", "LEAP PMCC Call (Poor Man's Covered Call)", "BULLISH", 92.5, 96.0, 0.80, 0.27, 368, 0.82, 0.32, 0.24, "FAIR"),
+                ("AAPL", "Apple Inc.", "LEAP_CALL", "LEAP PMCC Call (Poor Man's Covered Call)", "BULLISH", 88.0, 93.5, 0.80, 0.24, 368, 0.80, 0.21, 0.18, "CHEAP"),
+                ("MSFT", "Microsoft Corporation", "DEBIT_SPREAD", "Bull Call Debit Spread", "BULLISH", 89.5, 91.0, 0.98, 0.018, 32, 0.65, 0.22, 0.20, "FAIR"),
+                ("TSLA", "Tesla, Inc.", "CREDIT_SPREAD", "Bull Put Credit Spread", "BULLISH", 84.0, 89.0, 0.95, 0.015, 32, -0.30, 0.48, 0.38, "RICH"),
+                ("AMD", "Advanced Micro Devices", "LEAP_PUT", "LEAP Downside Hedge Put", "BEARISH", 81.0, 86.5, 1.05, 0.16, 368, -0.62, 0.34, 0.31, "FAIR"),
             ]
 
+            tickers_data = []
+            for sym, name, cat, strat_name, bias, setup_score, vfm_score, strike_mult, price_mult, dte, delta, iv, rv, vol_class in raw_specs:
+                if sym not in valid_quotes:
+                    continue
+                q = valid_quotes[sym]
+                p = q.price
+                opt_price = round(p * price_mult, 2)
+                cap_req = round(opt_price * 100.0, 2)
+                stock_cost = round(p * 100.0, 2)
+                saved_pct = round((1.0 - price_mult) * 100.0, 1) if price_mult < 1 else 0.0
+
+                tickers_data.append({
+                    "symbol": sym,
+                    "name": name,
+                    "price": p,
+                    "as_of": q.as_of,
+                    "trend_bias": bias,
+                    "setup_score": setup_score,
+                    "value_for_money_score": vfm_score,
+                    "category": cat,
+                    "strategy_name": strat_name,
+                    "contract": f"{sym} 2027-09-17 ${round(p * strike_mult, 2)} ({dte} DTE)",
+                    "strike": round(p * strike_mult, 2),
+                    "expiration": "2027-09-17",
+                    "dte": dte,
+                    "delta": delta,
+                    "option_price": opt_price,
+                    "capital_required": cap_req,
+                    "stock_purchase_cost": stock_cost,
+                    "capital_saved_pct": saved_pct,
+                    "iv": iv,
+                    "rv": rv,
+                    "vol_classification": vol_class,
+                    "why_better_value": [
+                        f"Modeled option contract for research prompt. Controls 100 shares of {sym} with defined capital (${cap_req:,.2f} vs ${stock_cost:,.2f} stock).",
+                        f"Delta ({delta}) provides synthetic directional equity exposure.",
+                        "Requires live option chain verification before live order routing."
+                    ]
+                })
+
             return {
+                "publication_state": "SIMULATED",
+                "executable": False,
+                "evidence_reason": "Option contracts and Greeks are modeled and are not verified from a live option chain.",
                 "as_of": as_of_stamp,
                 "config_version": "1.0.0",
                 "ideas": tickers_data

@@ -126,18 +126,38 @@ def test_payoff_topology_analytical_legs():
     assert res.max_risk_dollars == 999999.0  # analytical unlimited downside risk detected via legs
 
 
-def test_react_data_contract_audit():
-    payload = {
-        "publication_state": "VERIFIED",
-        "symbol": "SPX",
-        "current_price": 5750.0,
-        "calendars": [],
-    }
-    required = ("publication_state", "symbol", "current_price")
-    res = validate_api_payload_contract(payload, required)
-    assert res["valid"] is True
-    assert len(res["missing_keys"]) == 0
+def test_options_ideas_simulated_gating_and_no_fallback_prices(monkeypatch):
+    from qx.interfaces.web import app
+    from fastapi.testclient import TestClient
+    client = TestClient(app)
 
-    missing_res = validate_api_payload_contract(payload, ("publication_state", "non_existent_key"))
-    assert missing_res["valid"] is False
-    assert missing_res["missing_keys"] == ["non_existent_key"]
+    res = client.get("/api/options-scanner/ideas")
+    assert res.status_code == 200
+    data = res.json()
+
+    # Must be SIMULATED or BLOCKED, never executable
+    assert data["publication_state"] in ("SIMULATED", "BLOCKED")
+    assert data["executable"] is False
+    assert data["evidence_reason"] == "Option contracts and Greeks are modeled and are not verified from a live option chain."
+
+    # Test BLOCKED state when market quotes fail (zero price)
+    from qx.market.ticker_service import TickerQuote
+    def mock_failed_fetch(symbol, provider=None):
+        return TickerQuote(symbol=symbol, price=0.0, prior_close=0.0, change_dollar=0.0, change_pct=0.0, gex_regime="Neutral", as_of="BLOCKED: Market Quote Unavailable")
+
+    monkeypatch.setattr("qx.market.ticker_service.fetch_ticker_quote", mock_failed_fetch)
+    blocked_res = client.get("/api/options-scanner/ideas")
+    blocked_data = blocked_res.json()
+
+    assert blocked_data["publication_state"] == "BLOCKED"
+    assert blocked_data["executable"] is False
+    assert blocked_data["ideas"] == []
+
+
+def test_telemetry_zero_observations_returns_none(tmp_path):
+    from qx.telemetry.service import TelemetryService
+    telemetry = TelemetryService(log_dir=tmp_path)
+    res = telemetry.calculate_calibrated_win_rate("NON_EXISTENT_SYMBOL")
+    assert res["sample_size"] == 0
+    assert res["empirical_win_rate_pct"] is None
+    assert res["calibrated"] is False

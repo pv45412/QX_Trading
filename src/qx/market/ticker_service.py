@@ -41,16 +41,6 @@ class TerminalQuoteDetail:
 
 WATCHLIST_SYMBOLS = ("SPX", "SPY", "QQQ", "NVDA", "TSLA", "AMD", "AAPL")
 
-REAL_SYMBOL_BASELINES: dict[str, tuple[float, float]] = {
-    "SPX": (7656.98, 7593.13),
-    "SPY": (764.29, 757.85),
-    "QQQ": (714.88, 708.71),
-    "NVDA": (218.29, 218.35),
-    "TSLA": (365.44, 363.55),
-    "AMD": (516.13, 503.59),
-    "AAPL": (332.27, 326.55),
-}
-
 
 def fetch_ticker_quote(symbol: str, provider=None) -> TickerQuote:
     symbol_upper = symbol.strip().upper()

@@ -54,7 +54,7 @@ class TelemetryService:
         if symbol:
             filtered = [r for r in filtered if r.get("symbol") == symbol]
         if not filtered:
-            return {"sample_size": 0, "empirical_win_rate_pct": 55.0, "calibrated": False}
+            return {"sample_size": 0, "empirical_win_rate_pct": None, "calibrated": False}
 
         wins = sum(1 for r in filtered if str(r.get("final_outcome")).upper() in ("WIN", "PROFIT", "SUCCESS"))
         rate = round((wins / len(filtered)) * 100.0, 1)
