@@ -22,6 +22,16 @@ export default function WorkspaceNavigation({ route, context }) {
     document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const handleNavigate = (e, targetPage) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+    const href = workspaceHref(targetPage, context);
+    const origin = typeof location !== 'undefined' ? location.origin : 'http://127.0.0.1:5174';
+    const url = new URL(href, origin);
+    window.history.pushState(null, '', url.pathname + url.search + url.hash);
+    window.dispatchEvent(new Event('workspacecontextchange'));
+  };
+
   return (
     <>
       <nav className="workspace-nav" aria-label="Workspace pages">
@@ -29,6 +39,7 @@ export default function WorkspaceNavigation({ route, context }) {
           <a
             key={home.page}
             href={workspaceHref(home.page, context)}
+            onClick={e => handleNavigate(e, home.page)}
             aria-current={home.workspace === route?.workspace ? 'page' : undefined}
           >
             {home.workspace}
@@ -92,6 +103,7 @@ export default function WorkspaceNavigation({ route, context }) {
             <a
               key={item.page}
               href={workspaceHref(item.page, context)}
+              onClick={e => handleNavigate(e, item.page)}
               aria-current={item.page === route.page ? 'page' : undefined}
             >
               {item.label}

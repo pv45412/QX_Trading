@@ -54,6 +54,19 @@ function App() {
 
  const pageKey = route.page;
 
+ if (pageKey === 'spx_nq_futures') {
+  return (
+   <main>
+    <WorkspaceNavigation route={route} context={context}/>
+    <div style={{ padding: '20px 0' }}>
+     <ErrorBoundary title="SPX & Futures Command Dashboard">
+       <SPXFuturesWorkspace />
+     </ErrorBoundary>
+    </div>
+   </main>
+  );
+ }
+
  if (pageKey === 'scan' || pageKey === 'broad_watchlist' || pageKey === 'heatmap') {
   return (
    <main>

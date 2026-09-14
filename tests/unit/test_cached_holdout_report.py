@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import runpy
 import sys
+import pytest
 
 from qx.models.backtest import BacktestResult
 from tests.unit.test_market_regime import _bars
