@@ -22,6 +22,7 @@ import QXOptionsIdeas from './QXOptionsIdeas';
 import QXPositionAdvisor from './QXPositionAdvisor';
 import QXResearchStudio from './QXResearchStudio';
 import QXStrategyWorkspaces from './QXStrategyWorkspaces';
+import QXSystemControl from './QXSystemControl';
 import { ErrorBoundary } from './ErrorBoundary';
 
 
@@ -39,20 +40,105 @@ function App() {
  const query=new URLSearchParams(search);
  const context=workspaceContext(search);
  const route=resolveWorkspaceRoute(query.get('page')||'relative_strength');
- const destination=route&&route.page!=='relative_strength'
-  ?workspaceHref(query.get('page'),{...context,job_view:query.get('job_view'),history_view:query.get('history_view')}):null;
- useEffect(()=>{if(destination)location.replace(destination);},[destination]);
+
  useEffect(()=>{
-  if(route?.page==='relative_strength'&&(!context.etf||!context.symbol)){
+  if(!context.etf||!context.symbol){
    updateWorkspaceContext({etf:context.etf||'XLK',symbol:context.symbol||context.etf||'XLK'},{replace:true});
   }
- },[route?.page,context.etf,context.symbol]);
- if(!route||destination)return <main>
-  <WorkspaceNavigation route={route} context={context}/>
-  {destination?<p role="status">Opening {route.label}. <a href={destination}>Continue to {route.label}</a></p>
-   :<p role="alert">Workspace page unavailable. <a href={workspaceHref('relative_strength',context)}>Return to Markets</a></p>}
+ },[context.etf,context.symbol]);
+
+ if(!route) return <main>
+  <WorkspaceNavigation route={{workspace:'Markets',title:'Relative Strength',page:'relative_strength'}} context={context}/>
+  <p role="alert">Workspace page unavailable. <a href={workspaceHref('relative_strength',context)}>Return to Markets</a></p>
  </main>;
- return <MarketsDashboard context={context}/>;
+
+ const pageKey = route.page;
+
+ if (pageKey === 'scan' || pageKey === 'broad_watchlist' || pageKey === 'heatmap') {
+  return (
+   <main>
+    <WorkspaceNavigation route={route} context={context}/>
+    <div style={{ padding: '20px 0' }}>
+     <ErrorBoundary title="QX Institutional Scanner">
+       <QXInstitutionalScanner onSelectSymbol={val => updateWorkspaceContext({symbol: val, etf: val})} />
+     </ErrorBoundary>
+     <div style={{ marginTop: '32px' }}>
+       <ErrorBoundary title="QX Options Scanner">
+         <QXOptionsScanner defaultSymbol={context.symbol || 'NVDA'} onSelectSymbol={val => updateWorkspaceContext({symbol: val})} />
+       </ErrorBoundary>
+     </div>
+     <div style={{ marginTop: '32px' }}>
+       <ErrorBoundary title="QX Options Ideas Hub">
+         <QXOptionsIdeas />
+       </ErrorBoundary>
+     </div>
+    </div>
+   </main>
+  );
+ }
+
+ if (pageKey === 'command_center' || pageKey === 'morning_report' || pageKey === 'daily_workflow') {
+  return (
+   <main>
+    <WorkspaceNavigation route={route} context={context}/>
+    <div style={{ padding: '20px 0' }}>
+     <ErrorBoundary title="QX Day Trader Terminal">
+       <QXDayTraderTerminal activeSymbol={context.symbol||'XLK'} onSelectSymbol={val => updateWorkspaceContext({symbol: val})} />
+     </ErrorBoundary>
+     <ErrorBoundary title="QX Daily News & Prompt Deck">
+       <QXDailyNewsPrompt />
+     </ErrorBoundary>
+    </div>
+   </main>
+  );
+ }
+
+ if (pageKey === 'ticker_history' || pageKey === 'options_ideas' || pageKey === 'options_flow' || pageKey === 'liquidity_map' || pageKey === 'backtest' || pageKey === 'strategy_lab') {
+  return (
+   <main>
+    <WorkspaceNavigation route={route} context={context}/>
+    <div style={{ padding: '20px 0' }}>
+     <ErrorBoundary title="QX Research Studio">
+       <QXResearchStudio defaultSymbol={context.symbol||'XLK'} />
+     </ErrorBoundary>
+     <ErrorBoundary title="QX Options Ideas">
+       <QXOptionsIdeas />
+     </ErrorBoundary>
+     <ErrorBoundary title="QX Strategy Workspaces">
+       <QXStrategyWorkspaces />
+     </ErrorBoundary>
+    </div>
+   </main>
+  );
+ }
+
+ if (pageKey === 'idea_tracking' || pageKey === 'journal') {
+  return (
+   <main>
+    <WorkspaceNavigation route={route} context={context}/>
+    <div style={{ padding: '20px 0' }}>
+     <ErrorBoundary title="QX Position Research & Action Advisor">
+       <QXPositionAdvisor defaultSymbol={context.symbol||'XLK'} />
+     </ErrorBoundary>
+    </div>
+   </main>
+  );
+ }
+
+ if (route?.workspace === 'System' || pageKey === 'schwab' || pageKey === 'data_cache' || pageKey === 'jobs' || pageKey === 'run_history' || pageKey === 'strategy_rules') {
+  return (
+   <main>
+    <WorkspaceNavigation route={route} context={context}/>
+    <div style={{ padding: '20px 0' }}>
+     <ErrorBoundary title="QX System Operations Control">
+       <QXSystemControl currentSubRoute={pageKey} />
+     </ErrorBoundary>
+    </div>
+   </main>
+  );
+ }
+
+ return <MarketsDashboard context={context} route={route}/>;
 }
 
 function MarketsDashboard({context}) {

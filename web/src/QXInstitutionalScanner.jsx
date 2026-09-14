@@ -214,17 +214,15 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
             }));
             setData(mapped);
             setSelectedCandidate(mapped[0]);
-            return;
           }
         }
       } catch (e) {
-        // Fallback
+        if (isMounted) {
+          setData(defaultCandidates);
+          setSelectedCandidate(defaultCandidates[0]);
+        }
       } finally {
         if (isMounted) setLoading(false);
-      }
-      if (isMounted) {
-        setData(defaultCandidates);
-        setSelectedCandidate(defaultCandidates[0]);
       }
     };
     fetchMovers();

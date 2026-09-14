@@ -26,13 +26,12 @@ export function workspaceHref(page,context={},updates={}) {
  if(!route)throw new Error(`Unknown workspace route: ${page}`);
  const values={...context,...updates};
  const query=new URLSearchParams(contextFromValues(values));
- if(route.page==='relative_strength')return `http://127.0.0.1:5173/${query.size?'?'+query:''}`;
- query.set('page',route.page);
+ if(route.page!=='relative_strength')query.set('page',route.page);
  const viewKey=route.page==='jobs'?'job_view':route.page==='run_history'?'history_view':null;
  const options=viewKey==='job_view'?['Pipeline','Schedule']:['Scans','Workflows','Snapshots'];
  const view=route[viewKey]||values[viewKey];
  if(viewKey&&options.includes(view))query.set(viewKey,view);
- return `http://localhost:8501/?${query}`;
+ return `http://127.0.0.1:5174/${query.size?'?'+query:''}`;
 }
 
 export function updateWorkspaceContext(updates,{replace=false}={}) {

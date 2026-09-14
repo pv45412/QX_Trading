@@ -8,6 +8,7 @@ from typing import Any
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from qx.data.cache import _read_cached_bars, _cache_symbol
 from qx.data.dashboard_refresh import DashboardRefresh, RefreshLockUnavailable
@@ -95,6 +96,21 @@ def _validate_rows(rows: list[dict[str, Any]]) -> None:
 
 def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path = Path("data/cache/bars")) -> FastAPI:
     app = FastAPI(title="Scanner Dashboard", docs_url=None, redoc_url=None)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://127.0.0.1:5174",
+            "http://localhost:5174",
+            "http://127.0.0.1:5173",
+            "http://localhost:5173",
+            "http://127.0.0.1:8510",
+            "http://localhost:8510",
+            "*"
+        ],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     refresh = DashboardRefresh(cache_dir, lambda: build_market_data_provider("schwab"))
     ai = AIReviewer()
     stock_refreshes = {key: StockRefresh(cache_dir, lambda: build_market_data_provider("schwab"), key) for key in UNIVERSES}

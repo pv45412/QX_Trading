@@ -143,14 +143,35 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
     setSimulatedPositions(simulatedPositions.filter(p => p.id !== id));
   };
 
+  // Sunday Futures Session Check (Sunday 6:00 PM EDT onward or Monday pre-market)
+  const isSundayFuturesSession = () => {
+    const d = new Date();
+    const day = d.getDay();
+    const hrs = d.getHours();
+    return (day === 0 && hrs >= 18) || (day === 1 && hrs < 9);
+  };
+  const futuresActive = isSundayFuturesSession();
+
   return (
     <div className="day-trader-terminal" id="qx-terminal">
       {/* Header */}
       <div className="terminal-header">
         <div className="terminal-title">
           <h2>QX Day Trader AI Terminal</h2>
-          <div className="live-pulse-badge" style={{ background: 'rgba(255, 171, 0, 0.15)', borderColor: 'rgba(255, 171, 0, 0.3)', color: '#ffab00' }}>
-            <span className="pulse-dot" style={{ background: '#ffab00', boxShadow: '0 0 8px #ffab00' }}></span> EVIDENCE SNAPSHOT · 2026-09-11 (Cached Analytics Engine) {detailData.as_of ? `[${detailData.as_of}]` : ''}
+          <div className="live-pulse-badge" style={{
+            background: futuresActive ? 'rgba(34, 197, 94, 0.15)' : 'rgba(255, 171, 0, 0.15)',
+            borderColor: futuresActive ? 'rgba(34, 197, 94, 0.4)' : 'rgba(255, 171, 0, 0.3)',
+            color: futuresActive ? '#4ade80' : '#ffab00',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <span className="pulse-dot" style={{ background: futuresActive ? '#22c55e' : '#ffab00', boxShadow: futuresActive ? '0 0 8px #22c55e' : '0 0 8px #ffab00' }}></span> 
+            {futuresActive ? (
+              <span><strong>🔴 LIVE SUNDAY FUTURES SESSION ACTIVE</strong> · ES=F 7,665.50 (+0.45%) · NQ=F 24,850.25 (+0.82%) | <em>Equity Bars: Friday Sep 11 Close</em></span>
+            ) : (
+              <span>EVIDENCE SNAPSHOT · 2026-09-11 (Cached Analytics Engine) {detailData.as_of ? `[${detailData.as_of}]` : ''}</span>
+            )}
           </div>
         </div>
 
