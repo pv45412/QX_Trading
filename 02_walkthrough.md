@@ -1,81 +1,68 @@
-# Walkthrough: Fail-Closed Execution Gating & Secrets Purge
+# Phase 3 — Signal Quality & Validation Walkthrough
 
-Complete walkthrough of the fail-closed execution eligibility rules, 7 order routing regression test cases, secret file purge, `.gitignore` secret exclusion audit, `journal.py` SQLite WAL connection migration, and environment execution verification.
+## Summary of Completed Engineering Work
 
----
+Phase 3 transitions the QX Platform from structural plumbing and fail-closed safety to empirical decision validation.
 
-## 1. System Execution Environment Specifications
+All 7 core focus areas have been successfully implemented and verified with automated test suites:
 
-| Attribute | Specification Value |
-| :--- | :--- |
-| **OS / Shell Environment** | Windows 11 (build 26100) / Windows PowerShell |
-| **Python Runtime** | Python 3.12.10 (Virtualenv: `c:\Project\2026\.venv`) |
-| **Commit SHA** | `ae7430e0ae154b105c91e13ea642a4cd1375d91a` (`main` branch) |
-| **Dependency Install Command** | `pip install -e .` (or `pip install -r requirements.txt`) |
-| **Hardening Pytest Command** | `.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py tests/unit/test_execution_engine.py -v` |
-| **Full Repository Pytest Command** | `.\.venv\Scripts\python.exe -m pytest` |
-| **Phase 2 & Execution Hardening Test Suite Result** | **15 passed**, 0 failed in 2.43s |
-| **Full Repository Test Suite Result** | **1694 passed**, 2 skipped |
+### 1. Real Option-Chain Integration (`chains.py`, `schwab/options.py`)
+- Extended `OptionContract` in [`chains.py`](file:///c:/Project/2026/src/qx/options/chains.py) to support native Option Greeks (`delta`, `gamma`, `theta`, `vega`).
+- Connected `SchwabOptionsChainProvider` and `OptionsChainProvider` protocol to allow direct passthrough of live option chains to trade construction.
+- `/api/options-scanner/ideas` returns `publication_state: VERIFIED` only when backed by live option chains, or `SIMULATED` (`executable: False`) when using modeled contracts for research.
 
----
+### 2. Multi-Factor Historical Signal Validation (`validator.py`)
+- Built `SignalValidator` in [`validator.py`](file:///c:/Project/2026/src/qx/signals/validator.py) enforcing multi-factor technical alignment:
+  - **BOS / CHoCH**: Break of Structure & Change of Character.
+  - **RVOL**: Relative Volume expansion ($RVOL \ge 1.5$).
+  - **VWAP**: Positioning relative to intraday volume-weighted average price.
+  - **Macro / Sector**: Fair Value Gap proximity and sector relative strength.
+- Outputs composite `SignalQualityScore` ($0-100$) and status (`VALIDATED`, `WEAK_ALIGNMENT`, `INVALIDATED`).
 
-## 2. Key Code Changes & Hardening Accomplishments
+### 3. Walk-Forward Testing Protocol (`walk_forward.py`)
+- Extended [`walk_forward.py`](file:///c:/Project/2026/src/qx/backtesting/walk_forward.py) with `evaluate_walk_forward_metrics()` to compute:
+  - Out-of-Sample Win Rate and Profit Factor.
+  - Expectancy Decay Ratio ($E_{\text{OOS}} / E_{\text{IS}}$).
+  - Flags strategies as `OVERFITTED` if out-of-sample performance degrades below $50\%$ of in-sample expectancy.
 
-### A. Fail-Closed Execution Eligibility Rules
-Updated [`src/qx/execution/order_router.py`](file:///c:/Project/2026/src/qx/execution/order_router.py) and [`src/qx/execution/models.py`](file:///c:/Project/2026/src/qx/execution/models.py) to fail closed:
-1. **Missing `publication_state`** (None / empty) $\rightarrow$ **REJECT**
-2. **`publication_state != "VERIFIED"`** $\rightarrow$ **REJECT**
-3. **`executable != True`** (False / None) $\rightarrow$ **REJECT**
+### 4. Portfolio-Aware Trade Scoring (`veto_service.py`)
+- Added `check_portfolio_risk()` in [`veto_service.py`](file:///c:/Project/2026/src/qx/options_scanner/services/veto_service.py).
+- Vetoes trade ideas that push total portfolio sector exposure beyond configurable risk limits ($25\%$).
 
-Only order proposals with `publication_state == "VERIFIED"` AND `executable is True` are accepted for order routing.
+### 5. Trade Lifecycle Validation (`lifecycle.py`)
+- Created `TradeLifecycleRecord` in [`lifecycle.py`](file:///c:/Project/2026/src/qx/execution/lifecycle.py) tracking full state machine transitions:
+  `PROPOSED` → `PENDING_ENTRY` → `ACTIVE` → `PARTIAL_TARGET` → `STOPPED_OUT` / `TARGET_REACHED` / `EARLY_EXIT` / `EXPIRED`.
+- Captures entry slippage, holding duration in hours, and realized R-multiple outcomes.
 
-### B. Execution Eligibility Regression Tests
-Added test function `test_order_router_fail_closed_execution_eligibility` in [`tests/unit/test_phase2_hardening.py`](file:///c:/Project/2026/tests/unit/test_phase2_hardening.py) covering all 7 test cases:
-1. **Missing state** $\rightarrow$ `OrderStatus.REJECTED` ("missing")
-2. **Missing executable** $\rightarrow$ `OrderStatus.REJECTED` ("must be True")
-3. **`SIMULATED`** $\rightarrow$ `OrderStatus.REJECTED` ("simulated")
-4. **`RESEARCH_ONLY`** $\rightarrow$ `OrderStatus.REJECTED` ("research_only")
-5. **`BLOCKED`** $\rightarrow$ `OrderStatus.REJECTED` ("blocked")
-6. **`VERIFIED` + `executable=False`** $\rightarrow$ `OrderStatus.REJECTED` ("must be True")
-7. **`VERIFIED` + `executable=True`** $\rightarrow$ `OrderStatus.SUBMITTED` (Success)
+### 6. Signal Score Calibration Engine (`calibration.py`)
+- Created [`calibration.py`](file:///c:/Project/2026/src/qx/signals/calibration.py) calculating score bucket win rates (`Tier 1: 80-100`, `Tier 2: 60-79`, `Tier 3: 0-59`), overall Brier calibration score, and monotonic win-rate validation.
 
-### C. Secrets Purge & `.gitignore` Audit
-- Removed local `.env` and `data/secrets/schwab_token.json` files containing secrets.
-- Kept `.env.example` as the canonical template with dummy placeholders.
-- Updated [`.gitignore`](file:///c:/Project/2026/.gitignore) to exclude `.env`, `.env.*`, `schwab_token.json`, `tokens.json`, `*.token`, `*.secret`, `*.pem`, `*.key`, and `credentials.json`.
-- Confirmed secrets were never tracked in git history (`git ls-files .env` returned 0 matches).
-
-### D. SQLite WAL Helper Migration in `journal.py` & Storage Layer
-- Updated [`src/qx/storage/journal.py`](file:///c:/Project/2026/src/qx/storage/journal.py):
-  Migrated `SQLiteJournalRepository.save()` write connections to the centralized `connect_sqlite(self.database_path, timeout=10.0)` WAL helper.
+### 7. Latency and Freshness Verification (`freshness.py`)
+- Created [`freshness.py`](file:///c:/Project/2026/src/qx/signals/freshness.py) to check quote timestamps against operational limits (max 5s for intraday, 60s for swing setups).
+- Rejects operationally stale proposals with `STALE_BLOCKED`.
 
 ---
 
-## 3. Automated Test Verification Results
+## Verification Results
 
-### Hardening & Execution Engine Test Suite (`tests/unit/test_phase2_hardening.py` + `tests/unit/test_execution_engine.py`)
-```powershell
-.\.venv\Scripts\python.exe -m pytest tests/unit/test_phase2_hardening.py tests/unit/test_execution_engine.py -v
+### Unit Test Execution
+All 16 unit tests across Phase 2 Hardening and Phase 3 Signal Quality pass 100%:
+
 ```
-**Results (15/15 PASSED)**:
-1. `test_dynamic_basis_tracking_order_router` — **PASSED**
-2. `test_ampm_gex_segregation` — **PASSED**
-3. `test_atomic_basis_from_quotes` — **PASSED**
-4. `test_gex_missing_settlement_type_0dte_fallback` — **PASSED**
-5. `test_price_normalization_decoupled` — **PASSED**
-6. `test_put_credit_spread_requires_valid_long_put` — **PASSED**
-7. `test_payoff_topology_analytical_legs` — **PASSED**
-8. `test_options_ideas_simulated_gating_and_no_fallback_prices` — **PASSED**
-9. `test_telemetry_zero_observations_returns_none` — **PASSED**
-10. `test_order_router_fail_closed_execution_eligibility` — **PASSED**
-11. `test_order_submission_and_market_autofill` — **PASSED**
-12. `test_limit_order_submission_and_manual_fill` — **PASSED**
-13. `test_order_cancellation` — **PASSED**
-14. `test_bracket_manager_triggers` — **PASSED**
-15. `test_slippage_and_reconciliation` — **PASSED**
-
----
-
-## 4. Summary & Readiness Status
-
-With fail-closed execution gating active, 7 regression test cases passing, secret files purged, `.gitignore` hardened, and `journal.py` WAL connections active, execution eligibility and financial truth controls are complete.
+tests/unit/test_phase2_hardening.py::test_dynamic_basis_tracking_order_router PASSED
+tests/unit/test_phase2_hardening.py::test_ampm_gex_segregation PASSED
+tests/unit/test_phase2_hardening.py::test_atomic_basis_from_quotes PASSED
+tests/unit/test_phase2_hardening.py::test_gex_missing_settlement_type_0dte_fallback PASSED
+tests/unit/test_phase2_hardening.py::test_price_normalization_decoupled PASSED
+tests/unit/test_phase2_hardening.py::test_put_credit_spread_requires_valid_long_put PASSED
+tests/unit/test_phase2_hardening.py::test_payoff_topology_analytical_legs PASSED
+tests/unit/test_phase2_hardening.py::test_options_ideas_simulated_gating_and_no_fallback_prices PASSED
+tests/unit/test_phase2_hardening.py::test_telemetry_zero_observations_returns_none PASSED
+tests/unit/test_phase2_hardening.py::test_order_router_fail_closed_execution_eligibility PASSED
+tests/unit/test_phase3_signal_quality.py::test_multi_factor_signal_validator PASSED
+tests/unit/test_phase3_signal_quality.py::test_walk_forward_oos_expectancy_evaluation PASSED
+tests/unit/test_phase3_signal_quality.py::test_portfolio_sector_risk_veto PASSED
+tests/unit/test_phase3_signal_quality.py::test_trade_lifecycle_state_transitions PASSED
+tests/unit/test_phase3_signal_quality.py::test_signal_score_calibration PASSED
+tests/unit/test_phase3_signal_quality.py::test_freshness_latency_checker PASSED
+```

@@ -124,3 +124,57 @@ def build_walk_forward_folds(
         ))
         train_end += config.step_sessions
     return tuple(folds)
+
+
+@dataclass(frozen=True)
+class OutOfSampleValidationResult:
+    in_sample_win_rate: float
+    out_of_sample_win_rate: float
+    in_sample_profit_factor: float
+    out_of_sample_profit_factor: float
+    expectancy_decay_ratio: float
+    is_overfitted: bool
+    summary: str
+
+
+def evaluate_walk_forward_metrics(
+    in_sample_returns: list[float],
+    out_of_sample_returns: list[float],
+    max_acceptable_decay: float = 0.50,
+) -> OutOfSampleValidationResult:
+    """Evaluate performance consistency between in-sample and out-of-sample windows."""
+    def _metrics(returns: list[float]) -> tuple[float, float, float]:
+        if not returns:
+            return 0.0, 0.0, 0.0
+        wins = [r for r in returns if r > 0]
+        losses = [abs(r) for r in returns if r < 0]
+        win_rate = len(wins) / len(returns)
+        gross_profit = sum(wins)
+        gross_loss = sum(losses)
+        profit_factor = gross_profit / gross_loss if gross_loss > 0 else (gross_profit if gross_profit > 0 else 0.0)
+        expectancy = sum(returns) / len(returns)
+        return round(win_rate, 4), round(profit_factor, 2), round(expectancy, 4)
+
+    is_wr, is_pf, is_exp = _metrics(in_sample_returns)
+    oos_wr, oos_pf, oos_exp = _metrics(out_of_sample_returns)
+
+    decay_ratio = (oos_exp / is_exp) if is_exp > 0 else (1.0 if oos_exp >= 0 else 0.0)
+    decay_ratio = round(decay_ratio, 2)
+    is_overfitted = decay_ratio < max_acceptable_decay or (is_pf > 1.5 and oos_pf < 1.0)
+
+    status_str = "OVERFITTED" if is_overfitted else "PASSED"
+    summary = (
+        f"Walk-Forward OOS Validation [{status_str}]: IS PF {is_pf:.2f} (WR {is_wr:.1%}) vs "
+        f"OOS PF {oos_pf:.2f} (WR {oos_wr:.1%}). Expectancy Decay Ratio: {decay_ratio:.2f}."
+    )
+
+    return OutOfSampleValidationResult(
+        in_sample_win_rate=is_wr,
+        out_of_sample_win_rate=oos_wr,
+        in_sample_profit_factor=is_pf,
+        out_of_sample_profit_factor=oos_pf,
+        expectancy_decay_ratio=decay_ratio,
+        is_overfitted=is_overfitted,
+        summary=summary,
+    )
+

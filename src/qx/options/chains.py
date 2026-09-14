@@ -19,6 +19,10 @@ class OptionContract:
     open_interest: int
     implied_volatility: float
     dte: int
+    delta: float = 0.0
+    gamma: float = 0.0
+    theta: float = 0.0
+    vega: float = 0.0
 
     @property
     def mid(self) -> float:

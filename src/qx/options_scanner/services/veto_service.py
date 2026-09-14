@@ -137,3 +137,24 @@ class VetoService:
             )
 
         return VetoResult(passed=True)
+
+    def check_portfolio_risk(
+        self,
+        symbol: str,
+        current_sector_exposure_pct: float,
+        max_sector_limit_pct: float = 25.0,
+    ) -> VetoResult:
+        """Veto trade idea if portfolio sector exposure exceeds risk limits."""
+        if current_sector_exposure_pct > max_sector_limit_pct:
+            return VetoResult(
+                passed=False,
+                reason=VetoReasonEnum.DATA_STALE,  # Reuse or fail closed on risk limit
+                details={
+                    "symbol": symbol,
+                    "current_sector_exposure_pct": current_sector_exposure_pct,
+                    "max_sector_limit_pct": max_sector_limit_pct,
+                    "veto_type": "PORTFOLIO_SECTOR_LIMIT_EXCEEDED",
+                },
+            )
+        return VetoResult(passed=True)
+
