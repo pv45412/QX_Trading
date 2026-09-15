@@ -153,7 +153,8 @@ function App() {
  return <MarketsDashboard context={context} route={route}/>;
 }
 
-function MarketsDashboard({context}) {
+function MarketsDashboard({context, route}) {
+
  const symbol=context.etf||'XLK';
  const [revision,setRevision]=useState(0);
  const [hydrated, setHydrated] = useState(false);

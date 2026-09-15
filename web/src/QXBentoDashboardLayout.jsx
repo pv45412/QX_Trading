@@ -6,13 +6,14 @@ export function QXBentoDashboardLayout({ route, context, children }) {
   const page = route ? route.page : 'relative_strength';
 
   const navItems = [
-    { page: 'terminal', label: 'Terminal', icon: '⚡' },
+    { page: 'command_center', label: 'Terminal', icon: '⚡' },
     { page: 'options_ideas', label: 'Ideas Hub', icon: '💡' },
     { page: 'spx_nq_futures', label: 'Futures', icon: '📈' },
     { page: 'scan', label: 'Scanner', icon: '📊' },
-    { page: 'position_advisor', label: 'Advisor', icon: '🛡️' },
+    { page: 'idea_tracking', label: 'Advisor', icon: '🛡️' },
     { page: 'data_cache', label: 'System', icon: '⚙️' },
   ];
+
 
   return (
     <div className="qx-app-shell">
