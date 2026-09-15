@@ -85,11 +85,11 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
   return (
     <div id="options-scanner-v1" style={{
-      background: 'linear-gradient(135deg, #0b0f19 0%, #111827 100%)',
+      background: 'var(--qx-bg-canvas)',
       borderRadius: '16px',
-      border: '1px solid rgba(56, 189, 248, 0.2)',
+      border: '1px solid var(--qx-border)',
       padding: '24px',
-      color: '#f3f4f6',
+      color: 'var(--qx-text-primary)',
       fontFamily: 'Inter, system-ui, sans-serif',
       boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
       marginTop: '24px'
@@ -98,18 +98,18 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ background: 'rgba(56, 189, 248, 0.15)', padding: '8px', borderRadius: '10px', color: '#38bdf8' }}>
+            <div style={{ background: 'rgba(217, 160, 91, 0.15)', padding: '8px', borderRadius: '10px', color: 'var(--qx-accent)' }}>
               <Zap size={22} />
             </div>
             <div>
-              <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '700', color: '#ffffff', letterSpacing: '-0.5px' }}>
+              <h2 style={{ margin: 0, fontSize: '20px', fontWeight: '700', color: 'var(--qx-text-heading)', letterSpacing: '-0.5px' }}>
                 QX Options Scanner V1
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
-                <span style={{ fontSize: '12px', color: '#9ca3af' }}>
+                <span style={{ fontSize: '12px', color: 'var(--qx-text-secondary)' }}>
                   Process-Driven Multi-Gate Volatility & Defined-Risk Strategy Engine (v1.0.0)
                 </span>
-                <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                <span style={{ fontSize: '11px', background: 'rgba(124, 169, 130, 0.15)', color: 'var(--qx-positive)', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid var(--qx-positive)' }}>
                   📅 DATA PROVENANCE: {new Date().toISOString().split('T')[0]} Live Session (Verified Schwab Bar Engine)
                 </span>
               </div>
@@ -119,8 +119,8 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
         {/* Account Equity Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ fontSize: '13px', color: '#9ca3af', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <DollarSign size={14} color="#10b981" />
+          <div style={{ fontSize: '13px', color: 'var(--qx-text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <DollarSign size={14} color="var(--qx-positive)" />
             <span>Account Equity:</span>
             <input
               type="number"
@@ -128,10 +128,10 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
               onChange={(e) => setAccountEquity(e.target.value)}
               onBlur={() => runScan(symbol)}
               style={{
-                background: '#1e293b',
-                border: '1px solid #334155',
+                background: 'var(--qx-bg-surface)',
+                border: '1px solid var(--qx-border)',
                 borderRadius: '6px',
-                color: '#10b981',
+                color: 'var(--qx-positive)',
                 fontWeight: '600',
                 padding: '4px 8px',
                 width: '100px',
@@ -144,7 +144,7 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
       {/* Ticker Selector Bar */}
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '20px' }}>
-        <span style={{ fontSize: '13px', color: '#9ca3af', fontWeight: '500', marginRight: '4px' }}>Top Tickers:</span>
+        <span style={{ fontSize: '13px', color: 'var(--qx-text-secondary)', fontWeight: '500', marginRight: '4px' }}>Top Tickers:</span>
         {tickers.map((t) => (
           <button
             key={t}
@@ -153,9 +153,9 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
               if (onSelectSymbol) onSelectSymbol(t);
             }}
             style={{
-              background: symbol === t ? '#0284c7' : 'rgba(30, 41, 59, 0.8)',
-              color: symbol === t ? '#ffffff' : '#cbd5e1',
-              border: symbol === t ? '1px solid #38bdf8' : '1px solid #334155',
+              background: symbol === t ? 'var(--qx-bg-button)' : 'var(--qx-bg-surface)',
+              color: symbol === t ? 'var(--qx-text-heading)' : 'var(--qx-text-secondary)',
+              border: symbol === t ? '1px solid var(--qx-accent)' : '1px solid var(--qx-border)',
               borderRadius: '8px',
               padding: '6px 14px',
               fontSize: '13px',
@@ -175,10 +175,10 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
             value={customInput}
             onChange={(e) => setCustomInput(e.target.value)}
             style={{
-              background: '#1e293b',
-              border: '1px solid #334155',
+              background: 'var(--qx-bg-surface)',
+              border: '1px solid var(--qx-border)',
               borderRadius: '8px',
-              color: '#ffffff',
+              color: 'var(--qx-text-heading)',
               padding: '6px 12px',
               fontSize: '13px',
               width: '120px'
@@ -187,9 +187,9 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
           <button
             type="submit"
             style={{
-              background: '#0284c7',
-              color: '#fff',
-              border: 'none',
+              background: 'var(--qx-bg-button)',
+              color: 'var(--qx-text-heading)',
+              border: '1px solid var(--qx-border)',
               borderRadius: '8px',
               padding: '6px 14px',
               fontSize: '13px',
@@ -203,13 +203,13 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
       </div>
 
       {loading && (
-        <div style={{ padding: '40px', textAlign: 'center', color: '#38bdf8' }}>
+        <div style={{ padding: '40px', textAlign: 'center', color: 'var(--qx-accent)' }}>
           <div style={{ fontSize: '14px', fontWeight: '500' }}>Evaluating 7 Quality Gates for {symbol}...</div>
         </div>
       )}
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', borderRadius: '10px', padding: '16px', color: '#fca5a5', marginBottom: '20px' }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid var(--qx-negative)', borderRadius: '10px', padding: '16px', color: 'var(--qx-negative)', marginBottom: '20px' }}>
           <strong>Error running scan:</strong> {error}
         </div>
       )}
@@ -225,7 +225,7 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
           }}>
             {/* Continuous Overall Score */}
             <div style={{
-              background: 'rgba(15, 23, 42, 0.8)',
+              background: 'var(--qx-bg-surface)',
               border: `1px solid ${getScoreColor(scanResult.overall_score)}40`,
               borderRadius: '12px',
               padding: '16px',
@@ -234,9 +234,9 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
               justifyContent: 'space-between'
             }}>
               <div>
-                <span style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall Setup Score</span>
+                <span style={{ fontSize: '12px', color: 'var(--qx-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall Setup Score</span>
                 <div style={{ fontSize: '28px', fontWeight: '800', color: getScoreColor(scanResult.overall_score), marginTop: '4px' }}>
-                  {scanResult.overall_score} <span style={{ fontSize: '14px', color: '#6b7280' }}>/ 100</span>
+                  {scanResult.overall_score} <span style={{ fontSize: '14px', color: 'var(--qx-text-muted)' }}>/ 100</span>
                 </div>
               </div>
               <div style={{
@@ -257,8 +257,8 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
             {/* Gate 1 Veto Status */}
             <div style={{
-              background: 'rgba(15, 23, 42, 0.8)',
-              border: scanResult.passed_veto ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(239, 68, 68, 0.3)',
+              background: 'var(--qx-bg-surface)',
+              border: scanResult.passed_veto ? '1px solid var(--qx-positive)' : '1px solid var(--qx-negative)',
               borderRadius: '12px',
               padding: '16px',
               display: 'flex',
@@ -266,13 +266,13 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
               gap: '12px'
             }}>
               {scanResult.passed_veto ? (
-                <ShieldCheck size={36} color="#10b981" />
+                <ShieldCheck size={36} color="var(--qx-positive)" />
               ) : (
-                <ShieldAlert size={36} color="#ef4444" />
+                <ShieldAlert size={36} color="var(--qx-negative)" />
               )}
               <div>
-                <span style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Veto Gate</span>
-                <div style={{ fontSize: '16px', fontWeight: '700', color: scanResult.passed_veto ? '#10b981' : '#ef4444', marginTop: '2px' }}>
+                <span style={{ fontSize: '12px', color: 'var(--qx-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Veto Gate</span>
+                <div style={{ fontSize: '16px', fontWeight: '700', color: scanResult.passed_veto ? 'var(--qx-positive)' : 'var(--qx-negative)', marginTop: '2px' }}>
                   {scanResult.passed_veto ? 'PASSED (0 Hard Vetoes)' : `VETOED: ${scanResult.veto_result?.reason || 'DISQUALIFIED'}`}
                 </div>
               </div>
@@ -280,39 +280,39 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
             {/* Recommended Strategy */}
             <div style={{
-              background: 'rgba(15, 23, 42, 0.8)',
-              border: '1px solid rgba(56, 189, 248, 0.3)',
+              background: 'var(--qx-bg-surface)',
+              border: '1px solid var(--qx-border)',
               borderRadius: '12px',
               padding: '16px'
             }}>
-              <span style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Recommended Strategy</span>
-              <div style={{ fontSize: '15px', fontWeight: '700', color: '#38bdf8', marginTop: '4px' }}>
+              <span style={{ fontSize: '12px', color: 'var(--qx-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Recommended Strategy</span>
+              <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--qx-accent)', marginTop: '4px' }}>
                 {scanResult.strategy_result?.recommended?.strategy_name || 'N/A'}
               </div>
-              <div style={{ fontSize: '12px', color: '#10b981', marginTop: '2px' }}>
+              <div style={{ fontSize: '12px', color: 'var(--qx-positive)', marginTop: '2px' }}>
                 Fit Score: {scanResult.strategy_result?.recommended?.fit_score || 0}% ({scanResult.strategy_result?.recommended?.category})
               </div>
             </div>
 
             {/* Risk Sizing & Grade */}
             <div style={{
-              background: 'rgba(15, 23, 42, 0.8)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
+              background: 'var(--qx-bg-surface)',
+              border: '1px solid var(--qx-border)',
               borderRadius: '12px',
               padding: '16px'
             }}>
-              <span style={{ fontSize: '12px', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Account Sizing Grade</span>
-              <div style={{ fontSize: '18px', fontWeight: '800', color: '#f59e0b', marginTop: '2px' }}>
+              <span style={{ fontSize: '12px', color: 'var(--qx-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Account Sizing Grade</span>
+              <div style={{ fontSize: '18px', fontWeight: '800', color: 'var(--qx-warning)', marginTop: '2px' }}>
                 Grade {scanResult.risk_result?.grade || 'N/A'}
               </div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '2px' }}>
-                Max Allowed: <strong style={{ color: '#10b981' }}>{scanResult.risk_result?.contracts_allowed || 0} Contracts</strong> (${scanResult.risk_result?.allowed_risk_dollars} risk)
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '2px' }}>
+                Max Allowed: <strong style={{ color: 'var(--qx-positive)' }}>{scanResult.risk_result?.contracts_allowed || 0} Contracts</strong> (${scanResult.risk_result?.allowed_risk_dollars} risk)
               </div>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <div style={{ display: 'flex', gap: '12px', borderBottom: '1px solid #334155', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', gap: '12px', borderBottom: '1px solid var(--qx-border-subtle)', marginBottom: '20px' }}>
             {[
               ['overview', 'Constructed Trade'],
               ['direction', 'Direction (7 Factors)'],
@@ -326,8 +326,8 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
                 style={{
                   background: 'none',
                   border: 'none',
-                  borderBottom: activeTab === tabKey ? '2px solid #38bdf8' : '2px solid transparent',
-                  color: activeTab === tabKey ? '#38bdf8' : '#9ca3af',
+                  borderBottom: activeTab === tabKey ? '2px solid var(--qx-accent)' : '2px solid transparent',
+                  color: activeTab === tabKey ? 'var(--qx-accent)' : 'var(--qx-text-secondary)',
                   fontWeight: activeTab === tabKey ? '700' : '500',
                   padding: '10px 14px',
                   fontSize: '13px',
@@ -342,13 +342,13 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
           {/* Tab 1: Constructed Trade Details */}
           {activeTab === 'overview' && scanResult.trade && (
-            <div style={{ background: '#1e293b', borderRadius: '12px', padding: '20px', border: '1px solid #334155' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', borderRadius: '12px', padding: '20px', border: '1px solid var(--qx-border)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h3 style={{ margin: 0, fontSize: '16px', color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Target size={18} color="#38bdf8" />
+                <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--qx-text-heading)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Target size={18} color="var(--qx-accent)" />
                   Exact Contract Leg Specifications ({scanResult.trade.strategy_name})
                 </h3>
-                <span style={{ fontSize: '12px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', padding: '4px 10px', borderRadius: '6px' }}>
+                <span style={{ fontSize: '12px', background: 'rgba(217, 160, 91, 0.15)', color: 'var(--qx-accent)', padding: '4px 10px', borderRadius: '6px' }}>
                   Expiration: {scanResult.trade.expiration} ({scanResult.trade.dte} DTE)
                 </span>
               </div>
@@ -356,7 +356,7 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
               {/* Trade Legs Table */}
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', marginBottom: '20px' }}>
                 <thead>
-                  <tr style={{ background: '#0f172a', color: '#9ca3af', textAlign: 'left' }}>
+                  <tr style={{ background: 'var(--qx-bg-canvas)', color: 'var(--qx-text-muted)', textAlign: 'left' }}>
                     <th style={{ padding: '10px', borderRadius: '6px 0 0 6px' }}>Action</th>
                     <th style={{ padding: '10px' }}>Underlying & Contract Symbol</th>
                     <th style={{ padding: '10px' }}>Type</th>
@@ -368,18 +368,18 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
                 </thead>
                 <tbody>
                   {scanResult.trade.legs.map((leg, idx) => (
-                    <tr key={idx} style={{ borderBottom: '1px solid #334155' }}>
-                      <td style={{ padding: '12px 10px', fontWeight: '700', color: leg.action === 'BUY' ? '#10b981' : '#ef4444' }}>
+                    <tr key={idx} style={{ borderBottom: '1px solid var(--qx-border-subtle)' }}>
+                      <td style={{ padding: '12px 10px', fontWeight: '700', color: leg.action === 'BUY' ? 'var(--qx-positive)' : 'var(--qx-negative)' }}>
                         {leg.action}
                       </td>
-                      <td style={{ padding: '12px 10px', fontWeight: '700', color: '#38bdf8' }}>
+                      <td style={{ padding: '12px 10px', fontWeight: '700', color: 'var(--qx-accent)' }}>
                         {scanResult.symbol} ${leg.strike} {leg.option_type} ({leg.contract_symbol})
                       </td>
-                      <td style={{ padding: '12px 10px', color: '#cbd5e1' }}>{leg.option_type}</td>
-                      <td style={{ padding: '12px 10px', fontWeight: '700', color: '#ffffff' }}>${leg.strike}</td>
-                      <td style={{ padding: '12px 10px', color: '#38bdf8' }}>{leg.delta}</td>
-                      <td style={{ padding: '12px 10px', color: '#9ca3af' }}>${leg.bid} / ${leg.ask}</td>
-                      <td style={{ padding: '12px 10px', fontWeight: '600', color: '#ffffff' }}>${leg.mid}</td>
+                      <td style={{ padding: '12px 10px', color: 'var(--qx-text-secondary)' }}>{leg.option_type}</td>
+                      <td style={{ padding: '12px 10px', fontWeight: '700', color: 'var(--qx-text-heading)' }}>${leg.strike}</td>
+                      <td style={{ padding: '12px 10px', color: 'var(--qx-accent)' }}>{leg.delta}</td>
+                      <td style={{ padding: '12px 10px', color: 'var(--qx-text-muted)' }}>${leg.bid} / ${leg.ask}</td>
+                      <td style={{ padding: '12px 10px', fontWeight: '600', color: 'var(--qx-text-heading)' }}>${leg.mid}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -387,33 +387,33 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
               {/* Trade Metrics Breakdown Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Net Debit / Credit</span>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: scanResult.trade.net_debit_credit > 0 ? '#ef4444' : '#10b981', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Net Debit / Credit</span>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: scanResult.trade.net_debit_credit > 0 ? 'var(--qx-negative)' : 'var(--qx-positive)', marginTop: '2px' }}>
                     {scanResult.trade.net_debit_credit > 0 ? `$${scanResult.trade.net_debit_credit} Debit` : `$${Math.abs(scanResult.trade.net_debit_credit)} Credit`}
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Max Profit / Contract</span>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#10b981', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Max Profit / Contract</span>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--qx-positive)', marginTop: '2px' }}>
                     ${scanResult.trade.max_profit_per_contract}
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Max Loss / Contract</span>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#ef4444', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Max Loss / Contract</span>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--qx-negative)', marginTop: '2px' }}>
                     ${scanResult.trade.max_loss_per_contract}
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Breakeven Price</span>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#f59e0b', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Breakeven Price</span>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--qx-warning)', marginTop: '2px' }}>
                     ${scanResult.trade.breakeven_price}
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Risk : Reward Ratio</span>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#38bdf8', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Risk : Reward Ratio</span>
+                  <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--qx-accent)', marginTop: '2px' }}>
                     {scanResult.trade.risk_reward_ratio} : 1
                   </div>
                 </div>
@@ -423,9 +423,9 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
           {/* Tab 2: Direction 7-Factor Composite Breakdown */}
           {activeTab === 'direction' && scanResult.direction_result && (
-            <div style={{ background: '#1e293b', borderRadius: '12px', padding: '20px', border: '1px solid #334155' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', borderRadius: '12px', padding: '20px', border: '1px solid var(--qx-border)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <h3 style={{ margin: 0, fontSize: '16px', color: '#ffffff' }}>
+                <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--qx-text-heading)' }}>
                   Gate 2: Direction Composite Engine ({scanResult.direction_result.bias} · {scanResult.direction_result.score}/100)
                 </h3>
               </div>
@@ -439,8 +439,8 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
                   ['Fair Value Gap (FVG) Quality', '10%', scanResult.direction_result.components.fvg_quality],
                   ['Relative Strength vs SPY', '5%', scanResult.direction_result.components.relative_strength]
                 ].map(([label, weight, val]) => (
-                  <div key={label} style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: '#9ca3af' }}>
+                  <div key={label} style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--qx-text-muted)' }}>
                       <span>{label}</span>
                       <span>({weight})</span>
                     </div>
@@ -455,38 +455,38 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
           {/* Tab 3: Volatility & EWMA RV */}
           {activeTab === 'volatility' && scanResult.volatility_result && (
-            <div style={{ background: '#1e293b', borderRadius: '12px', padding: '20px', border: '1px solid #334155' }}>
-              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: '#ffffff' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', borderRadius: '12px', padding: '20px', border: '1px solid var(--qx-border)' }}>
+              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: 'var(--qx-text-heading)' }}>
                 Gate 3: Volatility Engine & EWMA RV Proxy
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Volatility Classification</span>
-                  <div style={{ fontSize: '18px', fontWeight: '800', color: scanResult.volatility_result.classification === 'CHEAP' ? '#10b981' : scanResult.volatility_result.classification === 'FAIR' ? '#38bdf8' : '#ef4444', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Volatility Classification</span>
+                  <div style={{ fontSize: '18px', fontWeight: '800', color: scanResult.volatility_result.classification === 'CHEAP' ? 'var(--qx-positive)' : scanResult.volatility_result.classification === 'FAIR' ? 'var(--qx-accent)' : 'var(--qx-negative)', marginTop: '2px' }}>
                     {scanResult.volatility_result.classification}
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Current Implied Vol (IV)</span>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Current Implied Vol (IV)</span>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: 'var(--qx-text-heading)', marginTop: '2px' }}>
                     {(scanResult.volatility_result.current_iv * 100).toFixed(1)}%
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>EWMA Forecast Realized Vol (RV)</span>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#ffffff', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>EWMA Forecast Realized Vol (RV)</span>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: 'var(--qx-text-heading)', marginTop: '2px' }}>
                     {(scanResult.volatility_result.forecast_rv * 100).toFixed(1)}%
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>IV / RV Ratio</span>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: '#38bdf8', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>IV / RV Ratio</span>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: 'var(--qx-accent)', marginTop: '2px' }}>
                     {scanResult.volatility_result.iv_rv_ratio}x
                   </div>
                 </div>
-                <div style={{ background: '#0f172a', padding: '12px', borderRadius: '8px' }}>
-                  <span style={{ fontSize: '11px', color: '#9ca3af' }}>Vol Edge (IV - RV)</span>
-                  <div style={{ fontSize: '16px', fontWeight: '700', color: scanResult.volatility_result.vol_edge > 0 ? '#ef4444' : '#10b981', marginTop: '2px' }}>
+                <div style={{ background: 'var(--qx-bg-canvas)', padding: '12px', borderRadius: '8px' }}>
+                  <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)' }}>Vol Edge (IV - RV)</span>
+                  <div style={{ fontSize: '16px', fontWeight: '700', color: scanResult.volatility_result.vol_edge > 0 ? 'var(--qx-negative)' : 'var(--qx-positive)', marginTop: '2px' }}>
                     {(scanResult.volatility_result.vol_edge * 100).toFixed(1)}%
                   </div>
                 </div>
@@ -496,28 +496,28 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
           {/* Tab 4: All Ranked Strategies */}
           {activeTab === 'strategies' && scanResult.strategy_result && (
-            <div style={{ background: '#1e293b', borderRadius: '12px', padding: '20px', border: '1px solid #334155' }}>
-              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: '#ffffff' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', borderRadius: '12px', padding: '20px', border: '1px solid var(--qx-border)' }}>
+              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: 'var(--qx-text-heading)' }}>
                 Gate 5: Strategy Selector (Continuous Ranking)
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {scanResult.strategy_result.all_ranked_strategies.map((strat, idx) => (
                   <div key={idx} style={{
-                    background: '#0f172a',
+                    background: 'var(--qx-bg-canvas)',
                     padding: '14px',
                     borderRadius: '8px',
-                    borderLeft: idx === 0 ? '4px solid #10b981' : idx === 1 ? '4px solid #38bdf8' : '4px solid #334155',
+                    borderLeft: idx === 0 ? '4px solid var(--qx-positive)' : idx === 1 ? '4px solid var(--qx-accent)' : '4px solid var(--qx-border)',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontWeight: '700', color: '#ffffff', fontSize: '14px' }}>{strat.strategy_name}</span>
-                        <span style={{ fontSize: '11px', background: '#1e293b', color: '#9ca3af', padding: '2px 6px', borderRadius: '4px' }}>{strat.category}</span>
-                        {idx === 0 && <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', fontWeight: '700', padding: '2px 8px', borderRadius: '4px' }}>RECOMMENDED</span>}
+                        <span style={{ fontWeight: '700', color: 'var(--qx-text-heading)', fontSize: '14px' }}>{strat.strategy_name}</span>
+                        <span style={{ fontSize: '11px', background: 'var(--qx-bg-surface)', color: 'var(--qx-text-secondary)', padding: '2px 6px', borderRadius: '4px' }}>{strat.category}</span>
+                        {idx === 0 && <span style={{ fontSize: '11px', background: 'rgba(124, 169, 130, 0.2)', color: 'var(--qx-positive)', fontWeight: '700', padding: '2px 8px', borderRadius: '4px' }}>RECOMMENDED</span>}
                       </div>
-                      <div style={{ fontSize: '12px', color: '#9ca3af', marginTop: '4px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', marginTop: '4px' }}>
                         {strat.explanation}
                       </div>
                     </div>
@@ -532,8 +532,8 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
 
           {/* Tab 5: Hard Veto Auditing */}
           {activeTab === 'veto' && (
-            <div style={{ background: '#1e293b', borderRadius: '12px', padding: '20px', border: '1px solid #334155' }}>
-              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: '#ffffff' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', borderRadius: '12px', padding: '20px', border: '1px solid var(--qx-border)' }}>
+              <h3 style={{ margin: '0 0 16px 0', fontSize: '16px', color: 'var(--qx-text-heading)' }}>
                 Gate 1: Hard Veto Auditing (7 Disqualifying Rules)
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
@@ -549,16 +549,16 @@ export default function QXOptionsScanner({ defaultSymbol = 'NVDA', onSelectSymbo
                   const isFailed = scanResult.veto_result?.reason === vetoKey;
                   return (
                     <div key={vetoKey} style={{
-                      background: '#0f172a',
+                      background: 'var(--qx-bg-canvas)',
                       padding: '12px',
                       borderRadius: '8px',
-                      border: isFailed ? '1px solid #ef4444' : '1px solid #334155'
+                      border: isFailed ? '1px solid var(--qx-negative)' : '1px solid var(--qx-border-subtle)'
                     }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color: isFailed ? '#ef4444' : '#10b981' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color: isFailed ? 'var(--qx-negative)' : 'var(--qx-positive)' }}>
                         {isFailed ? <AlertTriangle size={16} /> : <CheckCircle size={16} />}
                         <span>{vetoKey}</span>
                       </div>
-                      <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '4px' }}>
+                      <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', marginTop: '4px' }}>
                         {vetoDesc}
                       </div>
                     </div>

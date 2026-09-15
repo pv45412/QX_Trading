@@ -5,17 +5,17 @@ import { Zap, Target, Activity, Award, BarChart2, TrendingUp, Sparkles, PieChart
 
 export default function WorkspaceNavigation({ route, context }) {
   const jumpLinks = [
-    { label: 'Options Ideas Hub', hash: '#options-ideas-hub', key: 'F0', icon: Award, color: '#10b981' },
-    { label: 'Research Studio', hash: '#research-studio', key: 'F1', icon: Target, color: '#38bdf8' },
-    { label: 'Options Scanner V1', hash: '#options-scanner-v1', key: 'F2', icon: Zap, color: '#38bdf8' },
-    { label: 'SPX Command', hash: '#spx-dashboard', key: 'F2', icon: Zap, color: '#00f2fe' },
-    { label: 'Prompt Studio', hash: '#daily-prompt', key: 'F3', icon: Target, color: '#00e676' },
-    { label: 'Day Trader Terminal', hash: '#qx-terminal', key: 'F4', icon: Activity, color: '#ffab00' },
-    { label: 'QX Suite', hash: '#qx-suite', key: 'F5', icon: Award, color: '#3b82f6' },
-    { label: 'Sector Ranking', hash: '#ranking', key: 'F6', icon: BarChart2, color: '#a78bfa' },
-    { label: 'Market Movers', hash: '#movers', key: 'F7', icon: TrendingUp, color: '#f43f5e' },
-    { label: 'AI Review', hash: '#ai-review', key: 'F8', icon: Sparkles, color: '#38bdf8' },
-    { label: 'Holdings', hash: '#holdings', key: 'F9', icon: PieChart, color: '#4ade80' },
+    { label: 'Options Ideas Hub', hash: '#options-ideas-hub', key: 'F0', icon: Award, color: 'var(--qx-positive)' },
+    { label: 'Research Studio', hash: '#research-studio', key: 'F1', icon: Target, color: 'var(--qx-accent)' },
+    { label: 'Options Scanner V1', hash: '#options-scanner-v1', key: 'F2', icon: Zap, color: 'var(--qx-accent)' },
+    { label: 'SPX Command', hash: '#spx-dashboard', key: 'F2', icon: Zap, color: 'var(--qx-accent)' },
+    { label: 'Prompt Studio', hash: '#daily-prompt', key: 'F3', icon: Target, color: 'var(--qx-positive)' },
+    { label: 'Day Trader Terminal', hash: '#qx-terminal', key: 'F4', icon: Activity, color: 'var(--qx-warning)' },
+    { label: 'QX Suite', hash: '#qx-suite', key: 'F5', icon: Award, color: 'var(--qx-accent)' },
+    { label: 'Sector Ranking', hash: '#ranking', key: 'F6', icon: BarChart2, color: 'var(--qx-text-secondary)' },
+    { label: 'Market Movers', hash: '#movers', key: 'F7', icon: TrendingUp, color: 'var(--qx-negative)' },
+    { label: 'AI Review', hash: '#ai-review', key: 'F8', icon: Sparkles, color: 'var(--qx-accent)' },
+    { label: 'Holdings', hash: '#holdings', key: 'F9', icon: PieChart, color: 'var(--qx-positive)' },
   ];
 
   const handleJump = (hash) => {
@@ -59,8 +59,8 @@ export default function WorkspaceNavigation({ route, context }) {
 
       {/* Institutional Command Bar & Hotkeys Strip */}
       <div style={{
-        background: 'rgba(15, 23, 42, 0.75)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        background: 'var(--qx-bg-surface)',
+        border: '1px solid var(--qx-border)',
         borderRadius: '8px',
         padding: '8px 12px',
         margin: '10px 0',
@@ -70,8 +70,8 @@ export default function WorkspaceNavigation({ route, context }) {
         flexWrap: 'wrap',
         gap: '8px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 700, color: '#00f2fe' }}>
-          <span style={{ background: 'rgba(0, 242, 254, 0.15)', color: '#00f2fe', padding: '2px 6px', borderRadius: '4px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', fontWeight: 700, color: 'var(--qx-accent)' }}>
+          <span style={{ background: 'rgba(217, 160, 91, 0.15)', color: 'var(--qx-accent)', padding: '2px 6px', borderRadius: '4px' }}>
             COMMAND BAR
           </span>
           INSTITUTIONAL QUICK JUMP:
@@ -83,9 +83,9 @@ export default function WorkspaceNavigation({ route, context }) {
               key={item.label}
               onClick={() => handleJump(item.hash)}
               style={{
-                background: 'rgba(255, 255, 255, 0.04)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                color: '#cbd5e1',
+                background: 'var(--qx-bg-canvas)',
+                border: '1px solid var(--qx-border-subtle)',
+                color: 'var(--qx-text-primary)',
                 padding: '4px 8px',
                 borderRadius: '6px',
                 fontSize: '11px',
@@ -99,7 +99,7 @@ export default function WorkspaceNavigation({ route, context }) {
             >
               <item.icon size={12} color={item.color} />
               <span>{item.label}</span>
-              <span style={{ fontSize: '9px', background: 'rgba(255,255,255,0.08)', padding: '1px 4px', borderRadius: '3px', color: '#94a3b8' }}>
+              <span style={{ fontSize: '9px', background: 'var(--qx-bg-surface)', padding: '1px 4px', borderRadius: '3px', color: 'var(--qx-text-muted)' }}>
                 {item.key}
               </span>
             </button>

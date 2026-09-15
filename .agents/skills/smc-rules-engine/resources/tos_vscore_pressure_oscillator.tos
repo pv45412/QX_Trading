@@ -1,0 +1,102 @@
+# ==============================================================================
+# QX VSCORE PRESSURE OSCILLATOR v1.5
+# DAILY-AWARE PRESSURE CONFIRMATION + CLEAN BLACK-THEME COLORS
+# Thinkorswim / ThinkScript
+#
+# PURPOSE
+# -------
+# Makes the existing QX VScore easier to understand in real time.
+#
+# It shows:
+#   PARTICIPATION: LOW | RVOL 0.45x
+#   PRESSURE: NEUTRAL | -0.21
+#   SELLING EASING
+#   SETUP: EARLY BULL TURN
+#   ACTION: WAIT FOR VOLUME
+# ==============================================================================
+
+declare lower;
+
+input profile = {default AUTO, ONE_MIN, FIVE_MIN, DAILY, CUSTOM};
+input dailyUseCompletedBar = yes;
+
+input customPressureLength       = 20;
+input customNormalizationLength  = 100;
+input customExtremeLookback      = 500;
+input customSmoothingLength      = 3;
+
+input customBullThreshold        = 0.75;
+input customBearThreshold        = -0.75;
+input customExtremeBull          = 2.00;
+input customExtremeBear          = -2.00;
+input earlyTurnThreshold         = 0.25;
+
+input lowRVOL                    = 0.80;
+input normalRVOL                 = 1.00;
+input confirmRVOL                = 1.30;
+input highRVOL                   = 1.80;
+
+input showThresholds             = yes;
+input showSignals                = yes;
+input showDivergence             = yes;
+input showLabels                 = yes;
+input enableAlerts               = no;
+
+DefineGlobalColor("CallWatch",  CreateColor(0, 135, 125));      # Teal
+DefineGlobalColor("CallBuild",  CreateColor(0, 190, 120));      # Emerald
+DefineGlobalColor("CallStrong", CreateColor(0, 220, 205));      # Aqua
+DefineGlobalColor("CallActive", CreateColor(0, 255, 255));      # Cyan
+
+DefineGlobalColor("PutWatch",   CreateColor(190, 105, 25));     # Amber
+DefineGlobalColor("PutBuild",   CreateColor(245, 125, 30));     # Orange
+DefineGlobalColor("PutStrong",  CreateColor(255, 90, 70));      # Coral
+DefineGlobalColor("PutActive",  CreateColor(255, 30, 30));      # Bright Red
+
+DefineGlobalColor("Neutral",    CreateColor(110, 120, 130));    # Slate
+DefineGlobalColor("Wait",       CreateColor(255, 210, 40));     # Gold
+
+def agg = GetAggregationPeriod();
+def isOneMinute = agg == AggregationPeriod.MIN;
+def isFiveMinute = agg == AggregationPeriod.FIVE_MIN;
+def isDaily = agg == AggregationPeriod.DAY;
+
+def useOneMin = profile == profile.ONE_MIN or (profile == profile.AUTO and isOneMinute);
+def useFiveMin = profile == profile.FIVE_MIN or (profile == profile.AUTO and isFiveMinute);
+def useDaily = profile == profile.DAILY or (profile == profile.AUTO and isDaily);
+
+def candleRange = high - low;
+def clv = if candleRange > 0 then ((close - low) - (high - close)) / candleRange else 0;
+
+def avgVolume = Average(volume[1], 20);
+def rawRVOL = if avgVolume > 0 then volume / avgVolume else 1;
+def signalRVOL = if useDaily and dailyUseCompletedBar then rawRVOL[1] else rawRVOL;
+
+def atr = ATR(14);
+def priceImpulse = if atr > 0 then (close - close[1]) / atr else 0;
+def cappedImpulse = Max(-3.0, Min(3.0, priceImpulse));
+
+def rawPressure = 0.65 * (clv * Min(rawRVOL, 4.0)) + 0.35 * cappedImpulse;
+def pressureEMA = ExpAverage(rawPressure, 20);
+
+def pressureMean = Average(pressureEMA, 100);
+def pressureStd  = StDev(pressureEMA, 100);
+
+def rawVScore = if pressureStd > 0 then (pressureEMA - pressureMean) / pressureStd else 0;
+def vScore    = ExpAverage(rawVScore, 3);
+
+plot VScoreLine = vScore;
+VScoreLine.SetLineWeight(3);
+
+plot ZeroLine = 0;
+ZeroLine.SetDefaultColor(GlobalColor("Neutral"));
+ZeroLine.SetStyle(Curve.LONG_DASH);
+
+AddLabel(showLabels,
+    "PARTICIPATION: " + (if signalRVOL >= confirmRVOL then "CONFIRMED | RVOL " else "NORMAL | RVOL ") + Round(signalRVOL, 2) + "x",
+    if signalRVOL >= confirmRVOL then GlobalColor("CallStrong") else GlobalColor("Wait")
+);
+
+AddLabel(showLabels,
+    "PRESSURE: " + (if vScore >= 0.75 then "BUY | " else if vScore <= -0.75 then "SELL | " else "NEUTRAL | ") + Round(vScore, 2),
+    if vScore >= 0.75 then GlobalColor("CallActive") else if vScore <= -0.75 then GlobalColor("PutActive") else GlobalColor("Neutral")
+);

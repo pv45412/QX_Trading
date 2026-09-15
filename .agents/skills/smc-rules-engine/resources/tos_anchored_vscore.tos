@@ -1,0 +1,206 @@
+# ==============================================================================
+# QX ANCHORED VSCORE
+# Version: 3.1 AUTO FUTURES SESSION
+#
+# PURPOSE
+# -------
+# Anchored VScore:
+#
+#       VScore = (Price - Anchored VWAP)
+#                --------------------------------
+#                Anchored Volume-Weighted StdDev
+#
+# AUTO ANCHOR MAP
+# ---------------
+# 1m / 5m:
+#   AutoByTime:
+#       18:00 ET -> GLOBEX reset
+#       09:30 ET -> RTH reset
+#
+# >5m to 30m:
+#       Week anchor
+#
+# >30m intraday:
+#       Month anchor
+#
+# Daily:
+#       Year anchor
+#
+# Weekly:
+#       Manual / Structural anchor
+# ==============================================================================
+
+declare lower;
+
+# ==============================================================================
+# 1. INPUTS
+# ==============================================================================
+
+input anchorMode = {
+    default Auto,
+    SessionTime,
+    WeekStart,
+    MonthStart,
+    QuarterStart,
+    YearStart,
+    ManualDate
+};
+
+input sessionMode = {
+    default AutoByTime,
+    RTHOnly,
+    GlobexOnly
+};
+
+input rthAnchorTime = 0930;
+input globexAnchorTime = 1800;
+input manualAnchorDate = 20250407;
+
+input priceBasis = {
+    default Typical,
+    Close
+};
+
+input minimumBarsIntraday = 10;
+input minimumBarsDaily = 10;
+input minimumBarsWeekly = 6;
+input smoothLength = 1;
+
+input showOneSigma = yes;
+input showTwoSigma = yes;
+input showThreeSigma = no;
+input showZeroLine = yes;
+
+input showLabel = yes;
+input showAnchorMarker = no;
+
+# ==============================================================================
+# 2. COLORS
+# ==============================================================================
+
+DefineGlobalColor("VScore", CreateColor(0, 220, 235));
+DefineGlobalColor("Zero", CreateColor(145, 150, 155));
+DefineGlobalColor("OneSigma", CreateColor(205, 210, 215));
+DefineGlobalColor("UpperTwo", CreateColor(205, 65, 65));
+DefineGlobalColor("LowerTwo", CreateColor(35, 145, 80));
+DefineGlobalColor("UpperThree", CreateColor(125, 40, 40));
+DefineGlobalColor("LowerThree", CreateColor(25, 90, 50));
+DefineGlobalColor("Bull", CreateColor(0, 190, 160));
+DefineGlobalColor("Bear", CreateColor(225, 95, 55));
+DefineGlobalColor("ExtremeBull", CreateColor(0, 245, 225));
+DefineGlobalColor("ExtremeBear", CreateColor(255, 75, 75));
+DefineGlobalColor("Neutral", CreateColor(115, 120, 130));
+DefineGlobalColor("Warning", CreateColor(215, 165, 45));
+
+# ==============================================================================
+# 3. TIMEFRAME DETECTION
+# ==============================================================================
+
+def aggregation = GetAggregationPeriod();
+def isIntraday = aggregation < AggregationPeriod.DAY;
+def isFastIntraday = isIntraday and aggregation <= AggregationPeriod.FIVE_MIN;
+def isMediumIntraday = isIntraday and aggregation > AggregationPeriod.FIVE_MIN and aggregation <= AggregationPeriod.THIRTY_MIN;
+def isSlowIntraday = isIntraday and aggregation > AggregationPeriod.THIRTY_MIN;
+def isDaily = aggregation == AggregationPeriod.DAY;
+def isWeekly = aggregation == AggregationPeriod.WEEK;
+def supportedAutoAggregation = isIntraday or isDaily or isWeekly;
+
+# ==============================================================================
+# 4. AUTO / OVERRIDE ANCHOR SELECTION
+# ==============================================================================
+
+def useSessionAnchor = anchorMode == anchorMode.SessionTime or (anchorMode == anchorMode.Auto and isFastIntraday);
+def useWeekAnchor    = anchorMode == anchorMode.WeekStart or (anchorMode == anchorMode.Auto and isMediumIntraday);
+def useMonthAnchor   = anchorMode == anchorMode.MonthStart or (anchorMode == anchorMode.Auto and isSlowIntraday);
+def useQuarterAnchor = anchorMode == anchorMode.QuarterStart;
+def useYearAnchor    = anchorMode == anchorMode.YearStart or (anchorMode == anchorMode.Auto and isDaily);
+def useManualAnchor  = anchorMode == anchorMode.ManualDate or (anchorMode == anchorMode.Auto and isWeekly);
+
+def modeSupported = if anchorMode == anchorMode.Auto then supportedAutoAggregation else if anchorMode == anchorMode.SessionTime then isIntraday else yes;
+
+# ==============================================================================
+# 5. AUTOMATIC SESSION STATE
+# ==============================================================================
+
+def afterGlobexOpen = SecondsFromTime(globexAnchorTime) >= 0;
+def beforeRTHOpen   = SecondsFromTime(rthAnchorTime) < 0;
+def inGlobexSession = afterGlobexOpen or beforeRTHOpen;
+def inRTHSession    = !inGlobexSession;
+
+# ==============================================================================
+# 6. PRICE / VOLUME
+# ==============================================================================
+
+def sourcePrice = if priceBasis == priceBasis.Typical then (high + low + close) / 3 else close;
+def barVolume   = if IsNaN(volume) or volume <= 0 then 0 else volume;
+def priceVolume = sourcePrice * barVolume;
+def priceSquaredVolume = Sqr(sourcePrice) * barVolume;
+
+# ==============================================================================
+# 7. SESSION RESET EVENTS
+# ==============================================================================
+
+def rthReset    = isIntraday and SecondsFromTime(rthAnchorTime) >= 0 and SecondsFromTime(rthAnchorTime)[1] < 0;
+def globexReset = isIntraday and SecondsFromTime(globexAnchorTime) >= 0 and SecondsFromTime(globexAnchorTime)[1] < 0;
+def sessionReset = if sessionMode == sessionMode.RTHOnly then rthReset else if sessionMode == sessionMode.GlobexOnly then globexReset else rthReset or globexReset;
+
+# ==============================================================================
+# 8. WEEK / MONTH / QUARTER / YEAR / MANUAL RESETS
+# ==============================================================================
+
+def weekReset    = GetWeek() != GetWeek()[1];
+def monthReset   = GetMonth() != GetMonth()[1];
+def quarterNumber = Floor((GetMonth() - 1) / 3);
+def quarterKey   = GetYear() * 4 + quarterNumber;
+def quarterReset = quarterKey != quarterKey[1];
+def yearReset    = GetYear() != GetYear()[1];
+def manualReset  = GetYYYYMMDD() >= manualAnchorDate and GetYYYYMMDD()[1] < manualAnchorDate;
+
+# ==============================================================================
+# 9. MASTER ANCHOR RESET
+# ==============================================================================
+
+def anchorReset = if useSessionAnchor then sessionReset else if useWeekAnchor then weekReset else if useMonthAnchor then monthReset else if useQuarterAnchor then quarterReset else if useYearAnchor then yearReset else if useManualAnchor then manualReset else no;
+
+def anchorSeen = CompoundValue(1, if !modeSupported then 0 else if anchorReset then 1 else anchorSeen[1], 0);
+def activeAnchorDate = CompoundValue(1, if anchorReset then GetYYYYMMDD() else activeAnchorDate[1], 0);
+
+def barsSinceAnchor = CompoundValue(1, if !anchorSeen then 0 else if anchorReset then 1 else barsSinceAnchor[1] + 1, 0);
+def requiredBars = if isIntraday then Max(2, minimumBarsIntraday) else if isDaily then Max(2, minimumBarsDaily) else if isWeekly then Max(2, minimumBarsWeekly) else Max(2, minimumBarsDaily);
+
+# ==============================================================================
+# 12. ANCHORED VOLUME-WEIGHTED MOMENTS
+# ==============================================================================
+
+def cumulativeVolume = CompoundValue(1, if !anchorSeen then 0 else if anchorReset then barVolume else cumulativeVolume[1] + barVolume, 0);
+def cumulativePV     = CompoundValue(1, if !anchorSeen then 0 else if anchorReset then priceVolume else cumulativePV[1] + priceVolume, 0);
+def cumulativeP2V    = CompoundValue(1, if !anchorSeen then 0 else if anchorReset then priceSquaredVolume else cumulativeP2V[1] + priceSquaredVolume, 0);
+
+def anchoredVWAP = if anchorSeen and cumulativeVolume > 0 then cumulativePV / cumulativeVolume else Double.NaN;
+def anchoredVarianceRaw = if anchorSeen and cumulativeVolume > 0 then cumulativeP2V / cumulativeVolume - Sqr(anchoredVWAP) else Double.NaN;
+def anchoredVariance = if !IsNaN(anchoredVarianceRaw) then Max(0, anchoredVarianceRaw) else Double.NaN;
+def anchoredStdDev   = if !IsNaN(anchoredVariance) then Sqrt(anchoredVariance) else Double.NaN;
+
+def warmingUp = modeSupported and anchorSeen and barsSinceAnchor < requiredBars;
+def dataReady = modeSupported and anchorSeen and barsSinceAnchor >= requiredBars and cumulativeVolume > 0 and anchoredStdDev > 0;
+
+def rawVScore = if dataReady then (sourcePrice - anchoredVWAP) / anchoredStdDev else Double.NaN;
+def VScoreValue = if smoothLength <= 1 then rawVScore else ExpAverage(rawVScore, smoothLength);
+
+plot VScore = if modeSupported then VScoreValue else Double.NaN;
+VScore.SetDefaultColor(GlobalColor("VScore"));
+VScore.SetLineWeight(2);
+
+plot ZeroLine = if modeSupported and showZeroLine then 0 else Double.NaN;
+ZeroLine.SetDefaultColor(GlobalColor("Zero"));
+ZeroLine.SetStyle(Curve.LONG_DASH);
+
+plot PlusOne  = if modeSupported and showOneSigma then 1 else Double.NaN;
+plot MinusOne = if modeSupported and showOneSigma then -1 else Double.NaN;
+PlusOne.SetDefaultColor(GlobalColor("OneSigma"));
+MinusOne.SetDefaultColor(GlobalColor("OneSigma"));
+
+plot PlusTwo  = if modeSupported and showTwoSigma then 2 else Double.NaN;
+plot MinusTwo = if modeSupported and showTwoSigma then -2 else Double.NaN;
+PlusTwo.SetDefaultColor(GlobalColor("UpperTwo"));
+MinusTwo.SetDefaultColor(GlobalColor("LowerTwo"));

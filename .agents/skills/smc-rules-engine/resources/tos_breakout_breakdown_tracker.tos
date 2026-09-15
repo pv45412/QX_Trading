@@ -1,0 +1,43 @@
+# ====================================================================
+# Study: Breakout_Breakdown_Tracker
+# Platform: thinkorswim / thinkScript
+# Description: Fixed logic & Eye-friendly colors for 15-period BO/BD tracking.
+# ====================================================================
+
+# 1. Inputs
+input Length_BO = 15;
+input Length_BD = 15;
+
+# 2. Resistance & Support Calculation
+def HighPrice = Highest(high[3], Length_BO);
+def LowPrice = Lowest(low[3], Length_BD);
+
+# 3. Breakout Logic (Long)
+def trig = if (close[1] < HighPrice and close > HighPrice) then 0
+           else if (close[2] < HighPrice and close[1] > HighPrice and close > HighPrice) then 1
+           else if (close[3] < HighPrice and close[2] > HighPrice and close[1] > HighPrice and close > HighPrice) then 2
+           else -999;
+
+# 4. Breakdown Logic (Short)
+def trigL = if (close[1] > LowPrice and close < LowPrice) then 0
+            else if (close[2] > LowPrice and close[1] < LowPrice and close < LowPrice) then 1
+            else if (close[3] > LowPrice and close[2] < LowPrice and close[1] < LowPrice and close < LowPrice) then 2
+            else -999;
+
+# 5. Display Labels
+AddLabel(yes, if trig == 0 then "TODAY BO"
+              else if (trig == 1 and close <= close[1]) then "TESTING YESTERDAY BO"
+              else if (trig == 2 and close <= close[2]) then "TESTING 2 DAYS AGO BO"
+              else if (trig == 1 and close >= close[1]) then "CONTINUING YESTERDAY BO"
+              else if (trig == 2 and close >= close[2]) then "CONTINUING 2 DAYS AGO BO"
+              else if trigL == 0 then "TODAY BD"
+              else if (trigL == 1 and close >= close[1]) then "TESTING YESTERDAY BD"
+              else if (trigL == 2 and close >= close[2]) then "TESTING 2 DAYS AGO BD"
+              else if (trigL == 1 and close <= close[1]) then "CONTINUING YESTERDAY BD"
+              else if (trigL == 2 and close <= close[2]) then "CONTINUING 2 DAYS AGO BD"
+              else " ", Color.WHITE);
+
+# 6. Eye-Friendly Visuals
+AssignBackgroundColor(if trig >= 0 then CreateColor(0, 100, 0) 
+                       else if trigL >= 0 then CreateColor(150, 0, 0) 
+                       else Color.DARK_GRAY);

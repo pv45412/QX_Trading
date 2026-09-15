@@ -1,0 +1,142 @@
+# ====================================================================
+# Study: INST_Session_Auction_Engine (v2.0 Refined)
+# Platform: thinkorswim / thinkScript
+# Description: Institutional Upper-Chart Value Profile & Auction Engine.
+#              Plots Developing AVWAP, Value Area Bands (+/-1 SD, +/-2 SD),
+#              and 30-Minute Initial Balance (IB) Extensions.
+#              Refined with RTH-only masking to eliminate pre-market flare.
+# ====================================================================
+
+declare upper;
+
+# --------------------------------------------------------------------
+# 1. Inputs & Configuration
+# --------------------------------------------------------------------
+input sessionOpenTime   = 0930; # Regular Market Open (EST)
+input sessionCloseTime  = 1600; # Regular Market Close (EST)
+input initialBalanceMin = 30;   # Length of Initial Balance in minutes
+input showVWAP          = yes;  # White Session AVWAP line
+input showValueBands    = no;   # +/- 1 Standard Deviation (Turn ON if you want Value Area edges)
+input showExtremeBands  = yes;  # +/- 2 Standard Deviation (Reversal / Stretch bounds)
+input showInitialBal    = yes;  # 30m Opening Range (IB High / Low)
+input showPriorSession  = yes;  # Prior Day High / Low references
+input showAuctionLabel  = yes;  # Compact status pod on top HUD
+
+# --------------------------------------------------------------------
+# 2. Colors & Visual Language
+# --------------------------------------------------------------------
+DefineGlobalColor("VWAPColor",   CreateColor(255, 255, 255)); # Crisp White
+DefineGlobalColor("ValueBands",  CreateColor(56, 189, 248));  # Sky Blue (+/- 1 SD)
+DefineGlobalColor("ExtremeBands",CreateColor(244, 63, 94));   # Soft Rose (+/- 2 SD)
+DefineGlobalColor("IBColor",     CreateColor(251, 191, 36));  # Amber Gold
+DefineGlobalColor("PriorLevels", CreateColor(148, 163, 184)); # Slate Grey
+
+# --------------------------------------------------------------------
+# 3. Session Timing & Reset Logic
+# --------------------------------------------------------------------
+def agg = GetAggregationPeriod();
+def isIntraday = agg < AggregationPeriod.DAY;
+
+def isNewSession = isIntraday and SecondsFromTime(sessionOpenTime) >= 0 and SecondsFromTime(sessionOpenTime)[1] < 0;
+def inRTH = isIntraday and SecondsFromTime(sessionOpenTime) >= 0 and SecondsTillTime(sessionCloseTime) > 0;
+
+# --------------------------------------------------------------------
+# 4. Developing Cumulative Volume & AVWAP Engine
+# --------------------------------------------------------------------
+def vol = if IsNaN(volume) then 0 else volume;
+def typicalP = (high + low + close) / 3;
+
+rec cumVol = CompoundValue(1, if isNewSession then vol else cumVol[1] + vol, vol);
+rec cumPV  = CompoundValue(1, if isNewSession then typicalP * vol else cumPV[1] + (typicalP * vol), typicalP * vol);
+rec cumP2V = CompoundValue(1, if isNewSession then Sqr(typicalP) * vol else cumP2V[1] + (Sqr(typicalP) * vol), Sqr(typicalP) * vol);
+
+plot InstVWAP = if isIntraday and inRTH and showVWAP and cumVol > 0 then cumPV / cumVol else Double.NaN;
+InstVWAP.SetPaintingStrategy(PaintingStrategy.LINE);
+InstVWAP.SetDefaultColor(GlobalColor("VWAPColor"));
+InstVWAP.SetLineWeight(2);
+
+# Standard Deviation Dispersion Math
+def varianceRaw = if cumVol > 0 then (cumP2V / cumVol) - Sqr(InstVWAP) else 0;
+def instStdDev = if varianceRaw > 0 then Sqrt(varianceRaw) else 0;
+
+# +/- 1 Standard Deviation (Masked outside RTH to prevent pre-market flares)
+plot UpperOneSigma = if isIntraday and inRTH and showValueBands and instStdDev > 0 then InstVWAP + instStdDev else Double.NaN;
+plot LowerOneSigma = if isIntraday and inRTH and showValueBands and instStdDev > 0 then InstVWAP - instStdDev else Double.NaN;
+UpperOneSigma.SetDefaultColor(GlobalColor("ValueBands"));
+LowerOneSigma.SetDefaultColor(GlobalColor("ValueBands"));
+UpperOneSigma.SetStyle(Curve.SHORT_DASH);
+LowerOneSigma.SetStyle(Curve.SHORT_DASH);
+
+# +/- 2 Standard Deviation (Masked outside RTH to prevent pre-market flares)
+plot UpperTwoSigma = if isIntraday and inRTH and showExtremeBands and instStdDev > 0 then InstVWAP + (2 * instStdDev) else Double.NaN;
+plot LowerTwoSigma = if isIntraday and inRTH and showExtremeBands and instStdDev > 0 then InstVWAP - (2 * instStdDev) else Double.NaN;
+UpperTwoSigma.SetDefaultColor(GlobalColor("ExtremeBands"));
+LowerTwoSigma.SetDefaultColor(GlobalColor("ExtremeBands"));
+UpperTwoSigma.SetStyle(Curve.FIRM);
+LowerTwoSigma.SetStyle(Curve.FIRM);
+UpperTwoSigma.SetLineWeight(1);
+LowerTwoSigma.SetLineWeight(1);
+
+# --------------------------------------------------------------------
+# 5. Initial Balance (IB) Engine (30-Minute Range)
+# --------------------------------------------------------------------
+def ibSeconds = initialBalanceMin * 60;
+def inIB = isIntraday and SecondsFromTime(sessionOpenTime) >= 0 and SecondsFromTime(sessionOpenTime) < ibSeconds;
+def ibEnded = isIntraday and SecondsFromTime(sessionOpenTime) >= ibSeconds and inRTH;
+
+rec ibHighVal = CompoundValue(1,
+    if isNewSession then high
+    else if inIB then Max(ibHighVal[1], high)
+    else ibHighVal[1],
+    high
+);
+
+rec ibLowVal = CompoundValue(1,
+    if isNewSession then low
+    else if inIB then Min(ibLowVal[1], low)
+    else ibLowVal[1],
+    low
+);
+
+plot IBHigh = if isIntraday and showInitialBal and ibEnded then ibHighVal else Double.NaN;
+plot IBLow  = if isIntraday and showInitialBal and ibEnded then ibLowVal else Double.NaN;
+IBHigh.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+IBLow.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+IBHigh.SetDefaultColor(GlobalColor("IBColor"));
+IBLow.SetDefaultColor(GlobalColor("IBColor"));
+IBHigh.SetLineWeight(1);
+IBLow.SetLineWeight(1);
+
+# --------------------------------------------------------------------
+# 6. Prior Day High / Low Anchors
+# --------------------------------------------------------------------
+def prevDayHigh = Highest(high(period = AggregationPeriod.DAY)[1], 1);
+def prevDayLow  = Lowest(low(period = AggregationPeriod.DAY)[1], 1);
+
+plot PDH = if isIntraday and inRTH and showPriorSession then prevDayHigh else Double.NaN;
+plot PDL = if isIntraday and inRTH and showPriorSession then prevDayLow else Double.NaN;
+PDH.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+PDL.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+PDH.SetDefaultColor(GlobalColor("PriorLevels"));
+PDL.SetDefaultColor(GlobalColor("PriorLevels"));
+PDH.SetStyle(Curve.LONG_DASH);
+PDL.SetStyle(Curve.LONG_DASH);
+
+# --------------------------------------------------------------------
+# 7. Action-Pod Dashboard Label
+# --------------------------------------------------------------------
+def atOrAboveTwoSigma = close >= (InstVWAP + (2 * instStdDev));
+def atOrBelowTwoSigma = close <= (InstVWAP - (2 * instStdDev));
+def insideValue       = close <= (InstVWAP + instStdDev) and close >= (InstVWAP - instStdDev);
+
+AddLabel(showAuctionLabel and isIntraday and inRTH,
+    "AUCTION: " + 
+    (if atOrAboveTwoSigma then "EXTREME STRETCH (+2 SD)"
+     else if atOrBelowTwoSigma then "EXTREME STRETCH (-2 SD)"
+     else if insideValue then "BALANCED VALUE"
+     else if close > InstVWAP then "EXPANDING HIGH"
+     else "EXPANDING LOW"),
+    if atOrAboveTwoSigma or atOrBelowTwoSigma then GlobalColor("ExtremeBands")
+    else if insideValue then GlobalColor("ValueBands")
+    else GlobalColor("VWAPColor")
+);

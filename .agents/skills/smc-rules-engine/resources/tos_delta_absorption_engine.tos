@@ -1,0 +1,136 @@
+# ====================================================================
+# Study: INST_Delta_Absorption_Engine_v2_1
+# Platform: thinkorswim / thinkScript
+# Description: Institutional Limit Absorption & Wick Exhaustion Engine
+#              - Fixed Doji false-positives with ATR-scaled wick validation
+#              - Dynamic tick/ATR visual offsets (no wick collisions)
+#              - Active Globex & Volume-Paced Live HUD Pod
+# ====================================================================
+
+declare upper;
+
+# --------------------------------------------------------------------
+# 1. Inputs & Sensitivity
+# --------------------------------------------------------------------
+input volumeThresholdRatio = 1.25; # Minimum RVOL for completed absorption
+input wickToBodyMinRatio   = 1.50; # Wick must be >= 1.5x candle body
+input lookbackVol          = 20;   # Rolling baseline for volume
+input atrLength            = 14;
+input showAbsorptionDots   = yes;
+input showExhaustionBoxes  = yes;
+input showDeltaHUDPod      = yes;
+input enableAudioAlerts    = yes;
+
+# --------------------------------------------------------------------
+# 2. Institutional Colors
+# --------------------------------------------------------------------
+DefineGlobalColor("TrappedBuyers",  CreateColor(236, 72, 153)); # Neon Magenta (Short Edge)
+DefineGlobalColor("TrappedSellers", CreateColor(6, 182, 212));  # Vivid Cyan (Long Edge)
+DefineGlobalColor("ExhaustionBox",  CreateColor(245, 158, 11));  # Muted Amber
+DefineGlobalColor("Neutral",        CreateColor(100, 116, 139)); # Slate
+DefineGlobalColor("BullTape",       CreateColor(0, 230, 118));   # Emerald
+DefineGlobalColor("BearTape",       CreateColor(255, 23, 68));    # Crimson
+
+# --------------------------------------------------------------------
+# 3. Microstructure Volume & Wick Math
+# --------------------------------------------------------------------
+def ts = TickSize();
+def atrVal = ATR(atrLength);
+def minWick = atrVal * 0.20; # Prevents doji false-triggers
+
+def candleRange = high - low;
+def candleBody  = AbsValue(close - open);
+def upperWick   = high - Max(open, close);
+def lowerWick   = Min(open, close) - low;
+
+# Relative Volume baseline
+def avgVol = Average(volume[1], lookbackVol);
+def rvolRaw = if avgVol > 0 then volume / avgVol else 1.0;
+def rvol = if IsNaN(rvolRaw) then 1.0 else rvolRaw;
+def hasInstitutionalVol = rvol >= volumeThresholdRatio;
+
+# Close Location Value (Tape Pressure Proxy)
+def clv = if candleRange > 0 then ((close - low) - (high - close)) / candleRange else 0;
+
+# --------------------------------------------------------------------
+# 4. Absorption Detection Engine (Filtered)
+# --------------------------------------------------------------------
+# Bullish Absorption (Trapped Sellers on Lower Wick)
+def bullAbsorption = hasInstitutionalVol and
+                     (candleRange > 0) and
+                     (lowerWick >= minWick) and
+                     (lowerWick >= candleBody * wickToBodyMinRatio) and
+                     (lowerWick > upperWick);
+
+# Bearish Absorption (Trapped Buyers on Upper Wick)
+def bearAbsorption = hasInstitutionalVol and
+                     (candleRange > 0) and
+                     (upperWick >= minWick) and
+                     (upperWick >= candleBody * wickToBodyMinRatio) and
+                     (upperWick > lowerWick);
+
+# --------------------------------------------------------------------
+# 5. Exhaustion Volume (Climactic Push)
+# --------------------------------------------------------------------
+def extremeVolSpike = rvol >= 2.00;
+def exhaustionHigh  = extremeVolSpike and (close < high - (candleRange * 0.35));
+def exhaustionLow   = extremeVolSpike and (close > low + (candleRange * 0.35));
+
+# --------------------------------------------------------------------
+# 6. Plotting On-Chart Markers (Dynamic Tick Scaling)
+# --------------------------------------------------------------------
+# Scale offsets so they stay legible on both $100 Crude and 5000pt /ES
+def dotOffset = Max(ts * 5, atrVal * 0.15);
+def boxOffset = Max(ts * 10, atrVal * 0.35);
+
+plot TrappedBuyerDot = if showAbsorptionDots and bearAbsorption then high + dotOffset else Double.NaN;
+TrappedBuyerDot.SetPaintingStrategy(PaintingStrategy.POINTS);
+TrappedBuyerDot.SetLineWeight(5);
+TrappedBuyerDot.SetDefaultColor(GlobalColor("TrappedBuyers"));
+
+plot TrappedSellerDot = if showAbsorptionDots and bullAbsorption then low - dotOffset else Double.NaN;
+TrappedSellerDot.SetPaintingStrategy(PaintingStrategy.POINTS);
+TrappedSellerDot.SetLineWeight(5);
+TrappedSellerDot.SetDefaultColor(GlobalColor("TrappedSellers"));
+
+plot ExhaustionHighMark = if showExhaustionBoxes and exhaustionHigh then high + boxOffset else Double.NaN;
+ExhaustionHighMark.SetPaintingStrategy(PaintingStrategy.SQUARES);
+ExhaustionHighMark.SetLineWeight(3);
+ExhaustionHighMark.SetDefaultColor(GlobalColor("ExhaustionBox"));
+
+plot ExhaustionLowMark = if showExhaustionBoxes and exhaustionLow then low - boxOffset else Double.NaN;
+ExhaustionLowMark.SetPaintingStrategy(PaintingStrategy.SQUARES);
+ExhaustionLowMark.SetLineWeight(3);
+ExhaustionLowMark.SetDefaultColor(GlobalColor("ExhaustionBox"));
+
+# --------------------------------------------------------------------
+# 7. Live Action HUD Pod (Adaptive to Low & High Vol Sessions)
+# --------------------------------------------------------------------
+def isBullTape = clv >= 0.50;
+def isBearTape = clv <= -0.50;
+
+AddLabel(showDeltaHUDPod,
+    "DELTA: " +
+    (if bearAbsorption then "TRAPPED BUYERS (ABSORBING)"
+     else if bullAbsorption then "TRAPPED SELLERS (ABSORBING)"
+     else if exhaustionHigh or exhaustionLow then "VOLUME CLIMAX"
+     else if hasInstitutionalVol and close > open then "BULL PARTICIPATION"
+     else if hasInstitutionalVol and close < open then "BEAR PARTICIPATION"
+     else if isBullTape then "BULL TAPE ACCUMULATION"
+     else if isBearTape then "BEAR TAPE DISTRIBUTION"
+     else "BALANCED TAPE"),
+    if bearAbsorption then GlobalColor("TrappedBuyers")
+    else if bullAbsorption then GlobalColor("TrappedSellers")
+    else if exhaustionHigh or exhaustionLow then GlobalColor("ExhaustionBox")
+    else if hasInstitutionalVol and close > open then GlobalColor("BullTape")
+    else if hasInstitutionalVol and close < open then GlobalColor("BearTape")
+    else if isBullTape then GlobalColor("BullTape")
+    else if isBearTape then GlobalColor("BearTape")
+    else GlobalColor("Neutral")
+);
+
+# --------------------------------------------------------------------
+# 8. Audio Alerts
+# --------------------------------------------------------------------
+Alert(enableAudioAlerts and bearAbsorption, "ORDER FLOW: Trapped Buyers (Bearish Absorption)!", Alert.BAR, Sound.Ding);
+Alert(enableAudioAlerts and bullAbsorption, "ORDER FLOW: Trapped Sellers (Bullish Absorption)!", Alert.BAR, Sound.Ding);

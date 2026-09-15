@@ -168,9 +168,13 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
 
     @app.get("/api/reports/daily_summary")
     def get_daily_summary() -> dict[str, Any]:
-        snapshot_data = metrics(cache_dir)
-        etf_rows = snapshot_data.get("rows", [])
-        return generate_daily_system_summary(etf_rows=etf_rows)
+        try:
+            from qx.market.ticker_service import fetch_all_watchlist_quotes
+            watchlist = fetch_all_watchlist_quotes()
+        except Exception:
+            watchlist = []
+        return generate_daily_system_summary(options_ideas=watchlist)
+
 
 
     @app.post("/api/refresh", status_code=202)

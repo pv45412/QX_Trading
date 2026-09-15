@@ -1,0 +1,359 @@
+# ====================================================================
+# Study: SMC_Complete_Suite_v3_1_FuturesReady
+# Platform: thinkorswim / thinkScript
+# Description: Institutional Smart Money Concepts Suite
+#              - Fully compatible with Futures (/ES, /MCL, /NQ, /CL) & Equities
+#              - 24-Hour Globex Extended Liquidity Projection (No 16:00 wipeouts)
+#              - Adaptive Multi-Timeframe Structure (BOS / CHoCH / Sweeps)
+#              - Auto-Mitigated Fair Value Gaps (FVG) & Order Blocks (OB)
+#              - Universal AsPrice() HUD formatting across all asset classes
+# ====================================================================
+
+declare upper;
+
+# --------------------------------------------------------------------
+# 1. Inputs & Configuration
+# --------------------------------------------------------------------
+input isFuturesMarket     = yes;  # Set YES for 24h Globex (/ES, /MCL, /NQ, /CL)
+input useAdaptiveTimeframe = yes; # Auto-scales lookbacks across 1m, 5m, 1H
+input lookbackLimit        = 500; # Calculation window to protect platform memory
+input sessionCloseTime     = 1600; # Equities-only RTH close for liquidity expiration
+
+# Display Toggles
+input showMarketStructure  = yes; # Major BOS / CHoCH lines & bubbles
+input showInternalLines    = no;  # Minor swing dashed lines
+input showSweeps           = yes; # Wick sweep dots (amber)
+input showMajorBubbles     = yes; # BOS/CHoCH text tags
+input showFairValueGaps    = yes; # FVG shaded void clouds
+input showOrderBlocks      = yes; # OB shaded base clouds
+input showLiquidityPools   = yes; # EQH / EQL dotted lines
+input showDashboardPod     = yes; # Consolidated compact HUD pod
+
+# Audio Alerts
+input enableSoundAlerts    = yes;
+
+# --------------------------------------------------------------------
+# 2. Institutional Palette & Visual Definitions
+# --------------------------------------------------------------------
+DefineGlobalColor("BullMajor", CreateColor(46, 125, 50));   # Forest Emerald
+DefineGlobalColor("BearMajor", CreateColor(198, 40, 40));   # Crimson Brick
+DefineGlobalColor("Internal",  CreateColor(100, 116, 139)); # Slate Grey
+DefineGlobalColor("Sweep",     CreateColor(245, 158, 11));  # Amber Gold
+DefineGlobalColor("Equilib",   CreateColor(120, 144, 156)); # Muted Slate
+DefineGlobalColor("BullFVG",   CreateColor(38, 166, 154));  # Soft Emerald
+DefineGlobalColor("BearFVG",   CreateColor(239, 83, 80));   # Soft Crimson
+DefineGlobalColor("BullOB",    CreateColor(33, 150, 243));  # Slate Cobalt
+DefineGlobalColor("BearOB",    CreateColor(233, 30, 99));   # Deep Rose
+DefineGlobalColor("EQLColor",  CreateColor(56, 189, 248));  # Sky Blue
+
+# --------------------------------------------------------------------
+# 3. Core Memory & Timeframe Profiling
+# --------------------------------------------------------------------
+def barNum   = BarNumber();
+def maxBars  = HighestAll(barNum);
+def inWindow = (maxBars - barNum) <= lookbackLimit;
+
+def agg = GetAggregationPeriod();
+def isFastChart   = agg <= AggregationPeriod.TWO_MIN;
+def isMediumChart = agg > AggregationPeriod.TWO_MIN and agg <= AggregationPeriod.FIFTEEN_MIN;
+def isIntraday    = agg < AggregationPeriod.DAY;
+
+# Futures: Maintain continuous 24h Globex liquidity; Equities: enforce RTH
+def rthActive = if isFuturesMarket then yes 
+                else (!isIntraday or (SecondsTillTime(sessionCloseTime) > 0));
+
+def atrVal = MovingAverage(AverageType.SIMPLE, TrueRange(high, close, low), 14);
+def minGapSize = atrVal * (if isFastChart then 0.20 else 0.25);
+
+# --------------------------------------------------------------------
+# 4. Multi-Tier Pivot Fractal Engine
+# --------------------------------------------------------------------
+def extH_Fast = high[18] == Highest(high, 37);
+def extL_Fast = low[18]  == Lowest(low,  37);
+def intH_Fast = high[6]  == Highest(high, 13);
+def intL_Fast = low[6]   == Lowest(low,  13);
+
+def extH_Med  = high[10] == Highest(high, 21);
+def extL_Med  = low[10]  == Lowest(low,  21);
+def intH_Med  = high[4]  == Highest(high, 9);
+def intL_Med  = low[4]   == Lowest(low,  9);
+
+def extH_Mac  = high[6]  == Highest(high, 13);
+def extL_Mac  = low[6]   == Lowest(low,  13);
+def intH_Mac  = high[3]  == Highest(high, 7);
+def intL_Mac  = low[3]   == Lowest(low,  7);
+
+def isExtHigh = if isFastChart then extH_Fast else if isMediumChart then extH_Med else extH_Mac;
+def isExtLow  = if isFastChart then extL_Fast else if isMediumChart then extL_Med else extL_Mac;
+def isIntHigh = if isFastChart then intH_Fast else if isMediumChart then intH_Med else intH_Mac;
+def isIntLow  = if isFastChart then intL_Fast else if isMediumChart then intL_Med else intL_Mac;
+
+def activeExtH = if isFastChart then high[18] else if isMediumChart then high[10] else high[6];
+def activeExtL = if isFastChart then low[18]  else if isMediumChart then low[10]  else low[6];
+def activeIntH = if isFastChart then high[6]  else if isMediumChart then high[4]  else high[3];
+def activeIntL = if isFastChart then low[6]   else if isMediumChart then low[4]   else low[3];
+
+# --------------------------------------------------------------------
+# 5. Market Structure Tracking (BOS / CHoCH / Sweeps)
+# --------------------------------------------------------------------
+rec majorHigh = CompoundValue(1, if !inWindow then Double.NaN else if isExtHigh then activeExtH else majorHigh[1], high);
+rec majorLow  = CompoundValue(1, if !inWindow then Double.NaN else if isExtLow  then activeExtL else majorLow[1],  low);
+
+rec trendState = CompoundValue(1,
+    if !inWindow then 0
+    else if close > majorHigh[1] then 1
+    else if close < majorLow[1]  then -1
+    else trendState[1], 0);
+
+rec minorHigh = CompoundValue(1, if !inWindow then Double.NaN else if isIntHigh then activeIntH else minorHigh[1], high);
+rec minorLow  = CompoundValue(1, if !inWindow then Double.NaN else if isIntLow  then activeIntL else minorLow[1],  low);
+
+def bodyCrossH = (close > majorHigh[1]) and (close[1] <= majorHigh[1]);
+def bodyCrossL = (close < majorLow[1])  and (close[1] >= majorLow[1]);
+
+def sweepH = (high > majorHigh[1]) and (close <= majorHigh[1]) and (high[1] <= majorHigh[1]);
+def sweepL = (low < majorLow[1])   and (close >= majorLow[1])  and (low[1] >= majorLow[1]);
+
+def rawBullBOS   = bodyCrossH and (trendState[1] == 1);
+def rawBullCHoCH = bodyCrossH and (trendState[1] == -1);
+def rawBearBOS   = bodyCrossL and (trendState[1] == -1);
+def rawBearCHoCH = bodyCrossL and (trendState[1] == 1);
+
+rec barsSinceBOS = CompoundValue(1, if rawBullBOS or rawBearBOS then 0 else barsSinceBOS[1] + 1, 99);
+def cooldown = if isFastChart then 8 else 4;
+
+def isMajorBullBOS   = rawBullBOS and (barsSinceBOS[1] >= cooldown);
+def isMajorBearBOS   = rawBearBOS and (barsSinceBOS[1] >= cooldown);
+def isMajorBullCHoCH = rawBullCHoCH;
+def isMajorBearCHoCH = rawBearCHoCH;
+
+def activeRangeH = HighestAll(if inWindow then majorHigh else Double.NaN);
+def activeRangeL = LowestAll(if inWindow then majorLow else Double.NaN);
+
+plot MajorHighPlot = if showMarketStructure and inWindow then activeRangeH else Double.NaN;
+MajorHighPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+MajorHighPlot.SetLineWeight(2);
+MajorHighPlot.SetDefaultColor(GlobalColor("BullMajor"));
+
+plot MajorLowPlot = if showMarketStructure and inWindow then activeRangeL else Double.NaN;
+MajorLowPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+MajorLowPlot.SetLineWeight(2);
+MajorLowPlot.SetDefaultColor(GlobalColor("BearMajor"));
+
+def eqPrice = (activeRangeH + activeRangeL) / 2;
+plot EqPlot = if showMarketStructure and inWindow and !IsNaN(activeRangeH) and !IsNaN(activeRangeL) then eqPrice else Double.NaN;
+EqPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+EqPlot.SetStyle(Curve.SHORT_DASH);
+EqPlot.SetLineWeight(1);
+EqPlot.SetDefaultColor(GlobalColor("Equilib"));
+
+plot MinorHPlot = if showInternalLines and inWindow then minorHigh else Double.NaN;
+MinorHPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+MinorHPlot.SetStyle(Curve.SHORT_DASH);
+MinorHPlot.SetLineWeight(1);
+MinorHPlot.SetDefaultColor(GlobalColor("Internal"));
+
+plot MinorLPlot = if showInternalLines and inWindow then minorLow else Double.NaN;
+MinorLPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+MinorLPlot.SetStyle(Curve.SHORT_DASH);
+MinorLPlot.SetLineWeight(1);
+MinorLPlot.SetDefaultColor(GlobalColor("Internal"));
+
+AddChartBubble(showMajorBubbles and isMajorBullBOS and inWindow, low - (TickSize() * 4), "BOS", GlobalColor("BullMajor"), no);
+AddChartBubble(showMajorBubbles and isMajorBearBOS and inWindow, high + (TickSize() * 4), "BOS", GlobalColor("BearMajor"), yes);
+
+AddChartBubble(showMajorBubbles and isMajorBullCHoCH and inWindow, low - (TickSize() * 6), "CHoCH", GlobalColor("BullMajor"), no);
+AddChartBubble(showMajorBubbles and isMajorBearCHoCH and inWindow, high + (TickSize() * 6), "CHoCH", GlobalColor("BearMajor"), yes);
+
+plot SweepHDot = if showSweeps and sweepH and inWindow then high + (TickSize() * 3) else Double.NaN;
+SweepHDot.SetPaintingStrategy(PaintingStrategy.POINTS);
+SweepHDot.SetLineWeight(4);
+SweepHDot.SetDefaultColor(GlobalColor("Sweep"));
+
+plot SweepLDot = if showSweeps and sweepL and inWindow then low - (TickSize() * 3) else Double.NaN;
+SweepLDot.SetPaintingStrategy(PaintingStrategy.POINTS);
+SweepLDot.SetLineWeight(4);
+SweepLDot.SetDefaultColor(GlobalColor("Sweep"));
+
+# --------------------------------------------------------------------
+# 6. Fair Value Gap Engine (FVG with Auto-Mitigation)
+# --------------------------------------------------------------------
+def isBullGap = (low > high[2]) and ((low - high[2]) >= minGapSize) and inWindow;
+def isBearGap = (high < low[2]) and ((low[2] - high) >= minGapSize) and inWindow;
+
+rec activeBullTop = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBullGap then low
+    else if (low <= activeBullTop[1]) then Double.NaN
+    else activeBullTop[1], Double.NaN);
+
+rec activeBullBottom = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBullGap then high[2]
+    else if (low <= activeBullTop[1]) then Double.NaN
+    else activeBullBottom[1], Double.NaN);
+
+rec activeBearBottom = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBearGap then high
+    else if (high >= activeBearBottom[1]) then Double.NaN
+    else activeBearBottom[1], Double.NaN);
+
+rec activeBearTop = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBearGap then low[2]
+    else if (high >= activeBearBottom[1]) then Double.NaN
+    else activeBearTop[1], Double.NaN);
+
+plot BullFVGTop = if showFairValueGaps and inWindow then activeBullTop else Double.NaN;
+BullFVGTop.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BullFVGTop.SetLineWeight(1);
+BullFVGTop.SetDefaultColor(GlobalColor("BullFVG"));
+
+plot BullFVGBottom = if showFairValueGaps and inWindow then activeBullBottom else Double.NaN;
+BullFVGBottom.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BullFVGBottom.SetLineWeight(1);
+BullFVGBottom.SetDefaultColor(GlobalColor("BullFVG"));
+
+plot BearFVGTop = if showFairValueGaps and inWindow then activeBearTop else Double.NaN;
+BearFVGTop.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BearFVGTop.SetLineWeight(1);
+BearFVGTop.SetDefaultColor(GlobalColor("BearFVG"));
+
+plot BearFVGBottom = if showFairValueGaps and inWindow then activeBearBottom else Double.NaN;
+BearFVGBottom.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BearFVGBottom.SetLineWeight(1);
+BearFVGBottom.SetDefaultColor(GlobalColor("BearFVG"));
+
+AddCloud(if showFairValueGaps then BullFVGTop else Double.NaN, BullFVGBottom, GlobalColor("BullFVG"), GlobalColor("BullFVG"));
+AddCloud(if showFairValueGaps then BearFVGTop else Double.NaN, BearFVGBottom, GlobalColor("BearFVG"), GlobalColor("BearFVG"));
+
+# --------------------------------------------------------------------
+# 7. Institutional Order Block Engine (With FVG Confluence)
+# --------------------------------------------------------------------
+def isBullOBOrigin = (close[2] < open[2]) and isBullGap and inWindow;
+def isBearOBOrigin = (close[2] > open[2]) and isBearGap and inWindow;
+
+rec obBullT = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBullOBOrigin then Max(open[2], close[2])
+    else if low <= obBullT[1] then Double.NaN
+    else obBullT[1], Double.NaN);
+
+rec obBullB = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBullOBOrigin then low[2]
+    else if low <= obBullT[1] then Double.NaN
+    else obBullB[1], Double.NaN);
+
+rec obBearB = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBearOBOrigin then Min(open[2], close[2])
+    else if high >= obBearB[1] then Double.NaN
+    else obBearB[1], Double.NaN);
+
+rec obBearT = CompoundValue(1,
+    if !inWindow then Double.NaN
+    else if isBearOBOrigin then high[2]
+    else if high >= obBearB[1] then Double.NaN
+    else obBearT[1], Double.NaN);
+
+plot BullOBTopPlot = if showOrderBlocks and inWindow then obBullT else Double.NaN;
+BullOBTopPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BullOBTopPlot.SetLineWeight(1);
+BullOBTopPlot.SetDefaultColor(GlobalColor("BullOB"));
+
+plot BullOBBottomPlot = if showOrderBlocks and inWindow then obBullB else Double.NaN;
+BullOBBottomPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BullOBBottomPlot.SetLineWeight(1);
+BullOBBottomPlot.SetDefaultColor(GlobalColor("BullOB"));
+
+plot BearOBTopPlot = if showOrderBlocks and inWindow then obBearT else Double.NaN;
+BearOBTopPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BearOBTopPlot.SetLineWeight(1);
+BearOBTopPlot.SetDefaultColor(GlobalColor("BearOB"));
+
+plot BearOBBottomPlot = if showOrderBlocks and inWindow then obBearB else Double.NaN;
+BearOBBottomPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+BearOBBottomPlot.SetLineWeight(1);
+BearOBBottomPlot.SetDefaultColor(GlobalColor("BearOB"));
+
+AddCloud(if showOrderBlocks then BullOBTopPlot else Double.NaN, BullOBBottomPlot, GlobalColor("BullOB"), GlobalColor("BullOB"));
+AddCloud(if showOrderBlocks then BearOBTopPlot else Double.NaN, BearOBBottomPlot, GlobalColor("BearOB"), GlobalColor("BearOB"));
+
+# --------------------------------------------------------------------
+# 8. Liquidity Pools (EQH / EQL)
+# --------------------------------------------------------------------
+def activeTolerance = if isFastChart then 0.035 else if isMediumChart then 0.075 else 0.16;
+
+rec lastH1 = if !inWindow then Double.NaN else if isExtHigh then activeExtH else lastH1[1];
+rec lastH2 = if !inWindow then Double.NaN else if isExtHigh then lastH1[1] else lastH2[1];
+rec lastL1 = if !inWindow then Double.NaN else if isExtLow  then activeExtL else lastL1[1];
+rec lastL2 = if !inWindow then Double.NaN else if isExtLow  then lastL1[1] else lastL2[1];
+
+def hDiff = if !IsNaN(lastH1) and !IsNaN(lastH2) and lastH2 > 0 then AbsValue(lastH1 - lastH2) / lastH2 * 100 else 999;
+def lDiff = if !IsNaN(lastL1) and !IsNaN(lastL2) and lastL2 > 0 then AbsValue(lastL1 - lastL2) / lastL2 * 100 else 999;
+
+def isEQH = isExtHigh and (hDiff <= activeTolerance);
+def isEQL = isExtLow  and (lDiff <= activeTolerance);
+
+rec eqhLevel = CompoundValue(1, 
+    if !inWindow or !rthActive then Double.NaN 
+    else if isEQH then activeExtH 
+    else if high > eqhLevel[1] then Double.NaN 
+    else eqhLevel[1], Double.NaN);
+
+rec eqlLevel = CompoundValue(1, 
+    if !inWindow or !rthActive then Double.NaN 
+    else if isEQL then activeExtL 
+    else if low < eqlLevel[1] then Double.NaN 
+    else eqlLevel[1], Double.NaN);
+
+plot EQHPlot = if showLiquidityPools and inWindow and rthActive then eqhLevel else Double.NaN;
+EQHPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+EQHPlot.SetStyle(Curve.POINTS);
+EQHPlot.SetLineWeight(2);
+EQHPlot.SetDefaultColor(GlobalColor("Sweep"));
+
+plot EQLPlot = if showLiquidityPools and inWindow and rthActive then eqlLevel else Double.NaN;
+EQLPlot.SetPaintingStrategy(PaintingStrategy.HORIZONTAL);
+EQLPlot.SetStyle(Curve.POINTS);
+EQLPlot.SetLineWeight(2);
+EQLPlot.SetDefaultColor(GlobalColor("EQLColor"));
+
+rec pPrintedH = CompoundValue(1, if !inWindow then Double.NaN else if isEQH then activeExtH else pPrintedH[1], Double.NaN);
+rec pPrintedL = CompoundValue(1, if !inWindow then Double.NaN else if isEQL then activeExtL else pPrintedL[1], Double.NaN);
+
+def isNewH = isEQH and (IsNaN(pPrintedH[1]) or AbsValue(activeExtH - pPrintedH[1]) > (TickSize() * 2));
+def isNewL = isEQL and (IsNaN(pPrintedL[1]) or AbsValue(activeExtL - pPrintedL[1]) > (TickSize() * 2));
+
+AddChartBubble(showLiquidityPools and isNewH and inWindow and rthActive, activeExtH + (TickSize() * 3), "EQH (Liq)", GlobalColor("Sweep"), yes);
+AddChartBubble(showLiquidityPools and isNewL and inWindow and rthActive, activeExtL - (TickSize() * 3), "EQL (Liq)", GlobalColor("EQLColor"), no);
+
+# --------------------------------------------------------------------
+# 9. Consolidated Institutional Structure HUD Pod
+# --------------------------------------------------------------------
+def hasActiveSupply = !IsNaN(activeBearBottom) or !IsNaN(obBearB);
+def hasActiveDemand = !IsNaN(activeBullTop) or !IsNaN(obBullT);
+
+def supplyB = if !IsNaN(activeBearBottom) then activeBearBottom else obBearB;
+def supplyT = if !IsNaN(obBearT) then obBearT else activeBearTop;
+def demandB = if !IsNaN(obBullB) then obBullB else activeBullBottom;
+def demandT = if !IsNaN(activeBullTop) then activeBullTop else obBullT;
+
+AddLabel(showDashboardPod,
+    (if trendState == 1 then "REGIME: BULLISH" else if trendState == -1 then "REGIME: BEARISH" else "REGIME: CONSOLIDATION") +
+    (if hasActiveSupply and trendState == -1 then " | SUPPLY: " + AsPrice(supplyB) + " - " + AsPrice(supplyT)
+     else if hasActiveDemand and trendState == 1 then " | DEMAND: " + AsPrice(demandB) + " - " + AsPrice(demandT)
+     else " | NO ACTIVE POI"),
+    if trendState == 1 then GlobalColor("BullMajor")
+    else if trendState == -1 then GlobalColor("BearMajor")
+    else Color.DARK_GRAY
+);
+
+# --------------------------------------------------------------------
+# 10. Sound Alerts
+# --------------------------------------------------------------------
+Alert(enableSoundAlerts and isMajorBullCHoCH, "SMC: Bullish CHoCH Reversal!", Alert.BAR, Sound.Bell);
+Alert(enableSoundAlerts and isMajorBearCHoCH, "SMC: Bearish CHoCH Reversal!", Alert.BAR, Sound.Bell);
+Alert(enableSoundAlerts and (sweepH or sweepL), "SMC: Liquidity Grab (Sweep) Detected!", Alert.BAR, Sound.Bell);

@@ -1,0 +1,181 @@
+# ==============================================================================
+# QX MAGICLINE RADAR
+# Version: 1.8 SPACED RIGHT DISPLAY TEST
+#
+# PURPOSE
+# -------
+# Minimal prior-day level navigation for intraday charts.
+#
+# DISPLAY
+# -------
+# 1. D1 High / Low:
+#       always projected as short dashes in RIGHT expansion area
+# 2. D2 / D3:
+#       projected only when relevant
+# 3. Clean spacing:
+#       live candle -> gap -> short dash -> gap -> numeric price
+# 4. One SMALL top-right label:
+#       identifies nearest level above / below
+# ==============================================================================
+
+declare upper;
+
+# ==============================================================================
+# 1. INPUTS
+# ==============================================================================
+
+input daysToUse = 3;
+input includeMidpoints = yes;
+
+input showD1Anchors = yes;
+input showD1Mid = no;
+input d1DashBars = 4;
+
+input showOlderLevels = yes;
+input olderDashBars = 3;
+input revealOlderWithinATR = 0.75;
+
+input dashStartGapBars = 2;
+input priceGapBars = 2;
+input showLevelPrices = yes;
+
+input atrLength = 14;
+input nearWithinATR = 0.40;
+input testWithinATR = 0.15;
+
+input showSmallLabel = yes;
+input showPricesInTopLabel = no;
+input showOnlyOnIntraday = yes;
+input showDebug = no;
+
+# ==============================================================================
+# 2. COLORS
+# ==============================================================================
+
+DefineGlobalColor("D1",          CreateColor(55, 145, 155));
+DefineGlobalColor("UpLevel",     CreateColor(165, 85, 60));
+DefineGlobalColor("DownLevel",   CreateColor(45, 125, 115));
+
+DefineGlobalColor("FarState",    CreateColor(90, 95, 105));
+DefineGlobalColor("NearState",   CreateColor(205, 155, 40));
+DefineGlobalColor("TestState",   CreateColor(225, 185, 55));
+
+DefineGlobalColor("Error",       CreateColor(220, 80, 80));
+DefineGlobalColor("Debug",       CreateColor(140, 145, 150));
+
+# ==============================================================================
+# 3. PRIMARY CHART CONTEXT
+# ==============================================================================
+
+def isIntraday = GetAggregationPeriod() < AggregationPeriod.DAY;
+def canShow    = !showOnlyOnIntraday or isIntraday;
+
+# ==============================================================================
+# 4. DAILY SECONDARY DATA
+# ==============================================================================
+
+def dailyHigh  = high(period = AggregationPeriod.DAY);
+def dailyLow   = low(period = AggregationPeriod.DAY);
+def dailyClose = close(period = AggregationPeriod.DAY);
+def currentDailyClose = dailyClose;
+
+def D1High = dailyHigh[1];
+def D1Low  = dailyLow[1];
+def D1Mid  = (D1High + D1Low) / 2;
+
+def D2High = dailyHigh[2];
+def D2Low  = dailyLow[2];
+def D2Mid  = (D2High + D2Low) / 2;
+
+def D3High = dailyHigh[3];
+def D3Low  = dailyLow[3];
+def D3Mid  = (D3High + D3Low) / 2;
+
+def useD1 = daysToUse >= 1;
+def useD2 = daysToUse >= 2;
+def useD3 = daysToUse >= 3;
+
+def dailyDataReady = !IsNaN(currentDailyClose) and !IsNaN(D1High) and !IsNaN(D1Low);
+def dataReady      = canShow and dailyDataReady;
+
+# ==============================================================================
+# 6. ABOVE-PRICE CANDIDATES
+# ==============================================================================
+
+def A1 = if dailyDataReady and useD1 and D1High > currentDailyClose then D1High else Double.NaN;
+def A2 = if dailyDataReady and useD1 and D1Low > currentDailyClose then D1Low else Double.NaN;
+def A3 = if dailyDataReady and useD1 and includeMidpoints and D1Mid > currentDailyClose then D1Mid else Double.NaN;
+def A4 = if dailyDataReady and useD2 and D2High > currentDailyClose then D2High else Double.NaN;
+def A5 = if dailyDataReady and useD2 and D2Low > currentDailyClose then D2Low else Double.NaN;
+def A6 = if dailyDataReady and useD2 and includeMidpoints and D2Mid > currentDailyClose then D2Mid else Double.NaN;
+def A7 = if dailyDataReady and useD3 and D3High > currentDailyClose then D3High else Double.NaN;
+def A8 = if dailyDataReady and useD3 and D3Low > currentDailyClose then D3Low else Double.NaN;
+def A9 = if dailyDataReady and useD3 and includeMidpoints and D3Mid > currentDailyClose then D3Mid else Double.NaN;
+
+def above12 = if IsNaN(A1) then A2 else if IsNaN(A2) then A1 else if A1 <= A2 then A1 else A2;
+def above34 = if IsNaN(A3) then A4 else if IsNaN(A4) then A3 else if A3 <= A4 then A3 else A4;
+def above56 = if IsNaN(A5) then A6 else if IsNaN(A6) then A5 else if A5 <= A6 then A5 else A6;
+def above78 = if IsNaN(A7) then A8 else if IsNaN(A8) then A7 else if A7 <= A8 then A7 else A8;
+
+def above1234 = if IsNaN(above12) then above34 else if IsNaN(above34) then above12 else if above12 <= above34 then above12 else above34;
+def above5678 = if IsNaN(above56) then above78 else if IsNaN(above78) then above56 else if above56 <= above78 then above56 else above78;
+def above1to8  = if IsNaN(above1234) then above5678 else if IsNaN(above5678) then above1234 else if above1234 <= above5678 then above1234 else above5678;
+
+def nearestAbove = if IsNaN(above1to8) then A9 else if IsNaN(A9) then above1to8 else if above1to8 <= A9 then above1to8 else A9;
+
+# ==============================================================================
+# 7. BELOW-PRICE CANDIDATES
+# ==============================================================================
+
+def B1 = if dailyDataReady and useD1 and D1High < currentDailyClose then D1High else Double.NaN;
+def B2 = if dailyDataReady and useD1 and D1Low < currentDailyClose then D1Low else Double.NaN;
+def B3 = if dailyDataReady and useD1 and includeMidpoints and D1Mid < currentDailyClose then D1Mid else Double.NaN;
+def B4 = if dailyDataReady and useD2 and D2High < currentDailyClose then D2High else Double.NaN;
+def B5 = if dailyDataReady and useD2 and D2Low < currentDailyClose then D2Low else Double.NaN;
+def B6 = if dailyDataReady and useD2 and includeMidpoints and D2Mid < currentDailyClose then D2Mid else Double.NaN;
+def B7 = if dailyDataReady and useD3 and D3High < currentDailyClose then D3High else Double.NaN;
+def B8 = if dailyDataReady and useD3 and D3Low < currentDailyClose then D3Low else Double.NaN;
+def B9 = if dailyDataReady and useD3 and includeMidpoints and D3Mid < currentDailyClose then D3Mid else Double.NaN;
+
+def below12 = if IsNaN(B1) then B2 else if IsNaN(B2) then B1 else if B1 >= B2 then B1 else B2;
+def below34 = if IsNaN(B3) then B4 else if IsNaN(B4) then B3 else if B3 >= B4 then B3 else B4;
+def below56 = if IsNaN(B5) then B6 else if IsNaN(B6) then B5 else if B5 >= B6 then B5 else B6;
+def below78 = if IsNaN(B7) then B8 else if IsNaN(B8) then B7 else if B7 >= B8 then B7 else B8;
+
+def below1234 = if IsNaN(below12) then below34 else if IsNaN(below34) then below12 else if below12 >= below34 then below12 else below34;
+def below5678 = if IsNaN(below56) then below78 else if IsNaN(below78) then below56 else if below56 >= below78 then below56 else below78;
+def below1to8  = if IsNaN(below1234) then below5678 else if IsNaN(below5678) then below1234 else if below1234 >= below5678 then below1234 else below5678;
+
+def nearestBelow = if IsNaN(below1to8) then B9 else if IsNaN(B9) then below1to8 else if below1to8 >= B9 then below1to8 else B9;
+
+# ==============================================================================
+# 9. PROXIMITY & HUD LABEL
+# ==============================================================================
+
+def chartATR = Average(TrueRange(high, close, low), atrLength);
+def upDistanceNow = if !IsNaN(nearestAbove) then AbsValue(nearestAbove - close) else Double.NaN;
+def downDistanceNow = if !IsNaN(nearestBelow) then AbsValue(close - nearestBelow) else Double.NaN;
+
+def upDistanceATR = if !IsNaN(upDistanceNow) and chartATR > 0 then upDistanceNow / chartATR else Double.NaN;
+def downDistanceATR = if !IsNaN(downDistanceNow) and chartATR > 0 then downDistanceNow / chartATR else Double.NaN;
+
+def upIsTest   = !IsNaN(upDistanceATR) and upDistanceATR <= testWithinATR;
+def downIsTest = !IsNaN(downDistanceATR) and downDistanceATR <= testWithinATR;
+
+def upIsNear   = !upIsTest and !IsNaN(upDistanceATR) and upDistanceATR <= nearWithinATR;
+def downIsNear = !downIsTest and !IsNaN(downDistanceATR) and downDistanceATR <= nearWithinATR;
+
+def focusIsUp   = !IsNaN(upDistanceNow) and (IsNaN(downDistanceNow) or upDistanceNow <= downDistanceNow);
+def focusIsDown = !IsNaN(downDistanceNow) and (IsNaN(upDistanceNow) or downDistanceNow < upDistanceNow);
+
+def focusIsTest = (focusIsUp and upIsTest) or (focusIsDown and downIsTest);
+def focusIsNear = !focusIsTest and ((focusIsUp and upIsNear) or (focusIsDown and downIsNear));
+
+AddLabel(showSmallLabel,
+    "RADAR " +
+    (if !IsNaN(nearestAbove) then "↑" + Round(nearestAbove, 2) else "↑--") +
+    "   " +
+    (if !IsNaN(nearestBelow) then "↓" + Round(nearestBelow, 2) else "↓--"),
+    if focusIsTest then GlobalColor("TestState") else if focusIsNear then GlobalColor("NearState") else GlobalColor("FarState"),
+    Location.TOP_RIGHT
+);

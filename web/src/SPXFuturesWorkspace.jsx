@@ -177,39 +177,39 @@ export default function SPXFuturesWorkspace() {
   };
 
   return (
-    <section className="detail spx-workspace" id="spx-dashboard" style={{ background: '#090d16', color: '#f8fafc', padding: '20px', borderRadius: '12px', marginBottom: '24px', border: '1px solid rgba(255,255,255,0.08)' }}>
+    <section className="detail spx-workspace" id="spx-dashboard" style={{ background: 'var(--qx-bg-surface)', color: 'var(--qx-text-primary)', padding: '20px', borderRadius: '12px', marginBottom: '24px', border: '1px solid var(--qx-border)' }}>
       {/* Top Banner */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', paddingBottom: '16px', borderBottom: '1px solid var(--qx-border)' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 800, background: 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            <h2 style={{ margin: 0, fontSize: '22px', fontWeight: 800, color: 'var(--qx-text-heading)' }}>
               SPX & Futures Command Dashboard
             </h2>
-            <span style={{ background: 'rgba(0, 230, 118, 0.2)', color: '#00e676', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700 }}>
+            <span style={{ background: 'var(--qx-bg-button)', color: 'var(--qx-positive)', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700, border: '1px solid var(--qx-border)' }}>
               {spxData.regime}
             </span>
-            <span style={{ fontSize: '11px', color: '#00f2fe', background: 'rgba(0, 242, 254, 0.1)', border: '1px solid rgba(0, 242, 254, 0.2)', padding: '3px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
+            <span style={{ fontSize: '11px', color: 'var(--qx-accent)', background: 'var(--qx-bg-button)', border: '1px solid var(--qx-border)', padding: '3px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
               <RefreshCw size={11} className={loading ? 'spin' : ''} /> {spxData.session_label || 'LIVE PRE-MARKET SESSION'}
             </span>
           </div>
-          <p style={{ margin: '4px 0 0 0', color: '#94a3b8', fontSize: '13px' }}>
+          <p style={{ margin: '4px 0 0 0', color: 'var(--qx-text-secondary)', fontSize: '13px' }}>
             S&P 500 Implied Open Gap · Dealer Positioning · Decision Levels · SPX Calendars · Daily Action Plan
           </p>
         </div>
 
         {/* Implied Open Read Card */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'rgba(255,255,255,0.03)', padding: '10px 16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', background: 'var(--qx-bg-button)', padding: '10px 16px', borderRadius: '8px', border: '1px solid var(--qx-border)' }}>
           <div>
-            <small style={{ display: 'block', color: '#94a3b8', fontSize: '11px' }}>IMPLIED SPX OPEN</small>
-            <strong style={{ fontSize: '18px', color: '#00f2fe' }}>${(Number(spxData.spx_implied_open) || 0).toFixed(2)}</strong>
+            <small style={{ display: 'block', color: 'var(--qx-text-secondary)', fontSize: '11px' }}>IMPLIED SPX OPEN</small>
+            <strong style={{ fontSize: '18px', color: 'var(--qx-accent)' }}>${(Number(spxData.spx_implied_open) || 0).toFixed(2)}</strong>
           </div>
           <div>
-            <small style={{ display: 'block', color: '#94a3b8', fontSize: '11px' }}>OPENING GAP</small>
-            <strong style={{ fontSize: '16px', color: spxData.implied_gap_pts >= 0 ? '#00e676' : '#ff1744' }}>
+            <small style={{ display: 'block', color: 'var(--qx-text-secondary)', fontSize: '11px' }}>OPENING GAP</small>
+            <strong style={{ fontSize: '16px', color: spxData.implied_gap_pts >= 0 ? 'var(--qx-positive)' : 'var(--qx-negative)' }}>
               {spxData.implied_gap_pts >= 0 ? '+' : ''}{spxData.implied_gap_pts} pts
             </strong>
           </div>
-          <span style={{ background: 'rgba(0, 230, 118, 0.15)', color: '#00e676', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700 }}>
+          <span style={{ background: 'var(--qx-bg-surface)', color: 'var(--qx-positive)', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, border: '1px solid var(--qx-border)' }}>
             {spxData.gap_tone}
           </span>
         </div>
@@ -230,16 +230,16 @@ export default function SPXFuturesWorkspace() {
             style={{
               padding: '8px 16px',
               borderRadius: '6px',
-              border: '1px solid',
-              borderColor: activeTab === tab.id ? '#00f2fe' : 'rgba(255,255,255,0.1)',
-              background: activeTab === tab.id ? 'rgba(0, 242, 254, 0.15)' : 'transparent',
-              color: activeTab === tab.id ? '#00f2fe' : '#94a3b8',
+              border: activeTab === tab.id ? '1px solid var(--qx-accent)' : '1px solid var(--qx-border)',
+              background: activeTab === tab.id ? 'var(--qx-bg-hover)' : 'var(--qx-bg-button)',
+              color: activeTab === tab.id ? 'var(--qx-accent)' : 'var(--qx-text-secondary)',
               fontWeight: 600,
               fontSize: '13px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
+              transition: 'all 0.15s ease'
             }}
           >
             <tab.icon size={14} /> {tab.label}
@@ -252,41 +252,41 @@ export default function SPXFuturesWorkspace() {
       {activeTab === 'plan' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
           {/* Action Plan Summary Card */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#00f2fe', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ background: 'var(--qx-bg-button)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--qx-accent)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Shield size={16} /> Day Type: {spxData.day_type}
             </h3>
-            <div style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: '1.6' }}>
+            <div style={{ fontSize: '13px', color: 'var(--qx-text-primary)', lineHeight: '1.6' }}>
               <p style={{ margin: '0 0 10px 0' }}>
-                <strong style={{ color: '#f8fafc' }}>Primary Bias:</strong> {spxData.primary_bias}
+                <strong style={{ color: 'var(--qx-text-heading)' }}>Primary Bias:</strong> {spxData.primary_bias}
               </p>
-              <div style={{ background: 'rgba(0, 230, 118, 0.08)', padding: '10px', borderRadius: '6px', borderLeft: '3px solid #00e676', marginBottom: '8px' }}>
-                <strong style={{ color: '#00e676', display: 'block', marginBottom: '2px' }}>LONG PLAN:</strong>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px', borderLeft: '3px solid var(--qx-positive)', marginBottom: '8px', border: '1px solid var(--qx-border)' }}>
+                <strong style={{ color: 'var(--qx-positive)', display: 'block', marginBottom: '2px' }}>LONG PLAN:</strong>
                 {spxData.long_plan}
               </div>
-              <div style={{ background: 'rgba(255, 23, 68, 0.08)', padding: '10px', borderRadius: '6px', borderLeft: '3px solid #ff1744' }}>
-                <strong style={{ color: '#ff1744', display: 'block', marginBottom: '2px' }}>SHORT PLAN:</strong>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px', borderLeft: '3px solid var(--qx-negative)', border: '1px solid var(--qx-border)' }}>
+                <strong style={{ color: 'var(--qx-negative)', display: 'block', marginBottom: '2px' }}>SHORT PLAN:</strong>
                 {spxData.short_plan}
               </div>
             </div>
           </div>
 
           {/* Decision Zone Boundaries */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#ffab00', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ background: 'var(--qx-bg-button)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--qx-warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Zap size={16} /> Key Decision Zones & Levels
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '12px' }}>
-              <div style={{ background: 'rgba(0, 230, 118, 0.1)', padding: '10px', borderRadius: '6px', color: '#34d399' }}>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px', color: 'var(--qx-positive)', border: '1px solid var(--qx-border)' }}>
                 <strong>BUYER ACCEPTANCE ZONE:</strong> {spxData.buyer_zone}
               </div>
-              <div style={{ background: 'rgba(239, 68, 68, 0.1)', padding: '10px', borderRadius: '6px', color: '#f87171' }}>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px', color: 'var(--qx-negative)', border: '1px solid var(--qx-border)' }}>
                 <strong>SELLER CONTROL ZONE:</strong> {spxData.seller_zone}
               </div>
-              <div style={{ background: 'rgba(245, 158, 11, 0.1)', padding: '10px', borderRadius: '6px', color: '#fbbf24' }}>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px', color: 'var(--qx-warning)', border: '1px solid var(--qx-border)' }}>
                 <strong>CHOP / NO-TRADE ZONE:</strong> {spxData.no_trade_zone}
               </div>
-              <div style={{ background: 'rgba(59, 130, 246, 0.1)', padding: '10px', borderRadius: '6px', color: '#60a5fa' }}>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px', color: 'var(--qx-accent)', border: '1px solid var(--qx-border)' }}>
                 <strong>CONFIRMATION REQUIRED:</strong> {spxData.confirmation}
               </div>
             </div>
@@ -298,74 +298,74 @@ export default function SPXFuturesWorkspace() {
       {activeTab === 'gex' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
           {/* Dealer Positioning Key Metrics */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#00f2fe' }}>Dealer Positioning Metrics (SPX ${(Number(spxData?.spx_close) || 0).toFixed(2)})</h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '13px', color: '#cbd5e1' }}>
-              <div>Net Gamma: <strong style={{ color: '#00e676' }}>+$2.15 Billion</strong></div>
-              <div>Gamma Flip Price: <strong style={{ color: '#ffab00' }}>$7,630.00</strong></div>
-              <div>Top Call Wall: <strong style={{ color: '#00f2fe' }}>$7,700.00</strong></div>
-              <div>Top Put Wall: <strong style={{ color: '#ff1744' }}>$7,600.00</strong></div>
-              <div>1-Sigma Expected Move: <strong style={{ color: '#60a5fa' }}>±$48.50 pts</strong></div>
-              <div>2-Sigma Expected Move: <strong style={{ color: '#a78bfa' }}>±$97.00 pts</strong></div>
+          <div style={{ background: 'var(--qx-bg-button)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--qx-accent)' }}>Dealer Positioning Metrics (SPX ${(Number(spxData?.spx_close) || 0).toFixed(2)})</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '13px', color: 'var(--qx-text-primary)' }}>
+              <div>Net Gamma: <strong style={{ color: 'var(--qx-positive)' }}>+$2.15 Billion</strong></div>
+              <div>Gamma Flip Price: <strong style={{ color: 'var(--qx-warning)' }}>$7,630.00</strong></div>
+              <div>Top Call Wall: <strong style={{ color: 'var(--qx-accent)' }}>$7,700.00</strong></div>
+              <div>Top Put Wall: <strong style={{ color: 'var(--qx-negative)' }}>$7,600.00</strong></div>
+              <div>1-Sigma Expected Move: <strong style={{ color: 'var(--qx-accent)' }}>±$48.50 pts</strong></div>
+              <div>2-Sigma Expected Move: <strong style={{ color: 'var(--qx-warning)' }}>±$97.00 pts</strong></div>
             </div>
-            <div style={{ marginTop: '12px', padding: '10px', background: 'rgba(0, 230, 118, 0.08)', borderRadius: '6px', fontSize: '12px', color: '#34d399' }}>
+            <div style={{ marginTop: '12px', padding: '10px', background: 'var(--qx-bg-surface)', borderRadius: '6px', fontSize: '12px', color: 'var(--qx-positive)', border: '1px solid var(--qx-border)' }}>
               🛡️ <strong>Regime Read:</strong> Long Gamma regime suppresses intraday volatility and encourages mean-reversion buying near $7,630 support.
             </div>
           </div>
 
           {/* Visual Strike Ladder Diagram */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#ffab00' }}>SPX Dealer Strike Ladder Visualizer</h3>
+          <div style={{ background: 'var(--qx-bg-button)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--qx-warning)' }}>SPX Dealer Strike Ladder Visualizer</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(0, 242, 254, 0.12)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid #00f2fe' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--qx-bg-surface)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid var(--qx-accent)', border: '1px solid var(--qx-border)' }}>
                 <span>🎯 CALL WALL (Institutional Resistance)</span>
-                <strong style={{ color: '#00f2fe' }}>$7,700.00</strong>
+                <strong style={{ color: 'var(--qx-accent)' }}>$7,700.00</strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 215, 0, 0.15)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid #ffd700' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--qx-bg-surface)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid var(--qx-warning)', border: '1px solid var(--qx-border)' }}>
                 <span>📍 SPOT SPX CLOSE</span>
-                <strong style={{ color: '#ffd700' }}>${(Number(spxData?.spx_close) || 0).toFixed(2)}</strong>
+                <strong style={{ color: 'var(--qx-warning)' }}>${(Number(spxData?.spx_close) || 0).toFixed(2)}</strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 171, 0, 0.12)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid #ffab00' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--qx-bg-surface)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid var(--qx-warning)', border: '1px solid var(--qx-border)' }}>
                 <span>⚡ GAMMA FLIP LEVEL (Volatility Pivot)</span>
-                <strong style={{ color: '#ffab00' }}>$7,630.00</strong>
+                <strong style={{ color: 'var(--qx-warning)' }}>$7,630.00</strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 23, 68, 0.12)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid #ff1744' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--qx-bg-surface)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid var(--qx-negative)', border: '1px solid var(--qx-border)' }}>
                 <span>🛡️ PUT WALL (Institutional Support)</span>
-                <strong style={{ color: '#ff1744' }}>$7,600.00</strong>
+                <strong style={{ color: 'var(--qx-negative)' }}>$7,600.00</strong>
               </div>
             </div>
 
             {/* Intraday Camarilla Pivots Grid */}
-            <div style={{ marginTop: '14px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px' }}>
-              <small style={{ display: 'block', color: '#94a3b8', fontSize: '11px', marginBottom: '6px', fontWeight: 700 }}>
+            <div style={{ marginTop: '14px', borderTop: '1px solid var(--qx-border)', paddingTop: '10px' }}>
+              <small style={{ display: 'block', color: 'var(--qx-text-secondary)', fontSize: '11px', marginBottom: '6px', fontWeight: 700 }}>
                 INTRADAY CAMARILLA FLOOR PIVOTS
               </small>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', fontSize: '10px', textAlign: 'center' }}>
-                <div style={{ background: 'rgba(255,23,68,0.15)', padding: '4px', borderRadius: '3px', color: '#ff1744' }}>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '4px', borderRadius: '3px', color: 'var(--qx-negative)', border: '1px solid var(--qx-border)' }}>
                   <small style={{ display: 'block' }}>R3</small>
                   <strong>7698.5</strong>
                 </div>
-                <div style={{ background: 'rgba(255,23,68,0.1)', padding: '4px', borderRadius: '3px', color: '#ff5252' }}>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '4px', borderRadius: '3px', color: 'var(--qx-negative)', border: '1px solid var(--qx-border)' }}>
                   <small style={{ display: 'block' }}>R2</small>
                   <strong>7678.2</strong>
                 </div>
-                <div style={{ background: 'rgba(255,171,0,0.1)', padding: '4px', borderRadius: '3px', color: '#ffab00' }}>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '4px', borderRadius: '3px', color: 'var(--qx-warning)', border: '1px solid var(--qx-border)' }}>
                   <small style={{ display: 'block' }}>R1</small>
                   <strong>7668.1</strong>
                 </div>
-                <div style={{ background: 'rgba(0,242,254,0.15)', padding: '4px', borderRadius: '3px', color: '#00f2fe', fontWeight: 700 }}>
+                <div style={{ background: 'var(--qx-bg-hover)', padding: '4px', borderRadius: '3px', color: 'var(--qx-accent)', fontWeight: 700, border: '1px solid var(--qx-accent)' }}>
                   <small style={{ display: 'block' }}>PIVOT</small>
                   <strong>7656.6</strong>
                 </div>
-                <div style={{ background: 'rgba(0,230,118,0.1)', padding: '4px', borderRadius: '3px', color: '#69f0ae' }}>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '4px', borderRadius: '3px', color: 'var(--qx-positive)', border: '1px solid var(--qx-border)' }}>
                   <small style={{ display: 'block' }}>S1</small>
                   <strong>7645.3</strong>
                 </div>
-                <div style={{ background: 'rgba(0,230,118,0.15)', padding: '4px', borderRadius: '3px', color: '#00e676' }}>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '4px', borderRadius: '3px', color: 'var(--qx-positive)', border: '1px solid var(--qx-border)' }}>
                   <small style={{ display: 'block' }}>S2</small>
                   <strong>7635.1</strong>
                 </div>
-                <div style={{ background: 'rgba(0,230,118,0.2)', padding: '4px', borderRadius: '3px', color: '#00c853' }}>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '4px', borderRadius: '3px', color: 'var(--qx-positive)', border: '1px solid var(--qx-border)' }}>
                   <small style={{ display: 'block' }}>S3</small>
                   <strong>7614.8</strong>
                 </div>
@@ -379,84 +379,84 @@ export default function SPXFuturesWorkspace() {
       {activeTab === 'skew' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
           {/* Intraday Market Breadth & TICK Engine */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#00f2fe', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ background: 'var(--qx-bg-button)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--qx-accent)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Activity size={16} /> Intraday Market Breadth & TICK Engine
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '12px' }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
                   <span>NYSE Advance / Decline Volume Ratio</span>
-                  <strong style={{ color: '#00e676' }}>72% Adv / 28% Dec (2.57x Bullish)</strong>
+                  <strong style={{ color: 'var(--qx-positive)' }}>72% Adv / 28% Dec (2.57x Bullish)</strong>
                 </div>
-                <div style={{ width: '100%', height: '8px', background: 'rgba(255,23,68,0.3)', borderRadius: '4px', overflow: 'hidden', display: 'flex' }}>
-                  <div style={{ width: '72%', height: '100%', background: '#00e676' }}></div>
+                <div style={{ width: '100%', height: '8px', background: 'var(--qx-bg-surface)', borderRadius: '4px', overflow: 'hidden', display: 'flex', border: '1px solid var(--qx-border)' }}>
+                  <div style={{ width: '72%', height: '100%', background: 'var(--qx-positive)' }}></div>
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px', textAlign: 'center' }}>
-                <div style={{ background: 'rgba(0, 230, 118, 0.1)', padding: '8px', borderRadius: '6px', border: '1px solid rgba(0, 230, 118, 0.2)' }}>
-                  <small style={{ display: 'block', color: '#94a3b8', fontSize: '10px' }}>NYSE TICK INDEX</small>
-                  <strong style={{ color: '#00e676', fontSize: '15px' }}>+820 (Buy Sweep)</strong>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--qx-border)' }}>
+                  <small style={{ display: 'block', color: 'var(--qx-text-secondary)', fontSize: '10px' }}>NYSE TICK INDEX</small>
+                  <strong style={{ color: 'var(--qx-positive)', fontSize: '15px' }}>+820 (Buy Sweep)</strong>
                 </div>
-                <div style={{ background: 'rgba(0, 242, 254, 0.1)', padding: '8px', borderRadius: '6px', border: '1px solid rgba(0, 242, 254, 0.2)' }}>
-                  <small style={{ display: 'block', color: '#94a3b8', fontSize: '10px' }}>TRIN INDEX</small>
-                  <strong style={{ color: '#00f2fe', fontSize: '15px' }}>0.74 (Heavy Buying)</strong>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--qx-border)' }}>
+                  <small style={{ display: 'block', color: 'var(--qx-text-secondary)', fontSize: '10px' }}>TRIN INDEX</small>
+                  <strong style={{ color: 'var(--qx-accent)', fontSize: '15px' }}>0.74 (Heavy Buying)</strong>
                 </div>
-                <div style={{ background: 'rgba(255, 171, 0, 0.1)', padding: '8px', borderRadius: '6px', border: '1px solid rgba(255, 171, 0, 0.2)' }}>
-                  <small style={{ display: 'block', color: '#94a3b8', fontSize: '10px' }}>SPX CALL / PUT VOL RATIO</small>
-                  <strong style={{ color: '#ffab00', fontSize: '15px' }}>1.48 (Call Surge)</strong>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--qx-border)' }}>
+                  <small style={{ display: 'block', color: 'var(--qx-text-secondary)', fontSize: '10px' }}>SPX CALL / PUT VOL RATIO</small>
+                  <strong style={{ color: 'var(--qx-warning)', fontSize: '15px' }}>1.48 (Call Surge)</strong>
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(0, 242, 254, 0.08)', padding: '10px', borderRadius: '6px', color: '#38bdf8', fontSize: '11px', lineHeight: '1.5' }}>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px', color: 'var(--qx-accent)', fontSize: '11px', lineHeight: '1.5', border: '1px solid var(--qx-border)' }}>
                 ⚡ <strong>Institutional Breadth Read:</strong> TICK spikes above +800 combined with TRIN &lt; 0.80 indicate systematic algorithmic program buying across megacap index constituents.
               </div>
             </div>
           </div>
 
           {/* 25-Delta Option Volatility Skew Surface */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#ffab00', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ background: 'var(--qx-bg-button)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--qx-warning)', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Zap size={16} /> 25-Delta IV Skew & Probability Cones
             </h3>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '12px', marginBottom: '12px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.04)', padding: '8px', borderRadius: '6px' }}>
-                <small style={{ color: '#94a3b8', display: 'block', fontSize: '10px' }}>25-DELTA PUT IV</small>
-                <strong style={{ color: '#ff1744', fontSize: '14px' }}>16.40%</strong>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--qx-border)' }}>
+                <small style={{ color: 'var(--qx-text-secondary)', display: 'block', fontSize: '10px' }}>25-DELTA PUT IV</small>
+                <strong style={{ color: 'var(--qx-negative)', fontSize: '14px' }}>16.40%</strong>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.04)', padding: '8px', borderRadius: '6px' }}>
-                <small style={{ color: '#94a3b8', display: 'block', fontSize: '10px' }}>25-DELTA CALL IV</small>
-                <strong style={{ color: '#00e676', fontSize: '14px' }}>13.80%</strong>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--qx-border)' }}>
+                <small style={{ color: 'var(--qx-text-secondary)', display: 'block', fontSize: '10px' }}>25-DELTA CALL IV</small>
+                <strong style={{ color: 'var(--qx-positive)', fontSize: '14px' }}>13.80%</strong>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.04)', padding: '8px', borderRadius: '6px' }}>
-                <small style={{ color: '#94a3b8', display: 'block', fontSize: '10px' }}>VOL SKEW SPREAD (P - C)</small>
-                <strong style={{ color: '#ffab00', fontSize: '14px' }}>+2.60% (Moderate Fear)</strong>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--qx-border)' }}>
+                <small style={{ color: 'var(--qx-text-secondary)', display: 'block', fontSize: '10px' }}>VOL SKEW SPREAD (P - C)</small>
+                <strong style={{ color: 'var(--qx-warning)', fontSize: '14px' }}>+2.60% (Moderate Fear)</strong>
               </div>
-              <div style={{ background: 'rgba(255,255,255,0.04)', padding: '8px', borderRadius: '6px' }}>
-                <small style={{ color: '#94a3b8', display: 'block', fontSize: '10px' }}>DELTA-NEUTRAL PIVOT</small>
-                <strong style={{ color: '#00f2fe', fontSize: '14px' }}>$7,642.50</strong>
+              <div style={{ background: 'var(--qx-bg-surface)', padding: '8px', borderRadius: '6px', border: '1px solid var(--qx-border)' }}>
+                <small style={{ color: 'var(--qx-text-secondary)', display: 'block', fontSize: '10px' }}>DELTA-NEUTRAL PIVOT</small>
+                <strong style={{ color: 'var(--qx-accent)', fontSize: '14px' }}>$7,642.50</strong>
               </div>
             </div>
 
             {/* Probability Cones */}
-            <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '10px' }}>
-              <small style={{ display: 'block', color: '#94a3b8', fontSize: '11px', marginBottom: '6px', fontWeight: 700 }}>
+            <div style={{ borderTop: '1px solid var(--qx-border)', paddingTop: '10px' }}>
+              <small style={{ display: 'block', color: 'var(--qx-text-secondary)', fontSize: '11px', marginBottom: '6px', fontWeight: 700 }}>
                 0DTE EXPECTED MOVE PROBABILITY BOUNDARIES
               </small>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '11px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(0, 230, 118, 0.1)', padding: '6px 10px', borderRadius: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--qx-bg-surface)', padding: '6px 10px', borderRadius: '4px', border: '1px solid var(--qx-border)' }}>
                   <span>+1 Sigma Upper Limit (68% Prob):</span>
-                  <strong style={{ color: '#00e676' }}>$7,705.48 (+48.5 pts)</strong>
+                  <strong style={{ color: 'var(--qx-positive)' }}>$7,705.48 (+48.5 pts)</strong>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(255, 23, 68, 0.1)', padding: '6px 10px', borderRadius: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--qx-bg-surface)', padding: '6px 10px', borderRadius: '4px', border: '1px solid var(--qx-border)' }}>
                   <span>-1 Sigma Lower Limit (68% Prob):</span>
-                  <strong style={{ color: '#ff1744' }}>$7,608.48 (-48.5 pts)</strong>
+                  <strong style={{ color: 'var(--qx-negative)' }}>$7,608.48 (-48.5 pts)</strong>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', background: 'rgba(167, 139, 250, 0.1)', padding: '6px 10px', borderRadius: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', background: 'var(--qx-bg-surface)', padding: '6px 10px', borderRadius: '4px', border: '1px solid var(--qx-border)' }}>
                   <span>±2 Sigma Extreme Bounds (95% Prob):</span>
-                  <strong style={{ color: '#a78bfa' }}>$7,559.98 ↔ $7,753.98</strong>
+                  <strong style={{ color: 'var(--qx-warning)' }}>$7,559.98 ↔ $7,753.98</strong>
                 </div>
               </div>
             </div>
@@ -464,36 +464,36 @@ export default function SPXFuturesWorkspace() {
         </div>
       )}
 
-      {/* Tab 3: SPX Calendar Engine (NEW!) */}
+      {/* Tab 3: SPX Calendar Engine */}
       {activeTab === 'calendar' && (
         <div>
           {/* IV Term Structure Header Bar */}
-          <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--qx-bg-button)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)', marginBottom: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                  <h3 style={{ margin: 0, fontSize: '16px', color: '#00f2fe', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <h3 style={{ margin: 0, fontSize: '16px', color: 'var(--qx-accent)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Calendar size={18} /> SPX Options Term Structure & Calendar Engine
                   </h3>
-                  <span style={{ background: 'rgba(0, 230, 118, 0.15)', color: '#00e676', padding: '3px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700 }}>
+                  <span style={{ background: 'var(--qx-bg-surface)', color: 'var(--qx-positive)', padding: '3px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700, border: '1px solid var(--qx-border)' }}>
                     {calendarData.research_gates || '5 / 5 Gates Resolved (Publication Eligible)'}
                   </span>
                 </div>
-                <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8' }}>
+                <p style={{ margin: 0, fontSize: '12px', color: 'var(--qx-text-secondary)' }}>
                   Exploiting short-dated IV skew & weekend theta decay across 0DTE / 1DTE vs 4DTE SPX legs.
                 </p>
               </div>
 
               <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <div style={{ background: 'rgba(0, 242, 254, 0.1)', padding: '6px 12px', borderRadius: '6px', textAlign: 'center' }}>
-                  <small style={{ display: 'block', fontSize: '10px', color: '#94a3b8' }}>FRONT 1DTE IV</small>
-                  <strong style={{ color: '#00f2fe', fontSize: '14px' }}>{calendarData.iv_term_structure.front_leg_iv}%</strong>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '6px 12px', borderRadius: '6px', textAlign: 'center', border: '1px solid var(--qx-border)' }}>
+                  <small style={{ display: 'block', fontSize: '10px', color: 'var(--qx-text-secondary)' }}>FRONT 1DTE IV</small>
+                  <strong style={{ color: 'var(--qx-accent)', fontSize: '14px' }}>{calendarData.iv_term_structure.front_leg_iv}%</strong>
                 </div>
-                <div style={{ background: 'rgba(0, 242, 254, 0.1)', padding: '6px 12px', borderRadius: '6px', textAlign: 'center' }}>
-                  <small style={{ display: 'block', fontSize: '10px', color: '#94a3b8' }}>BACK 4DTE IV</small>
-                  <strong style={{ color: '#00f2fe', fontSize: '14px' }}>{calendarData.iv_term_structure.back_leg_iv}%</strong>
+                <div style={{ background: 'var(--qx-bg-surface)', padding: '6px 12px', borderRadius: '6px', textAlign: 'center', border: '1px solid var(--qx-border)' }}>
+                  <small style={{ display: 'block', fontSize: '10px', color: 'var(--qx-text-secondary)' }}>BACK 4DTE IV</small>
+                  <strong style={{ color: 'var(--qx-accent)', fontSize: '14px' }}>{calendarData.iv_term_structure.back_leg_iv}%</strong>
                 </div>
-                <div style={{ background: 'rgba(0, 230, 118, 0.15)', color: '#00e676', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 700 }}>
+                <div style={{ background: 'var(--qx-bg-surface)', color: 'var(--qx-positive)', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, border: '1px solid var(--qx-border)' }}>
                   {calendarData.iv_term_structure.iv_slope}
                 </div>
               </div>
@@ -501,18 +501,18 @@ export default function SPXFuturesWorkspace() {
 
             {/* Resolved Gates Bar */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginTop: '12px', fontSize: '11px' }}>
-              <div style={{ background: 'rgba(0, 230, 118, 0.1)', padding: '6px 10px', borderRadius: '4px', color: '#34d399', borderLeft: '3px solid #00e676' }}>
+              <div style={{ background: 'rgba(124, 169, 130, 0.12)', padding: '6px 10px', borderRadius: '4px', color: 'var(--qx-positive)', borderLeft: '3px solid var(--qx-positive)' }}>
                 <strong>Open Interest:</strong> {calendarData.contracts_with_open_interest ? calendarData.contracts_with_open_interest.toLocaleString() : '18,450'} contracts (100% Active)
               </div>
-              <div style={{ background: 'rgba(0, 242, 254, 0.1)', padding: '6px 10px', borderRadius: '4px', color: '#60a5fa', borderLeft: '3px solid #00f2fe' }}>
+              <div style={{ background: 'rgba(217, 160, 91, 0.12)', padding: '6px 10px', borderRadius: '4px', color: 'var(--qx-accent)', borderLeft: '3px solid var(--qx-accent)' }}>
                 <strong>Event Risk:</strong> {calendarData.economic_event_window || 'Clear Window (CPI/FOMC verified)'}
               </div>
-              <div style={{ background: 'rgba(167, 139, 250, 0.1)', padding: '6px 10px', borderRadius: '4px', color: '#c084fc', borderLeft: '3px solid #a78bfa' }}>
+              <div style={{ background: 'rgba(194, 166, 136, 0.12)', padding: '6px 10px', borderRadius: '4px', color: 'var(--qx-text-secondary)', borderLeft: '3px solid var(--qx-border-subtle)' }}>
                 <strong>Intraday Evidence:</strong> {calendarData.intraday_evidence || 'Verified: 5m Bar & Tape Alignment'}
               </div>
             </div>
 
-            <div style={{ marginTop: '10px', fontSize: '12px', color: '#cbd5e1', background: 'rgba(0,0,0,0.3)', padding: '8px 12px', borderRadius: '6px' }}>
+            <div style={{ marginTop: '10px', fontSize: '12px', color: 'var(--qx-text-primary)', background: 'var(--qx-bg-canvas)', padding: '8px 12px', borderRadius: '6px', border: '1px solid var(--qx-border-subtle)' }}>
               💡 <strong>Recommendation:</strong> {calendarData.iv_term_structure.recommendation}
             </div>
           </div>
@@ -520,38 +520,38 @@ export default function SPXFuturesWorkspace() {
           {/* Calendar Setups Cards Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
             {calendarData.calendars.map((cal, idx) => (
-              <div key={idx} style={{ background: 'rgba(15, 23, 42, 0.85)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(0, 242, 254, 0.2)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div key={idx} style={{ background: 'var(--qx-bg-surface)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <span style={{ background: 'rgba(0, 242, 254, 0.15)', color: '#00f2fe', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700 }}>
+                    <span style={{ background: 'rgba(217, 160, 91, 0.15)', color: 'var(--qx-accent)', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 700 }}>
                       {cal.strategy_type}
                     </span>
-                    <span style={{ color: '#00e676', fontSize: '12px', fontWeight: 700 }}>
+                    <span style={{ color: 'var(--qx-positive)', fontSize: '12px', fontWeight: 700 }}>
                       {cal.win_probability_pct}% Win Prob
                     </span>
                   </div>
 
-                  <h4 style={{ margin: '0 0 10px 0', fontSize: '15px', color: '#f8fafc' }}>
+                  <h4 style={{ margin: '0 0 10px 0', fontSize: '15px', color: 'var(--qx-text-heading)' }}>
                     {cal.name}
                   </h4>
 
-                  <div style={{ fontSize: '12px', color: '#cbd5e1', background: 'rgba(0,0,0,0.4)', padding: '10px', borderRadius: '6px', marginBottom: '10px' }}>
-                    <div style={{ color: '#ff1744', marginBottom: '4px' }}>🔴 {cal.short_leg}</div>
-                    <div style={{ color: '#00e676' }}>🟢 {cal.long_leg}</div>
+                  <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', background: 'var(--qx-bg-canvas)', padding: '10px', borderRadius: '6px', marginBottom: '10px' }}>
+                    <div style={{ color: 'var(--qx-negative)', marginBottom: '4px' }}>🔴 {cal.short_leg}</div>
+                    <div style={{ color: 'var(--qx-positive)' }}>🟢 {cal.long_leg}</div>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', marginBottom: '10px' }}>
-                    <div>Net Debit: <strong style={{ color: '#f8fafc' }}>${cal.net_debit}</strong></div>
-                    <div>Net Daily Theta: <strong style={{ color: '#00e676' }}>+${cal.net_theta_per_day}/day</strong></div>
-                    <div>Max Profit: <strong style={{ color: '#00e676' }}>${cal.max_profit} (+{cal.return_on_capital_pct}%)</strong></div>
-                    <div>Max Loss: <strong style={{ color: '#ff1744' }}>${cal.max_loss}</strong></div>
+                    <div>Net Debit: <strong style={{ color: 'var(--qx-text-heading)' }}>${cal.net_debit}</strong></div>
+                    <div>Net Daily Theta: <strong style={{ color: 'var(--qx-positive)' }}>+${cal.net_theta_per_day}/day</strong></div>
+                    <div>Max Profit: <strong style={{ color: 'var(--qx-positive)' }}>${cal.max_profit} (+{cal.return_on_capital_pct}%)</strong></div>
+                    <div>Max Loss: <strong style={{ color: 'var(--qx-negative)' }}>${cal.max_loss}</strong></div>
                   </div>
 
-                  <div style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '12px' }}>
-                    Breakeven Range: <strong style={{ color: '#ffab00' }}>${cal.breakeven_low} – ${cal.breakeven_high}</strong>
+                  <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', marginBottom: '12px' }}>
+                    Breakeven Range: <strong style={{ color: 'var(--qx-warning)' }}>${cal.breakeven_low} – ${cal.breakeven_high}</strong>
                   </div>
 
-                  <p style={{ fontSize: '12px', color: '#94a3b8', margin: '0 0 12px 0', lineHeight: '1.4' }}>
+                  <p style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', margin: '0 0 12px 0', lineHeight: '1.4' }}>
                     {cal.rationale}
                   </p>
                 </div>
@@ -562,9 +562,9 @@ export default function SPXFuturesWorkspace() {
                     width: '100%',
                     padding: '8px',
                     borderRadius: '6px',
-                    border: 'none',
-                    background: 'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
-                    color: '#070a12',
+                    border: '1px solid var(--qx-border)',
+                    background: 'var(--qx-bg-button)',
+                    color: 'var(--qx-text-heading)',
                     fontWeight: 700,
                     cursor: 'pointer',
                     display: 'flex',
@@ -582,17 +582,17 @@ export default function SPXFuturesWorkspace() {
 
           {/* Executed Calendar Spreads Log */}
           {executedCalendarOrders.length > 0 && (
-            <div style={{ marginTop: '16px', background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(0, 230, 118, 0.3)' }}>
-              <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#00e676', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ marginTop: '16px', background: 'var(--qx-bg-surface)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+              <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: 'var(--qx-positive)', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <CheckCircle size={15} /> Active Executed Calendar Positions ({executedCalendarOrders.length})
               </h4>
               {executedCalendarOrders.map(ord => (
-                <div key={ord.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'rgba(0,0,0,0.3)', borderRadius: '6px', marginBottom: '6px', fontSize: '12px' }}>
+                <div key={ord.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--qx-bg-canvas)', borderRadius: '6px', marginBottom: '6px', fontSize: '12px' }}>
                   <div>
-                    <strong style={{ color: '#f8fafc' }}>{ord.name}</strong> (${ord.strike} Strike)
-                    <span style={{ marginLeft: '10px', color: '#94a3b8' }}>Debit: {ord.debit} | Theta: {ord.theta}</span>
+                    <strong style={{ color: 'var(--qx-text-heading)' }}>{ord.name}</strong> (${ord.strike} Strike)
+                    <span style={{ marginLeft: '10px', color: 'var(--qx-text-muted)' }}>Debit: {ord.debit} | Theta: {ord.theta}</span>
                   </div>
-                  <div style={{ color: '#00e676', fontWeight: 700 }}>{ord.pnl} (Simulated)</div>
+                  <div style={{ color: 'var(--qx-positive)', fontWeight: 700 }}>{ord.pnl} (Simulated)</div>
                 </div>
               ))}
             </div>
@@ -602,12 +602,12 @@ export default function SPXFuturesWorkspace() {
 
       {/* Tab 4: Macro Futures Matrix */}
       {activeTab === 'futures' && (
-        <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-          <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#00f2fe' }}>Cross-Asset Macro & Futures Context</h3>
+        <div style={{ background: 'var(--qx-bg-surface)', padding: '16px', borderRadius: '10px', border: '1px solid var(--qx-border)' }}>
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: 'var(--qx-accent)' }}>Cross-Asset Macro & Futures Context</h3>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', fontSize: '13px', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
-                <tr style={{ color: '#94a3b8', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                <tr style={{ color: 'var(--qx-text-muted)', borderBottom: '1px solid var(--qx-border-subtle)' }}>
                   <th style={{ padding: '8px' }}>SYMBOL</th>
                   <th style={{ padding: '8px' }}>NAME</th>
                   <th style={{ padding: '8px', textAlign: 'right' }}>PRICE</th>
@@ -617,15 +617,15 @@ export default function SPXFuturesWorkspace() {
               </thead>
               <tbody>
                 {macroMatrix.map(row => (
-                  <tr key={row.symbol} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                    <td style={{ padding: '8px', fontWeight: 700, color: '#f8fafc' }}>{row.symbol}</td>
-                    <td style={{ padding: '8px', color: '#94a3b8' }}>{row.name}</td>
+                  <tr key={row.symbol} style={{ borderBottom: '1px solid var(--qx-border-subtle)' }}>
+                    <td style={{ padding: '8px', fontWeight: 700, color: 'var(--qx-text-heading)' }}>{row.symbol}</td>
+                    <td style={{ padding: '8px', color: 'var(--qx-text-secondary)' }}>{row.name}</td>
                     <td style={{ padding: '8px', textAlign: 'right', fontWeight: 600 }}>${row.price.toFixed(2)}</td>
-                    <td style={{ padding: '8px', textAlign: 'right', fontWeight: 700, color: row.change.startsWith('+') ? '#00e676' : '#ff1744' }}>
+                    <td style={{ padding: '8px', textAlign: 'right', fontWeight: 700, color: row.change.startsWith('+') ? 'var(--qx-positive)' : 'var(--qx-negative)' }}>
                       {row.change}
                     </td>
                     <td style={{ padding: '8px' }}>
-                      <span style={{ background: 'rgba(0,242,254,0.1)', color: '#00f2fe', padding: '2px 8px', borderRadius: '4px', fontSize: '11px' }}>
+                      <span style={{ background: 'rgba(217, 160, 91, 0.12)', color: 'var(--qx-accent)', padding: '2px 8px', borderRadius: '4px', fontSize: '11px' }}>
                         {row.signal}
                       </span>
                     </td>

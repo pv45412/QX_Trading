@@ -1,0 +1,140 @@
+#######################################################################
+# Knowing the Mkt Phases can really help to understand stock trend.  This 
+# script breaks out the five market phases as identified by James Boyd.
+# The definitions for each market phase are documented in the code.  In
+# addition to idenfifying the specific market conditions associated with each
+# market phase, each phase is color-coded to help the eye evaluate other
+# indictors in the watch list.  
+########################################################################
+
+########################################################################
+##########################  PHASE 1 ####################################
+
+# Phase 1 - In Phase 1 the stock is trading below the 10-day EMA and
+# the 30-day SMA.  The stock has no doubt broken horizontal support and
+# we are waiting for it to find support and enter into a trend reversal
+# pattern and start heading up again.  Here are the Phase 1 market conditions:
+#
+#  1. Close is less than 10 day EMA
+#  2. Close is less than 30 day SMA
+#
+# Stocks in Phase 1 will have a Dark Red background
+#
+
+################# Moving Averages ###########################
+def MA10 = movingaverage(averageType.EXPONENTIAL, close, 10);
+def MA30 = movingaverage(averageType.SIMPLE, close, 30);
+
+def closeBelow10 = if close < MA10 then 1 else 0;
+def closeBelowMA30 = if close < MA30 then 1 else 0;
+def phase1 = if closeBelow10 AND closeBelowMA30 then 1 else 0;
+
+
+########################################################################
+########################## PHASE 2 #####################################
+
+# Phase 2 - This code is meant to signal stocks breaking upward 
+# through diagonal resistance, leaving Phase 1.  This is the first step
+# to changing from a down-trend to an up-trend.  Stocks in Phase 2 will
+# be closing above the 10-day EMA, but still lower than the 30-day SMA.
+#
+# Here are the Phase 2 market conditions:
+#
+# 1. Close above the 10 day EMA
+# 2. Close lower than 30 day SMA
+#
+# Stocks in Phase 2 will have a Light Green background
+#
+
+def closeAbove10 = if close > MA10 then 1 else 0;
+def closeBelow30 = if close < MA30 then 1 else 0;
+def Phase2 = if closeAbove10 and closeBelow30 then 1 else 0;
+
+
+########################################################################
+########################## PHASE 3 #####################################
+# Phase 3 - Phase 3 represents a strong trending
+# stock.  We are looking for the stock price to be higher than both the
+# 30-day SMA and the 10-day EMA.  If the stock remains strong, the 10 day EMA 
+# will ultimately cross above the 30 day SMA. Market Phase 3 is the
+# sweet spot for trading bull flags and horizontal break outs.  
+# Here are the Phase 3 market conditions:  
+#
+# 1. Price is closing higher than 30 day SMA
+# 2. Price is closing higher than 10 day EMA
+#
+# Stocks in Phase 3 can have two possible background colors:
+#  a. If the 10-day EMA is below the 30-day SMA, the background color will be Pale Green
+#  b. If the 10-day EMA is above the 30-day SMA, the background color will be Dark Green
+#
+
+def closeAbove30 = if close > MA30 then 1 else 0;
+def phase3 = if closeAbove30 and closeAbove10 then 1 else 0;
+
+
+########################################################################
+########################## PHASE 4 #####################################
+
+# Phase 4 - Technically speaking, the stock is still in Phase 3 but it is 
+# up against resistance and is showing some signs of weakness.  In a strong
+# trending stock, this can happen multiple times and often it will bounce off the
+# 10-day EMA or the 30-day SMA.  However, know that the stock will eventually break
+# to the down side from Phase 4.  Consider Phase 4 as a warning sign, or another
+# opportunity to enter a bullish position on the stock.  Use other technical indicators
+# to help determine the trading posture.
+# Here are the Phase 4 market conditions:
+#
+#  a. Stock in Phase 3
+#  b. 10-day EMA is greater than 30-day SMA
+#  c. 10-day Hull MA is falling
+#
+# Stocks in Phase 4 will have an orange background color
+#
+
+# 10 day EMA greater than 30 day SMA
+def MA10gtMA30 = if MA10 > MA30 then 1 else 0;
+
+# Hull Moving Average
+def hull = HullMovingAvg(price = close, length = 10);
+def fallingHull = if hull <= hull[1] then 1 else 0;
+
+def phase4 = if Phase3 AND MA10gtMA30 AND fallingHull then 1 else 0;
+
+
+########################################################################
+########################## PHASE 5 #####################################
+
+# Phase 5 - Phase 5 represents a strong trending stock that is
+# having a brief pull back.  If the stock price falls below
+# the 10 day EMA, but is still higher than the 30 day SMA it is 
+# considered to be in Phase 5.  For a really strong trending stock, 
+# it is possible that it will bounce off the 30 day SMA, but if it doesn't
+# we should be prepared for it to fall through horizontal support (most
+# likely near the 30-day SMA) and keep going.  
+# Here are the Phase 5 market conditions: 
+#
+#  1. Close is less than 10 day EMA
+#  2. Close is greater than 30 day SMA
+#
+# Stocks in Phase 5 will have a Plum background color
+#
+
+def phase5 = if closeBelow10 AND closeAbove30 then 1 else 0;
+
+###################################################################
+
+# Test for P4 up front, because it is a subset of P3
+AddLabel(yes, if phase4 then "4" else
+               if phase1 then "1" else
+               if phase2 then "2" else
+               if phase3 then "3" else
+               if phase5 then "5" else " "); 
+
+
+AssignBackgroundColor(if phase4 then Color.DARK_ORANGE else                       # dark orange
+                       if phase1 then CreateColor(150, 0, 0) else                 # dark red
+                       if phase2 then CreateColor(91, 160, 91) else               # light green
+                       if phase3 and MA10gtMA30 then Color.DARK_GREEN else        # dark green
+                       if Phase3 and !MA10gtMA30 then Color.DARK_GREEN else       # dark green
+                       if phase5 then Color.PLUM else                             # plum
+                       Color.WHITE);

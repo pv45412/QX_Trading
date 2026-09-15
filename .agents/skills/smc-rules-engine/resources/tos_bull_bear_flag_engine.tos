@@ -1,0 +1,27 @@
+# ====================================================================
+# Study: Bull_Bear_Flag_Engine
+# Platform: thinkorswim / thinkScript
+# Description: Bull Flag & Bear Flag Detection Engine with MACD Histogram & SMA(30) Trend.
+# ====================================================================
+
+# Bull Flag Logic
+def StockPrice = close >= 10;
+def trend = SimpleMovingAvg(price = close, length = 30) > SimpleMovingAvg(price = close, length = 30)[5];
+def MacdLow = MACDHistogram(8, 17, 9)[1] < MACDHistogram(8, 17, 9)[2] and close[1] < close[2] and close > high[1];
+
+# Bear Flag Logic
+def StockPriceBear = close >= 10;
+def trendBear = SimpleMovingAvg(price = close, length = 30) < SimpleMovingAvg(price = close, length = 30)[5];
+def MacdHighBear = MACDHistogram(8, 17, 9)[1] > MACDHistogram(8, 17, 9)[2] and close[1] > close[2] and close < low[1];
+
+def Bulltrigger = trend and MacdLow;
+def BearTrigger = trendBear and MacdHighBear;
+
+# 10/50 EMA Reversal Pullback Output
+plot output = if (ExpAverage(close, 10) > ExpAverage(close, 50)) and 
+                 (low[1] <= Lowest(low, 3) and close > high[1] or 
+                  low[2] <= Lowest(low, 3) and close > high[2] or 
+                  low[3] <= Lowest(low, 1) and close > high[1]) then 1 else 0;
+
+AddLabel(yes, if Bulltrigger then "Bull Flag" else if BearTrigger then "Bear Flag" else " ", Color.BLACK);
+AssignBackgroundColor(if Bulltrigger then Color.GREEN else if BearTrigger then Color.LIGHT_RED else Color.BLACK);

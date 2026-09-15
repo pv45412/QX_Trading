@@ -104,10 +104,10 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
   }
 
   const verdictStyles = {
-    'HOLD': { color: '#10b981', bg: 'rgba(16, 185, 129, 0.12)', border: 'rgba(16, 185, 129, 0.4)', icon: ShieldCheck, emoji: '🟢' },
-    'TRIM / TAKE PROFIT': { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.12)', border: 'rgba(245, 158, 11, 0.4)', icon: AlertTriangle, emoji: '🟡' },
-    'CLOSE / EXIT': { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.12)', border: 'rgba(239, 68, 68, 0.4)', icon: ShieldAlert, emoji: '🔴' },
-    'ROLL / ADJUST': { color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.12)', border: 'rgba(56, 189, 248, 0.4)', icon: Activity, emoji: '🔵' },
+    'HOLD': { color: 'var(--qx-positive)', bg: 'rgba(124, 169, 130, 0.12)', border: 'var(--qx-positive)', icon: ShieldCheck, emoji: '🟢' },
+    'TRIM / TAKE PROFIT': { color: 'var(--qx-warning)', bg: 'rgba(217, 160, 91, 0.12)', border: 'var(--qx-warning)', icon: AlertTriangle, emoji: '🟡' },
+    'CLOSE / EXIT': { color: 'var(--qx-negative)', bg: 'rgba(239, 68, 68, 0.12)', border: 'var(--qx-negative)', icon: ShieldAlert, emoji: '🔴' },
+    'ROLL / ADJUST': { color: 'var(--qx-accent)', bg: 'rgba(217, 160, 91, 0.12)', border: 'var(--qx-accent)', icon: Activity, emoji: '🔵' },
   };
 
   const currentVerdict = report ? report.action_verdict : 'HOLD';
@@ -115,75 +115,75 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
 
   return (
     <section className="detail" id="position-advisor" style={{ marginTop: '24px', marginBottom: '24px' }}>
-      <div className="section-head" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)', paddingBottom: '12px' }}>
-        <h2 style={{ fontSize: '18px', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+      <div className="section-head" style={{ borderBottom: '1px solid var(--qx-border-subtle)', paddingBottom: '12px' }}>
+        <h2 style={{ fontSize: '18px', color: 'var(--qx-accent)', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
           <Zap size={20} /> 🎯 Automated Position Research & Action Advisor
         </h2>
-        <span style={{ fontSize: '12px', color: '#94a3b8' }}>
+        <span style={{ fontSize: '12px', color: 'var(--qx-text-secondary)' }}>
           Realtime quantitative evaluation for open share & options positions
         </span>
       </div>
 
       {/* INPUT FORM CONTROLS */}
-      <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '10px', padding: '16px', marginTop: '16px' }}>
+      <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '10px', padding: '16px', marginTop: '16px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px', alignItems: 'end' }}>
           <div>
-            <label style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Ticker Symbol</label>
+            <label style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', display: 'block', marginBottom: '4px' }}>Ticker Symbol</label>
             <input
               type="text"
               value={symbol}
               onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-              style={{ width: '100%', padding: '8px', background: '#1f293d', border: '1px solid #374151', borderRadius: '6px', color: '#fff', fontSize: '14px', fontWeight: 'bold' }}
+              style={{ width: '100%', padding: '8px', background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border)', borderRadius: '6px', color: 'var(--qx-text-heading)', fontSize: '14px', fontWeight: 'bold' }}
             />
           </div>
           <div>
-            <label style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Position Type</label>
+            <label style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', display: 'block', marginBottom: '4px' }}>Position Type</label>
             <select
               value={posType}
               onChange={(e) => setPosType(e.target.value)}
-              style={{ width: '100%', padding: '8px', background: '#1f293d', border: '1px solid #374151', borderRadius: '6px', color: '#fff', fontSize: '14px' }}
+              style={{ width: '100%', padding: '8px', background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border)', borderRadius: '6px', color: 'var(--qx-text-heading)', fontSize: '14px' }}
             >
               {POSITION_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
           <div>
-            <label style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Entry Price ($)</label>
+            <label style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', display: 'block', marginBottom: '4px' }}>Entry Price ($)</label>
             <input
               type="number"
               value={entryPrice}
               step="0.5"
               onChange={(e) => setEntryPrice(e.target.value)}
-              style={{ width: '100%', padding: '8px', background: '#1f293d', border: '1px solid #374151', borderRadius: '6px', color: '#fff', fontSize: '14px' }}
+              style={{ width: '100%', padding: '8px', background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border)', borderRadius: '6px', color: 'var(--qx-text-heading)', fontSize: '14px' }}
             />
           </div>
           <div>
-            <label style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Quantity / Contracts</label>
+            <label style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', display: 'block', marginBottom: '4px' }}>Quantity / Contracts</label>
             <input
               type="number"
               value={quantity}
               step="10"
               onChange={(e) => setQuantity(e.target.value)}
-              style={{ width: '100%', padding: '8px', background: '#1f293d', border: '1px solid #374151', borderRadius: '6px', color: '#fff', fontSize: '14px' }}
+              style={{ width: '100%', padding: '8px', background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border)', borderRadius: '6px', color: 'var(--qx-text-heading)', fontSize: '14px' }}
             />
           </div>
           <div>
-            <label style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Target Price ($)</label>
+            <label style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', display: 'block', marginBottom: '4px' }}>Target Price ($)</label>
             <input
               type="number"
               value={targetPrice}
               step="1.0"
               onChange={(e) => setTargetPrice(e.target.value)}
-              style={{ width: '100%', padding: '8px', background: '#1f293d', border: '1px solid #374151', borderRadius: '6px', color: '#fff', fontSize: '14px' }}
+              style={{ width: '100%', padding: '8px', background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border)', borderRadius: '6px', color: 'var(--qx-text-heading)', fontSize: '14px' }}
             />
           </div>
           <div>
-            <label style={{ fontSize: '12px', color: '#94a3b8', display: 'block', marginBottom: '4px' }}>Stop Loss ($)</label>
+            <label style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', display: 'block', marginBottom: '4px' }}>Stop Loss ($)</label>
             <input
               type="number"
               value={stopLoss}
               step="1.0"
               onChange={(e) => setStopLoss(e.target.value)}
-              style={{ width: '100%', padding: '8px', background: '#1f293d', border: '1px solid #374151', borderRadius: '6px', color: '#fff', fontSize: '14px' }}
+              style={{ width: '100%', padding: '8px', background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border)', borderRadius: '6px', color: 'var(--qx-text-heading)', fontSize: '14px' }}
             />
           </div>
         </div>
@@ -195,10 +195,10 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
             marginTop: '16px',
             width: '100%',
             padding: '10px',
-            background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-            border: '1px solid rgba(56, 189, 248, 0.35)',
+            background: 'var(--qx-bg-button)',
+            border: '1px solid var(--qx-border)',
             borderRadius: '6px',
-            color: '#38bdf8',
+            color: 'var(--qx-text-heading)',
             fontWeight: 'bold',
             fontSize: '14px',
             cursor: loading ? 'not-allowed' : 'pointer',
@@ -213,7 +213,7 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
       </div>
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', padding: '12px', borderRadius: '8px', color: '#ef4444', marginTop: '16px' }}>
+        <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid var(--qx-negative)', padding: '12px', borderRadius: '8px', color: 'var(--qx-negative)', marginTop: '16px' }}>
           ⚠️ {error}
         </div>
       )}
@@ -227,7 +227,7 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
             borderRadius: '10px',
             padding: '20px',
             display: 'flex',
-            justifyContent: 'space-between',
+            justify: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
             gap: '16px'
@@ -236,17 +236,17 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
               <div style={{ fontSize: '12px', fontWeight: 'bold', color: style.color, textTransform: 'uppercase', letterSpacing: '1px' }}>
                 AUTOMATED POSITION VERDICT
               </div>
-              <h2 style={{ margin: '4px 0 0 0', fontSize: '28px', color: '#fff', fontWeight: '800' }}>
-                {style.emoji} {report.action_verdict} <span style={{ fontSize: '18px', color: '#94a3b8', fontWeight: 'normal' }}>({(Number(report?.confidence_score || 0) * 100).toFixed(0)}% Confidence)</span>
+              <h2 style={{ margin: '4px 0 0 0', fontSize: '28px', color: 'var(--qx-text-heading)', fontWeight: '800' }}>
+                {style.emoji} {report.action_verdict} <span style={{ fontSize: '18px', color: 'var(--qx-text-muted)', fontWeight: 'normal' }}>({(Number(report?.confidence_score || 0) * 100).toFixed(0)}% Confidence)</span>
               </h2>
-              <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: '#cbd5e1', maxWidth: '650px' }}>
+              <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: 'var(--qx-text-primary)', maxWidth: '650px' }}>
                 {report.verdict_summary}
               </p>
             </div>
 
-            <div style={{ textAlign: 'right', background: 'rgba(0,0,0,0.3)', padding: '12px 18px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.05)' }}>
-              <div style={{ fontSize: '12px', color: '#94a3b8' }}>Unrealized P&L</div>
-              <div style={{ fontSize: '24px', fontWeight: 'bold', color: report.unrealized_pnl >= 0 ? '#00c853' : '#ff3d00' }}>
+            <div style={{ textAlign: 'right', background: 'var(--qx-bg-canvas)', padding: '12px 18px', borderRadius: '8px', border: '1px solid var(--qx-border-subtle)' }}>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-muted)' }}>Unrealized P&L</div>
+              <div style={{ fontSize: '24px', fontWeight: 'bold', color: report.unrealized_pnl >= 0 ? 'var(--qx-positive)' : 'var(--qx-negative)' }}>
                 {report.unrealized_pnl >= 0 ? '+' : ''}${report.unrealized_pnl.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 <span style={{ fontSize: '14px', marginLeft: '6px' }}>
                   ({report.unrealized_pnl_pct >= 0 ? '+' : ''}{(Number(report?.unrealized_pnl_pct || 0) * 100).toFixed(1)}%)
@@ -258,18 +258,18 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
           {/* ROLL & ADJUSTMENT RECOMMENDATION ENGINE CARD */}
           {rollPlan && rollPlan.recommendation && (
             <div style={{
-              background: '#0f172a',
-              border: '1px solid #1e293b',
+              background: 'var(--qx-bg-canvas)',
+              border: '1px solid var(--qx-border)',
               borderRadius: '10px',
               padding: '16px',
               marginTop: '16px'
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: '10px' }}>
-                <h3 style={{ margin: 0, fontSize: '15px', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: '1px solid var(--qx-border-subtle)', paddingBottom: '10px' }}>
+                <h3 style={{ margin: 0, fontSize: '15px', color: 'var(--qx-accent)', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <RefreshCw size={16} /> 🔄 Position Adjustment & Roll Engine Plan
                 </h3>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <span style={{ fontSize: '11px', background: '#1e293b', color: '#cbd5e1', padding: '4px 8px', borderRadius: '4px', border: '1px solid #334155' }}>
+                  <span style={{ fontSize: '11px', background: 'var(--qx-bg-surface)', color: 'var(--qx-text-primary)', padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--qx-border-subtle)' }}>
                     Health Score: <b>{rollPlan.composite_health} / 100</b>
                   </span>
                   <span style={{
@@ -277,28 +277,28 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
                     fontWeight: 'bold',
                     padding: '4px 10px',
                     borderRadius: '4px',
-                    background: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(56, 189, 248, 0.15)',
-                    color: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? '#10b981' : '#38bdf8',
-                    border: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(56, 189, 248, 0.4)'
+                    background: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? 'rgba(124, 169, 130, 0.15)' : 'rgba(217, 160, 91, 0.15)',
+                    color: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? 'var(--qx-positive)' : 'var(--qx-accent)',
+                    border: rollPlan.recommendation.roll_type === 'HOLD_NO_ACTION' ? '1px solid var(--qx-positive)' : '1px solid var(--qx-accent)'
                   }}>
                     {rollPlan.recommendation.roll_type}
                   </span>
                 </div>
               </div>
 
-              <div style={{ fontSize: '13px', color: '#cbd5e1', marginBottom: '14px', lineHeight: '1.5' }}>
+              <div style={{ fontSize: '13px', color: 'var(--qx-text-primary)', marginBottom: '14px', lineHeight: '1.5' }}>
                 📌 <b>Rationale:</b> {rollPlan.recommendation.rationale}
               </div>
 
               {rollPlan.recommendation.recommended_legs && rollPlan.recommendation.recommended_legs.length > 0 ? (
                 <div>
-                  <div style={{ fontSize: '12px', color: '#94a3b8', fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--qx-text-muted)', fontWeight: 'bold', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <Layers size={14} /> Execution Order Legs:
                   </div>
                   <div style={{ overflowX: 'auto' }}>
                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
                       <thead>
-                        <tr style={{ background: '#1e293b', textAlign: 'left', color: '#94a3b8', fontSize: '11px' }}>
+                        <tr style={{ background: 'var(--qx-bg-surface)', textAlign: 'left', color: 'var(--qx-text-muted)', fontSize: '11px' }}>
                           <th style={{ padding: '8px', borderRadius: '4px 0 0 4px' }}>ACTION</th>
                           <th style={{ padding: '8px' }}>TYPE</th>
                           <th style={{ padding: '8px' }}>STRIKE ($)</th>
@@ -308,14 +308,14 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
                       </thead>
                       <tbody>
                         {rollPlan.recommendation.recommended_legs.map((leg, idx) => (
-                          <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                            <td style={{ padding: '8px', fontWeight: 'bold', color: leg.action.startsWith('BUY') ? '#38bdf8' : '#f59e0b' }}>
+                          <tr key={idx} style={{ borderBottom: '1px solid var(--qx-border-subtle)' }}>
+                            <td style={{ padding: '8px', fontWeight: 'bold', color: leg.action.startsWith('BUY') ? 'var(--qx-accent)' : 'var(--qx-warning)' }}>
                               {leg.action}
                             </td>
-                            <td style={{ padding: '8px', textTransform: 'uppercase', color: '#e2e8f0' }}>{leg.option_type}</td>
-                            <td style={{ padding: '8px', color: '#fff', fontWeight: 'bold' }}>${(Number(leg?.strike) || 0).toFixed(2)}</td>
-                            <td style={{ padding: '8px', color: '#94a3b8' }}>{leg.dte} Days</td>
-                            <td style={{ padding: '8px', textAlign: 'right', color: '#fff', fontWeight: 'bold' }}>${(Number(leg?.estimated_premium) || 0).toFixed(2)}</td>
+                            <td style={{ padding: '8px', textTransform: 'uppercase', color: 'var(--qx-text-secondary)' }}>{leg.option_type}</td>
+                            <td style={{ padding: '8px', color: 'var(--qx-text-heading)', fontWeight: 'bold' }}>${(Number(leg?.strike) || 0).toFixed(2)}</td>
+                            <td style={{ padding: '8px', color: 'var(--qx-text-muted)' }}>{leg.dte} Days</td>
+                            <td style={{ padding: '8px', textAlign: 'right', color: 'var(--qx-text-heading)', fontWeight: 'bold' }}>${(Number(leg?.estimated_premium) || 0).toFixed(2)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -323,7 +323,7 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
                   </div>
                 </div>
               ) : (
-                <div style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic', background: '#1e293b', padding: '10px', borderRadius: '6px' }}>
+                <div style={{ fontSize: '12px', color: 'var(--qx-text-muted)', fontStyle: 'italic', background: 'var(--qx-bg-surface)', padding: '10px', borderRadius: '6px' }}>
                   ✓ Position health is strong. No leg execution adjustment required.
                 </div>
               )}
@@ -332,61 +332,61 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
 
           {/* 4-CARD DIAGNOSTICS GRID */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginTop: '16px' }}>
-            <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>P&L & PRICE METRICS</div>
-              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>${(Number(report?.current_price) || 0).toFixed(2)}</div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>Entry: <b>${(Number(report?.entry_price) || 0).toFixed(2)}</b></div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Position: <b>{report.position_type}</b></div>
+            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '14px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', fontWeight: 'bold' }}>P&L & PRICE METRICS</div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--qx-text-heading)', marginTop: '4px' }}>${(Number(report?.current_price) || 0).toFixed(2)}</div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '4px' }}>Entry: <b>${(Number(report?.entry_price) || 0).toFixed(2)}</b></div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)' }}>Position: <b>{report.position_type}</b></div>
             </div>
 
-            <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>RISK : REWARD PARAMETERS</div>
-              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '14px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', fontWeight: 'bold' }}>RISK : REWARD PARAMETERS</div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--qx-text-heading)', marginTop: '4px' }}>
                 {report.risk_metrics?.risk_reward_ratio ? Number(report.risk_metrics.risk_reward_ratio).toFixed(2) : '1.50'}:1 R:R
               </div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>Stop Loss: <b>${(Number(report?.adjusted_stop_loss) || 0).toFixed(2)}</b></div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Target Price: <b>${(Number(report?.adjusted_target_price) || 0).toFixed(2)}</b></div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '4px' }}>Stop Loss: <b>${(Number(report?.adjusted_stop_loss) || 0).toFixed(2)}</b></div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)' }}>Target Price: <b>${(Number(report?.adjusted_target_price) || 0).toFixed(2)}</b></div>
             </div>
 
-            <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>MOVING AVERAGE TREND</div>
-              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>RSI: {report.technical_metrics?.rsi_14}</div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>SMA 20: <b>${report.technical_metrics?.sma_20}</b></div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>SMA 50: <b>${report.technical_metrics?.sma_50}</b></div>
+            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '14px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', fontWeight: 'bold' }}>MOVING AVERAGE TREND</div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--qx-text-heading)', marginTop: '4px' }}>RSI: {report.technical_metrics?.rsi_14}</div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '4px' }}>SMA 20: <b>${report.technical_metrics?.sma_20}</b></div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)' }}>SMA 50: <b>${report.technical_metrics?.sma_50}</b></div>
             </div>
 
-            <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
-              <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>VOLATILITY & RANGE</div>
-              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>ATR: ${report.technical_metrics?.atr_14}</div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>52w High: <b>${report.technical_metrics?.high_52w}</b></div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Off Peak: <b>{(Number(report?.technical_metrics?.pct_from_high || 0) * 100).toFixed(1)}%</b></div>
+            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '14px' }}>
+              <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', fontWeight: 'bold' }}>VOLATILITY & RANGE</div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--qx-text-heading)', marginTop: '4px' }}>ATR: ${report.technical_metrics?.atr_14}</div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '4px' }}>52w High: <b>${report.technical_metrics?.high_52w}</b></div>
+              <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)' }}>Off Peak: <b>{(Number(report?.technical_metrics?.pct_from_high || 0) * 100).toFixed(1)}%</b></div>
             </div>
           </div>
 
           {/* BULLISH VS BEARISH FACTORS */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px', marginTop: '16px' }}>
-            <div style={{ background: '#111827', border: '1px solid #166534', borderRadius: '8px', padding: '14px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#4ade80', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-positive)', borderRadius: '8px', padding: '14px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--qx-positive)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 🟢 Supporting Bullish Factors
               </div>
-              <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#e2e8f0', lineHeight: '1.6' }}>
+              <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: 'var(--qx-text-primary)', lineHeight: '1.6' }}>
                 {report.positive_factors && report.positive_factors.length > 0 ? (
                   report.positive_factors.map((f, i) => <li key={i}>{f}</li>)
                 ) : (
-                  <li style={{ color: '#94a3b8' }}>No strong positive drivers detected.</li>
+                  <li style={{ color: 'var(--qx-text-muted)' }}>No strong positive drivers detected.</li>
                 )}
               </ul>
             </div>
 
-            <div style={{ background: '#111827', border: '1px solid #991b1b', borderRadius: '8px', padding: '14px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#f87171', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-negative)', borderRadius: '8px', padding: '14px' }}>
+              <div style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--qx-negative)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 🔴 Bearish / Risk Factors
               </div>
-              <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: '#e2e8f0', lineHeight: '1.6' }}>
+              <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '13px', color: 'var(--qx-text-primary)', lineHeight: '1.6' }}>
                 {report.negative_factors && report.negative_factors.length > 0 ? (
                   report.negative_factors.map((f, i) => <li key={i}>{f}</li>)
                 ) : (
-                  <li style={{ color: '#94a3b8' }}>No critical risk flags detected.</li>
+                  <li style={{ color: 'var(--qx-text-muted)' }}>No critical risk flags detected.</li>
                 )}
               </ul>
             </div>

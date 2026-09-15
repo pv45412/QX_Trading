@@ -360,9 +360,9 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
                     </td>
                     <td>
                       <span className="qx-score-badge" style={{
-                        background: c.qx_score >= 90 ? 'rgba(52, 211, 153, 0.12)' : 'rgba(56, 189, 248, 0.12)',
-                        color: c.qx_score >= 90 ? '#34d399' : '#38bdf8',
-                        border: `1px solid ${c.qx_score >= 90 ? 'rgba(52, 211, 153, 0.3)' : 'rgba(56, 189, 248, 0.3)'}`,
+                        background: c.qx_score >= 90 ? 'rgba(124, 169, 130, 0.15)' : 'rgba(217, 160, 91, 0.15)',
+                        color: c.qx_score >= 90 ? 'var(--qx-positive)' : 'var(--qx-accent)',
+                        border: `1px solid ${c.qx_score >= 90 ? 'var(--qx-positive)' : 'var(--qx-accent)'}`,
                         padding: '2px 8px',
                         borderRadius: '4px',
                         fontWeight: 700
@@ -383,7 +383,7 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
           </div>
 
           {!filteredCandidates.length && (
-            <div className="empty" style={{ padding: '24px', textAlign: 'center' }}>
+            <div className="empty" style={{ padding: '24px', textAlign: 'center', color: 'var(--qx-text-muted)' }}>
               No candidates match current minimum score ({minScore}) or preset lens.
             </div>
           )}
@@ -395,25 +395,25 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
             <div className="qx-inspector-header">
               <div>
                 <span className="qx-quad-badge leading"><Target size={13} /> {selectedCandidate.setup_type}</span>
-                <h3 style={{ margin: '6px 0 2px 0', fontSize: '19px', color: '#f1f5f9' }}>
-                  {selectedCandidate.symbol} · ${selectedCandidate.price.toFixed(2)}
+                <h3 style={{ margin: '6px 0 2px 0', fontSize: '19px', color: 'var(--qx-text-heading)' }}>
+                  {selectedCandidate.symbol} · ${selectedCandidate.price ? selectedCandidate.price.toFixed(2) : '—'}
                 </h3>
-                <small style={{ color: '#94a3b8' }}>{selectedCandidate.name} ({selectedCandidate.sector})</small>
+                <small style={{ color: 'var(--qx-text-secondary)' }}>{selectedCandidate.name} ({selectedCandidate.sector})</small>
               </div>
 
               <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '11px', color: '#94a3b8', display: 'block' }}>QX SETUP SCORE</span>
-                <strong style={{ fontSize: '22px', color: '#34d399' }}>{selectedCandidate.qx_score} / 100</strong>
+                <span style={{ fontSize: '11px', color: 'var(--qx-text-muted)', display: 'block' }}>QX SETUP SCORE</span>
+                <strong style={{ fontSize: '22px', color: 'var(--qx-positive)' }}>{selectedCandidate.qx_score} / 100</strong>
               </div>
             </div>
 
             {/* Signal & Trade Parameters */}
             <div className="qx-blueprint-box">
               <div className="qx-signal-header">
-                <span style={{ color: '#34d399', fontWeight: 700, fontSize: '13px' }}>
+                <span style={{ color: 'var(--qx-positive)', fontWeight: 700, fontSize: '13px' }}>
                   ▲ {selectedCandidate.signal}
                 </span>
-                <span style={{ fontSize: '12px', color: '#fbbf24' }}>
+                <span style={{ fontSize: '12px', color: 'var(--qx-warning)' }}>
                   R : R Ratio <strong>{selectedCandidate.risk_reward}</strong>
                 </span>
               </div>
@@ -421,30 +421,30 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
               <div className="qx-blueprint-grid">
                 <div className="qx-bp-item">
                   <small>TRIGGER ENTRY</small>
-                  <strong style={{ color: '#38bdf8' }}>${(Number(selectedCandidate.entry) || 0).toFixed(2)}</strong>
+                  <strong style={{ color: 'var(--qx-accent)' }}>${(Number(selectedCandidate.entry) || 0).toFixed(2)}</strong>
                 </div>
                 <div className="qx-bp-item">
                   <small>STOP LOSS</small>
-                  <strong style={{ color: '#f87171' }}>${(Number(selectedCandidate.stop) || 0).toFixed(2)}</strong>
+                  <strong style={{ color: 'var(--qx-negative)' }}>${(Number(selectedCandidate.stop) || 0).toFixed(2)}</strong>
                 </div>
                 <div className="qx-bp-item">
                   <small>TARGET 1 (2R)</small>
-                  <strong style={{ color: '#34d399' }}>${(Number(selectedCandidate.target1) || 0).toFixed(2)}</strong>
+                  <strong style={{ color: 'var(--qx-positive)' }}>${(Number(selectedCandidate.target1) || 0).toFixed(2)}</strong>
                 </div>
                 <div className="qx-bp-item">
                   <small>TARGET 2 (4R)</small>
-                  <strong style={{ color: '#059669' }}>${(Number(selectedCandidate.target2) || 0).toFixed(2)}</strong>
+                  <strong style={{ color: 'var(--qx-positive)' }}>${(Number(selectedCandidate.target2) || 0).toFixed(2)}</strong>
                 </div>
               </div>
             </div>
 
             {/* Options Strategy & Notes */}
             <div className="qx-options-blueprint-card">
-              <h4><Zap size={14} style={{ color: '#38bdf8' }} /> Recommended Option Contract</h4>
-              <div style={{ fontSize: '13px', color: '#f1f5f9', fontWeight: 600, margin: '4px 0 8px 0' }}>
+              <h4><Zap size={14} style={{ color: 'var(--qx-accent)' }} /> Recommended Option Contract</h4>
+              <div style={{ fontSize: '13px', color: 'var(--qx-text-heading)', fontWeight: 600, margin: '4px 0 8px 0' }}>
                 {selectedCandidate.options_fit}
               </div>
-              <p style={{ margin: 0, fontSize: '12px', color: '#cbd5e1', lineHeight: '1.5' }}>
+              <p style={{ margin: 0, fontSize: '12px', color: 'var(--qx-text-primary)', lineHeight: '1.5' }}>
                 <strong>Quantitative Thesis:</strong> {selectedCandidate.notes}
               </p>
             </div>

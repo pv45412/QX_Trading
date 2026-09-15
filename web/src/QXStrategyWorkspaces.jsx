@@ -111,16 +111,16 @@ export default function QXStrategyWorkspaces() {
     const pointsString = curve.map((p) => `${mapX(p.underlying_price)},${mapY(p.pnl_dollars)}`).join(' ');
 
     return (
-      <div className="relative bg-slate-900/90 rounded-xl p-4 border border-slate-800 shadow-inner">
+      <div className="relative bg-slate-900/90 rounded-xl p-4 border border-slate-800 shadow-inner" style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)' }}>
         <div className="flex justify-between items-center mb-2 px-2 text-xs font-semibold tracking-wider text-slate-400 uppercase">
-          <span>Option Leg At-Expiration Payoff Curve ($ P&L)</span>
-          <span>Spot Target: ${underlyingPrice}</span>
+          <span style={{ color: 'var(--qx-text-muted)' }}>Option Leg At-Expiration Payoff Curve ($ P&L)</span>
+          <span style={{ color: 'var(--qx-text-secondary)' }}>Spot Target: ${underlyingPrice}</span>
         </div>
 
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto overflow-visible">
           {/* Grid lines */}
-          <line x1={padding} y1={zeroY} x2={width - padding} y2={zeroY} stroke="#475569" strokeWidth="1.5" strokeDasharray="4 4" />
-          <line x1={spotX} y1={padding} x2={spotX} y2={height - padding} stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="3 3" />
+          <line x1={padding} y1={zeroY} x2={width - padding} y2={zeroY} stroke="var(--qx-border-subtle)" strokeWidth="1.5" strokeDasharray="4 4" />
+          <line x1={spotX} y1={padding} x2={spotX} y2={height - padding} stroke="var(--qx-accent)" strokeWidth="1.5" strokeDasharray="3 3" />
 
           {/* Area fill under curve */}
           <polygon
@@ -131,21 +131,21 @@ export default function QXStrategyWorkspaces() {
 
           <defs>
             <linearGradient id="payoffGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#ef4444" stopOpacity="0.8" />
+              <stop offset="0%" stopColor="var(--qx-positive)" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="var(--qx-negative)" stopOpacity="0.8" />
             </linearGradient>
           </defs>
 
           {/* Main Payoff Line */}
-          <polyline points={pointsString} fill="none" stroke="#10b981" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <polyline points={pointsString} fill="none" stroke="var(--qx-positive)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
           {/* Breakeven Dots */}
           {payoffData.breakevens?.map((be, idx) => {
             const beX = mapX(be);
             return (
               <g key={idx}>
-                <circle cx={beX} cy={zeroY} r="5" fill="#f59e0b" stroke="#0f172a" strokeWidth="2" />
-                <text x={beX} y={zeroY - 10} textAnchor="middle" fill="#f59e0b" fontSize="11" fontWeight="bold">
+                <circle cx={beX} cy={zeroY} r="5" fill="var(--qx-warning)" stroke="var(--qx-bg-canvas)" strokeWidth="2" />
+                <text x={beX} y={zeroY - 10} textAnchor="middle" fill="var(--qx-warning)" fontSize="11" fontWeight="bold">
                   BE: ${be}
                 </text>
               </g>
@@ -153,31 +153,31 @@ export default function QXStrategyWorkspaces() {
           })}
 
           {/* Spot price marker */}
-          <circle cx={spotX} cy={mapY(curve.find((c) => Math.abs(c.underlying_price - underlyingPrice) < 2)?.pnl_dollars || 0)} r="6" fill="#38bdf8" />
+          <circle cx={spotX} cy={mapY(curve.find((c) => Math.abs(c.underlying_price - underlyingPrice) < 2)?.pnl_dollars || 0)} r="6" fill="var(--qx-accent)" />
 
           {/* X Axis Labels */}
-          <text x={padding} y={height - 10} fill="#94a3b8" fontSize="11">
+          <text x={padding} y={height - 10} fill="var(--qx-text-muted)" fontSize="11">
             ${minPrice}
           </text>
-          <text x={width / 2} y={height - 10} fill="#94a3b8" fontSize="11" textAnchor="middle">
+          <text x={width / 2} y={height - 10} fill="var(--qx-text-muted)" fontSize="11" textAnchor="middle">
             Price Range (±20%)
           </text>
-          <text x={width - padding} y={height - 10} fill="#94a3b8" fontSize="11" textAnchor="end">
+          <text x={width - padding} y={height - 10} fill="var(--qx-text-muted)" fontSize="11" textAnchor="end">
             ${maxPrice}
           </text>
 
           {/* Y Axis Zero Label */}
-          <text x={padding - 8} y={zeroY + 4} fill="#64748b" fontSize="10" textAnchor="end">
+          <text x={padding - 8} y={zeroY + 4} fill="var(--qx-text-muted)" fontSize="10" textAnchor="end">
             $0
           </text>
         </svg>
 
         {/* Legend */}
-        <div className="flex justify-center gap-6 mt-3 text-xs text-slate-300">
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Profit Zone</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Max Loss Risk</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Breakeven</span>
-          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-sky-400 inline-block"></span> Current Spot</span>
+        <div className="flex justify-center gap-6 mt-3 text-xs" style={{ color: 'var(--qx-text-secondary)' }}>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full inline-block" style={{ background: 'var(--qx-positive)' }}></span> Profit Zone</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full inline-block" style={{ background: 'var(--qx-negative)' }}></span> Max Loss Risk</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full inline-block" style={{ background: 'var(--qx-warning)' }}></span> Breakeven</span>
+          <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full inline-block" style={{ background: 'var(--qx-accent)' }}></span> Current Spot</span>
         </div>
       </div>
     );

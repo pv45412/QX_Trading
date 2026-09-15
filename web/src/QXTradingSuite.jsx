@@ -71,10 +71,10 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
       <div className="section-head">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <h2>QX Intelligence Suite — {symbol}</h2>
-          <span className="badge" style={{ background: '#3b82f6', color: '#fff', padding: '2px 8px', borderRadius: '4px', fontSize: '11px' }}>
+          <span className="badge" style={{ background: 'rgba(217, 160, 91, 0.15)', color: 'var(--qx-accent)', border: '1px solid var(--qx-border)', padding: '2px 8px', borderRadius: '4px', fontSize: '11px' }}>
             QX POWER MODULE
           </span>
-          {loading && <RefreshCw size={14} className="spin" style={{ color: '#94a3b8' }} />}
+          {loading && <RefreshCw size={14} className="spin" style={{ color: 'var(--qx-text-muted)' }} />}
         </div>
         <div className="mode-toggle-group" style={{ display: 'flex', gap: '8px' }}>
           <button
@@ -83,9 +83,9 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
             style={{
               padding: '6px 14px',
               borderRadius: '6px',
-              border: '1px solid #3b82f6',
-              background: mode === 'day_trader' ? '#3b82f6' : 'transparent',
-              color: '#fff',
+              border: '1px solid var(--qx-border)',
+              background: mode === 'day_trader' ? 'var(--qx-bg-button)' : 'transparent',
+              color: 'var(--qx-text-heading)',
               cursor: 'pointer',
               fontWeight: 600,
               display: 'flex',
@@ -101,9 +101,9 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
             style={{
               padding: '6px 14px',
               borderRadius: '6px',
-              border: '1px solid #10b981',
-              background: mode === 'investor' ? '#10b981' : 'transparent',
-              color: '#fff',
+              border: '1px solid var(--qx-border)',
+              background: mode === 'investor' ? 'rgba(124, 169, 130, 0.2)' : 'transparent',
+              color: 'var(--qx-positive)',
               cursor: 'pointer',
               fontWeight: 600,
               display: 'flex',
@@ -119,22 +119,22 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
       {mode === 'day_trader' ? (
         <div className="qx-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginTop: '16px' }}>
           {/* Dealer Positioning Card */}
-          <div className="qx-card" style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="qx-card" style={{ background: 'var(--qx-bg-surface)', padding: '16px', borderRadius: '8px', border: '1px solid var(--qx-border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span style={{ fontSize: '13px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Activity size={14} color="#3b82f6" /> 0DTE Dealer Positioning (GEX)
+              <span style={{ fontSize: '13px', color: 'var(--qx-text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Activity size={14} color="var(--qx-accent)" /> 0DTE Dealer Positioning (GEX)
               </span>
-              <span style={{ fontSize: '11px', background: 'rgba(59,130,246,0.2)', color: '#60a5fa', padding: '2px 6px', borderRadius: '4px' }}>
+              <span style={{ fontSize: '11px', background: 'rgba(217, 160, 91, 0.15)', color: 'var(--qx-accent)', padding: '2px 6px', borderRadius: '4px' }}>
                 {gexData.regime}
               </span>
             </div>
-            <div style={{ fontSize: '22px', fontWeight: 700, color: '#f8fafc', marginBottom: '8px' }}>
+            <div style={{ fontSize: '22px', fontWeight: 700, color: 'var(--qx-text-heading)', marginBottom: '8px' }}>
               ${gexData.current_price ? Number(gexData.current_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '100.00'}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#cbd5e1' }}>
-              <div>Net Gamma: <strong style={{ color: '#10b981' }}>+{gexData.net_gamma} M</strong></div>
-              <div>Gamma Flip: <strong style={{ color: '#f59e0b' }}>${(Number(gexData.gamma_flip) || 0).toFixed(2)}</strong></div>
-              <div>Top Call Wall: <strong style={{ color: '#3b82f6' }}>${gexData.top_call_strike}</strong></div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: 'var(--qx-text-primary)' }}>
+              <div>Net Gamma: <strong style={{ color: 'var(--qx-positive)' }}>+{gexData.net_gamma} M</strong></div>
+              <div>Gamma Flip: <strong style={{ color: 'var(--qx-warning)' }}>${(Number(gexData.gamma_flip) || 0).toFixed(2)}</strong></div>
+              <div>Top Call Wall: <strong style={{ color: 'var(--qx-accent)' }}>${gexData.top_call_strike}</strong></div>
               <div>Top Put Wall: <strong style={{ color: '#ef4444' }}>${gexData.top_put_strike}</strong></div>
               <div>1-Sigma Move: <strong>±${gexData.exp_move_1sig}</strong></div>
               <div>0DTE Volume Share: <strong>{gexData.zero_dte_ratio}</strong></div>
@@ -142,23 +142,23 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
           </div>
 
           {/* Intraday VWAP & ORB Triggers */}
-          <div className="qx-card" style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="qx-card" style={{ background: 'var(--qx-bg-surface)', padding: '16px', borderRadius: '8px', border: '1px solid var(--qx-border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span style={{ fontSize: '13px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <BarChart2 size={14} color="#10b981" /> VWAP SD Bands & ORB Triggers
+              <span style={{ fontSize: '13px', color: 'var(--qx-text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <BarChart2 size={14} color="var(--qx-positive)" /> VWAP SD Bands & ORB Triggers
               </span>
-              <span style={{ fontSize: '11px', background: 'rgba(16,185,129,0.2)', color: '#34d399', padding: '2px 6px', borderRadius: '4px' }}>
+              <span style={{ fontSize: '11px', background: 'rgba(124, 169, 130, 0.2)', color: 'var(--qx-positive)', padding: '2px 6px', borderRadius: '4px' }}>
                 {gexData.orb_status}
               </span>
             </div>
-            <div style={{ fontSize: '14px', fontWeight: 600, color: '#f8fafc', marginBottom: '10px' }}>
+            <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--qx-text-heading)', marginBottom: '10px' }}>
               VWAP: ${(Number(gexData.vwap) || 0).toFixed(2)}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#cbd5e1' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: 'var(--qx-text-primary)' }}>
               <div>VWAP Upper +1SD: <strong>${(Number(gexData.vwap_upper1) || 0).toFixed(2)}</strong></div>
               <div>VWAP Lower -1SD: <strong>${(Number(gexData.vwap_lower1) || 0).toFixed(2)}</strong></div>
-              <div>15m ORB High: <strong style={{ color: '#10b981' }}>${(Number(gexData.orb_15m_high) || 0).toFixed(2)}</strong></div>
-              <div>15m ORB Low: <strong style={{ color: '#ef4444' }}>${(Number(gexData.orb_15m_low) || 0).toFixed(2)}</strong></div>
+              <div>15m ORB High: <strong style={{ color: 'var(--qx-positive)' }}>${(Number(gexData.orb_15m_high) || 0).toFixed(2)}</strong></div>
+              <div>15m ORB Low: <strong style={{ color: 'var(--qx-negative)' }}>${(Number(gexData.orb_15m_low) || 0).toFixed(2)}</strong></div>
               <div style={{ gridColumn: 'span 2' }}>EMA Alignment: <strong>{gexData.ema_stack}</strong></div>
             </div>
           </div>
@@ -166,21 +166,21 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
       ) : (
         <div className="qx-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginTop: '16px' }}>
           {/* Fundamental Quality Score */}
-          <div className="qx-card" style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="qx-card" style={{ background: 'var(--qx-bg-surface)', padding: '16px', borderRadius: '8px', border: '1px solid var(--qx-border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span style={{ fontSize: '13px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Award size={14} color="#f59e0b" /> Fundamental Quality Rating
+              <span style={{ fontSize: '13px', color: 'var(--qx-text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Award size={14} color="var(--qx-warning)" /> Fundamental Quality Rating
               </span>
-              <span style={{ fontSize: '11px', background: 'rgba(245,158,11,0.2)', color: '#fbbf24', padding: '2px 6px', borderRadius: '4px' }}>
+              <span style={{ fontSize: '11px', background: 'rgba(217, 160, 91, 0.2)', color: 'var(--qx-warning)', padding: '2px 6px', borderRadius: '4px' }}>
                 {investorData.tier}
               </span>
             </div>
-            <div style={{ fontSize: '26px', fontWeight: 800, color: '#10b981', marginBottom: '8px' }}>
+            <div style={{ fontSize: '26px', fontWeight: 800, color: 'var(--qx-positive)', marginBottom: '8px' }}>
               {(Number(investorData.quality_score || 0) * 100).toFixed(0)} / 100
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#cbd5e1' }}>
-              <div>EPS Growth (Qtr): <strong style={{ color: '#10b981' }}>{investorData.eps_growth}</strong></div>
-              <div>Sales Growth: <strong style={{ color: '#10b981' }}>{investorData.sales_growth}</strong></div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: 'var(--qx-text-primary)' }}>
+              <div>EPS Growth (Qtr): <strong style={{ color: 'var(--qx-positive)' }}>{investorData.eps_growth}</strong></div>
+              <div>Sales Growth: <strong style={{ color: 'var(--qx-positive)' }}>{investorData.sales_growth}</strong></div>
               <div>ROE: <strong>{investorData.roe}</strong></div>
               <div>P/E Ratio: <strong>{investorData.pe_ratio}</strong></div>
               <div>Free Cash Flow Yield: <strong>{investorData.fcf_yield}</strong></div>
@@ -189,24 +189,24 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
           </div>
 
           {/* Consolidation Base & Relative Strength */}
-          <div className="qx-card" style={{ background: 'rgba(255,255,255,0.03)', padding: '16px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="qx-card" style={{ background: 'var(--qx-bg-surface)', padding: '16px', borderRadius: '8px', border: '1px solid var(--qx-border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span style={{ fontSize: '13px', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Layers size={14} color="#8b5cf6" /> Base Structure & RS New High
+              <span style={{ fontSize: '13px', color: 'var(--qx-text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Layers size={14} color="var(--qx-accent)" /> Base Structure & RS New High
               </span>
               {investorData.rs_new_high && (
-                <span style={{ fontSize: '11px', background: 'rgba(139,92,246,0.2)', color: '#c084fc', padding: '2px 6px', borderRadius: '4px' }}>
+                <span style={{ fontSize: '11px', background: 'rgba(217, 160, 91, 0.2)', color: 'var(--qx-accent)', padding: '2px 6px', borderRadius: '4px' }}>
                   RS Line New High
                 </span>
               )}
             </div>
-            <div style={{ fontSize: '16px', fontWeight: 600, color: '#f8fafc', marginBottom: '10px' }}>
+            <div style={{ fontSize: '16px', fontWeight: 600, color: 'var(--qx-text-heading)', marginBottom: '10px' }}>
               {investorData.base_structure}
             </div>
-            <div style={{ fontSize: '12px', color: '#cbd5e1', lineHeight: '1.6' }}>
+            <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', lineHeight: '1.6' }}>
               <div>Box Compression: <strong>{investorData.base_range}</strong></div>
-              <div>Relative Strength vs SPX: <strong style={{ color: '#10b981' }}>Outperforming (+14.2% 3M)</strong></div>
-              <div style={{ marginTop: '8px', color: '#94a3b8', fontSize: '11px' }}>
+              <div>Relative Strength vs SPX: <strong style={{ color: 'var(--qx-positive)' }}>Outperforming (+14.2% 3M)</strong></div>
+              <div style={{ marginTop: '8px', color: 'var(--qx-text-muted)', fontSize: '11px' }}>
                 RS Line made a new 52-week high prior to price breakout, confirming institutional accumulation.
               </div>
             </div>

@@ -1,0 +1,120 @@
+# ==============================================================================
+# Study: Cumulative_Delta_Volume_CDV_Scaled
+# Platform: thinkorswim / thinkScript
+# Description: Scaled Net Delta Version of Cumulative Volume Delta (CVD)
+#              with Globex Open Reset (17:00 / 5:00 PM), Heikin-Ashi smoothing,
+#              and 1.618 StDev Bands.
+# ==============================================================================
+
+declare lower;
+
+input linestyle = {default Candle, Line};
+input HeikinAshi = no;
+input maLength = 20;
+input ShowMovAvg = yes;
+input ShowBands = yes;
+input ShowCloud = yes;
+input ShowZeroLine = yes;
+
+# --- SCALING & CALIBRATION ---
+input ScalingFactor = 0.10;
+
+def na = Double.NaN;
+
+###############
+script nz {
+    input data = 0;
+    input replacement = 0;
+    plot return = if IsNaN(data) then replacement else data;
+}
+
+script _rate {
+    input cond = 1;
+    def criteria = if cond == 1 then open <= close else open > close;
+    def tw = high - Max(open, close);
+    def bw = Min(open, close) - low;
+    def body = AbsValue(close - open);
+    def ret = 0.5 * (tw + bw + (if criteria then 2 * body else 0)) / (tw + bw + body);
+    def rate = if nz(ret) == 0 then 0.5 else ret;
+    plot Result = rate;
+}
+
+# --- CALCULATE SCALED NET DELTA ---
+def rate_up = _rate(1);
+def rate_dn = _rate(0);
+
+# Scaled Net Delta = (Buy Volume - Sell Volume) * ScalingFactor
+def net_delta = (volume * (rate_up - rate_dn)) * ScalingFactor;
+
+# --- GLOBEX RESET LOGIC ---
+input GlobexOpenTime = 1700; # 5:00 PM CST/EST
+
+def isReset = (SecondsFromTime(GlobexOpenTime) >= 0 and SecondsFromTime(GlobexOpenTime)[1] < 0) 
+           or (GetDay() != GetDay()[1] and SecondsFromTime(GlobexOpenTime) >= 0);
+
+def cumdelta_rec;
+if isReset {
+    cumdelta_rec = net_delta;
+} else {
+    cumdelta_rec = nz(cumdelta_rec[1]) + net_delta;
+}
+def cumdelta = cumdelta_rec;
+
+# --- CANDLE DATA ---
+def o = cumdelta[1];
+def h = Max(cumdelta, cumdelta[1]);
+def l = Min(cumdelta, cumdelta[1]);
+def c = cumdelta;
+
+def _haClose = (o + h + l + c) / 4;
+def _haOpen = if IsNaN(_haOpen[1]) then (o + c) / 2 else (_haOpen[1] + _haClose[1]) / 2;
+def haClose = if HeikinAshi then _haClose else c;
+def haOpen = if HeikinAshi then _haOpen else o;
+
+def srcVal = if HeikinAshi then haClose else c;
+
+# --- RESETTING SESSION MOVING AVERAGE LOGIC ---
+def barCount = if isReset then 1 else nz(barCount[1]) + 1;
+def currentLen = Min(barCount, maLength);
+
+def sessionSum;
+if isReset {
+    sessionSum = srcVal;
+} else if barCount <= maLength {
+    sessionSum = nz(sessionSum[1]) + srcVal;
+} else {
+    sessionSum = nz(sessionSum[1]) + srcVal - srcVal[maLength];
+}
+
+def sessionMA = sessionSum / currentLen;
+
+# --- PRIMARY PLOTS ---
+plot Line = if linestyle == linestyle.Line then cumdelta else na;
+Line.SetDefaultColor(Color.CYAN);
+Line.SetLineWeight(2);
+
+plot AvgLine = sessionMA;
+AvgLine.SetDefaultColor(Color.YELLOW);
+AvgLine.SetStyle(Curve.SHORT_DASH);
+AvgLine.SetHiding(!ShowMovAvg);
+
+plot ZeroLine = if ShowZeroLine then 0 else na;
+ZeroLine.SetDefaultColor(Color.WHITE);
+ZeroLine.SetStyle(Curve.LONG_DASH);
+
+# --- BANDS & CLOUD ---
+def dev = 1.618 * StDev(srcVal, maLength);
+plot UpperBand = AvgLine + dev;
+plot LowerBand = AvgLine - dev;
+UpperBand.SetDefaultColor(Color.DARK_GRAY);
+LowerBand.SetDefaultColor(Color.DARK_GRAY);
+UpperBand.SetHiding(!ShowBands);
+LowerBand.SetHiding(!ShowBands);
+
+AddCloud(if ShowCloud then UpperBand else na, LowerBand, Color.DARK_GRAY, Color.DARK_GRAY);
+
+# --- LABELS ---
+AddLabel(yes, 
+    "CumDelta: " + Round(cumdelta, 0), 
+    if cumdelta >= 0 then Color.GREEN else Color.DOWNTICK
+);

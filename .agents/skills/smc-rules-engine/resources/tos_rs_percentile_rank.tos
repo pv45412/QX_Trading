@@ -1,0 +1,49 @@
+# =======================================================================
+# Study: RS_Percentile_Rank
+# Platform: thinkorswim / thinkScript
+# Description: Computes Relative Strength Percentile Rank vs SPX over a rolling window.
+# =======================================================================
+
+script GetRanking {
+   input i_length = 0;                          # Time Period to analyze
+   input i_agg = {default "DAYS", "WEEKS"};     # Aggregation period; DAYS, or WEEKS
+
+   def agg;
+   def RS;
+   def RSLow;
+   def RSHigh;
+   plot Ranking;
+   switch (i_agg)  {
+
+   case DAYS:
+      agg = AggregationPeriod.DAY;
+      RS = close(period = agg) / close("SPX", period = agg);
+      RSLow =  Lowest(RS, i_length);
+      RSHigh = Highest(RS, i_length);
+      Ranking = Round((RS - RSLow) / (RSHigh - RSLow) * 100, 1);
+
+   case WEEKS:
+      agg = AggregationPeriod.WEEK;
+      RS = close(period = agg) / close("SPX", period = agg);
+      RSLow =  Lowest(RS, i_length);
+      RSHigh = Highest(RS, i_length);
+      Ranking = Round((RS - RSLow) / (RSHigh - RSLow) * 100, 1);
+   } 
+}
+
+def Flag_Bearish_Clusters = no;
+
+def greenline = reference MarketForecast.intermediate;
+def blueline  = reference MarketForecast.NearTerm;
+def redline   = reference MarketForecast.momentum;
+def BearishCluster = if Flag_Bearish_Clusters and greenline > 80 and redline > 80 and blueline > 80 then 1 else 0;
+
+plot RsRank = GetRanking(10, "DAYS");  # 10-day Relative Strength Percentile vs SPX
+
+AssignBackgroundColor(if BearishCluster then Color.DARK_ORANGE else
+        if RsRank > 80 then Color.DARK_GREEN else
+        if RsRank > 60 and RsRank <= 80 then CreateColor(0, 175, 0) else
+        if RsRank > 40 and RsRank <= 60 then Color.GRAY else
+        if RsRank > 20 and RsRank <= 40 then CreateColor(225, 0, 0) else
+        if RsRank <= 20 then CreateColor(150, 0, 0) else
+        Color.WHITE);

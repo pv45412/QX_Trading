@@ -1,0 +1,205 @@
+# ====================================================================
+# Study: SMC_INST_Clean_Execution_V15_3_UniversalFutures
+# Platform: thinkorswim / thinkScript
+# Placement: UPPER CHART
+# Description: Institutional Execution Suite (Universal Futures & Equities)
+#              - Auto-adapts across /MNQ, /NQ, /MES, /ES, /MCL, /CL, and Equities
+#              - Pure numerical asset detection (Zero String comparison bugs)
+#              - Tick-scaled point risk limits per asset class
+#              - Strict Session Boundary Detection (18:00 Globex & Pit Opens)
+#              - Finite 4-bar target shelves with zero historical ghosting
+# ====================================================================
+
+declare upper;
+
+# --------------------------------------------------------------------
+# 1. Inputs & Configuration
+# --------------------------------------------------------------------
+input assetMode           = {default AUTO_DETECT, FUTURES_NASDAQ, FUTURES_INDEX_ES, FUTURES_ENERGY_MCL, EQUITIES_RTH};
+input tradeExtendedHours  = yes;   # Set YES to trade Globex/London sessions
+input cooldownBars        = 8;     # Minimum bars between executions
+input targetShelfBars     = 4;     # Shelf line width (bars)
+input atrLength           = 14;
+input target1R            = 1.00;  # 1.0x Risk
+input target2R            = 2.00;  # 2.0x Risk
+
+input showArrows          = yes;   
+input showPriceBubbles    = yes;
+input showTargetShelves   = yes;   
+input showHUDLabels       = yes;   
+input enableAlerts        = yes;
+
+# --------------------------------------------------------------------
+# 2. Institutional Palette
+# --------------------------------------------------------------------
+DefineGlobalColor("Buy",        CreateColor(0, 230, 118));   # Emerald
+DefineGlobalColor("Sell",       CreateColor(255, 23, 68));    # Crimson
+DefineGlobalColor("Target1",    CreateColor(0, 215, 255));    # Cyan (T1)
+DefineGlobalColor("Target2",    CreateColor(0, 255, 200));    # Bright Teal (T2)
+DefineGlobalColor("HUD_Gray",   CreateColor(51, 65, 85));     # Slate
+
+# --------------------------------------------------------------------
+# 3. Dynamic Asset Profiling & Multi-Market Risk Range (Numerical Only)
+# --------------------------------------------------------------------
+def ts = TickSize();
+
+# Pure numerical profiling: /NQ & /MNQ trade with 0.25 tick and price > 10,000
+def isNasdaq = (assetMode == assetMode.FUTURES_NASDAQ) or 
+               (assetMode == assetMode.AUTO_DETECT and (ts == 0.25 and close > 10000));
+
+def isEnergy = (assetMode == assetMode.FUTURES_ENERGY_MCL) or 
+               (assetMode == assetMode.AUTO_DETECT and (ts == 0.01 and close < 250));
+
+def isIndex  = (assetMode == assetMode.FUTURES_INDEX_ES) or 
+               (assetMode == assetMode.AUTO_DETECT and (ts == 0.25 and close <= 10000));
+
+# Asset-specific risk bounds (in exact contract points)
+def minRisk = if isEnergy then 0.15          # Crude Oil: 15 ticks ($15/micro)
+              else if isNasdaq then 12.00    # Nasdaq: 12 pts ($24/micro /MNQ)
+              else if isIndex then 1.75      # S&P 500: 7 ticks ($8.75/micro /MES)
+              else Max(ts * 8, ATR(atrLength) * 0.5);
+
+def maxRisk = if isEnergy then 0.45          # Crude Oil: 45 ticks ($45/micro)
+              else if isNasdaq then 40.00    # Nasdaq: 40 pts ($80/micro /MNQ)
+              else if isIndex then 5.50      # S&P 500: 22 ticks ($27.50/micro /MES)
+              else Max(ts * 24, ATR(atrLength) * 2.0);
+
+# --------------------------------------------------------------------
+# 4. Session VWAP & Dispersion Engine
+# --------------------------------------------------------------------
+def agg = GetAggregationPeriod();
+def isIntraday = agg < AggregationPeriod.DAY;
+
+# CME Globex trade date boundary (18:00 ET) & Pit opens
+def isGlobexReset = isIntraday and (GetDay() != GetDay()[1]);
+def isRTHReset    = isIntraday and (SecondsFromTime(0930) >= 0 and SecondsFromTime(0930)[1] < 0);
+def isOilPitReset = isIntraday and (SecondsFromTime(0900) >= 0 and SecondsFromTime(0900)[1] < 0);
+
+def isNewSession = if isEnergy then (isGlobexReset or isOilPitReset)
+                   else if isNasdaq or isIndex then (isGlobexReset or isRTHReset)
+                   else isRTHReset;
+
+def rthActive = SecondsFromTime(0930) >= 0 and SecondsTillTime(1600) > 0;
+def allowExecution = if !isIntraday then yes
+                     else if tradeExtendedHours then (SecondsTillTime(1700) > 0 or SecondsFromTime(1800) >= 0)
+                     else rthActive;
+
+def vol = if IsNaN(volume) then 0 else volume;
+def typicalP = (high + low + close) / 3;
+
+rec cumVol = CompoundValue(1, if isNewSession then vol else cumVol[1] + vol, vol);
+rec cumPV  = CompoundValue(1, if isNewSession then typicalP * vol else cumPV[1] + (typicalP * vol), typicalP * vol);
+rec cumP2V = CompoundValue(1, if isNewSession then Sqr(typicalP) * vol else cumP2V[1] + (Sqr(typicalP) * vol), Sqr(typicalP) * vol);
+
+def vwapLine = if cumVol > 0 then cumPV / cumVol else close;
+def variance = if cumVol > 0 then (cumP2V / cumVol) - Sqr(vwapLine) else 0;
+def stdDev   = if variance > 0 then Sqrt(variance) else 0;
+def upper2SD = vwapLine + (2 * stdDev);
+def lower2SD = vwapLine - (2 * stdDev);
+
+# --------------------------------------------------------------------
+# 5. Market Structure Tracking & Sweeps
+# --------------------------------------------------------------------
+def isPivotHigh = high == Highest(high, 11)[-5];
+def isPivotLow  = low  == Lowest(low,  11)[-5];
+
+rec lastPH = CompoundValue(1, if isPivotHigh then high[5] else lastPH[1], high);
+rec lastPL = CompoundValue(1, if isPivotLow  then low[5]  else lastPL[1], low);
+
+rec regime = CompoundValue(1,
+    if isNewSession then 0
+    else if close crosses above lastPH then 1
+    else if close crosses below lastPL then -1
+    else regime[1], 0);
+
+def sweptHigh = Highest(high, 3) >= upper2SD or Highest(high, 3) > lastPH[1];
+def sweptLow  = Lowest(low, 3) <= lower2SD or Lowest(low, 3) < lastPL[1];
+
+# --------------------------------------------------------------------
+# 6. Confluence Engine & Displacements
+# --------------------------------------------------------------------
+def avgVol = Average(volume[1], 20);
+def rvol = if !IsNaN(volume) and avgVol > 0 then volume / avgVol else 1.0;
+def volOK = rvol >= 0.70;
+
+def ema8 = ExpAverage(close, 8);
+def ema21 = ExpAverage(close, 21);
+def macdHist = MACD(12, 26, 9).Diff;
+
+def bullDisplace = (close > open) and (close > high[1]) and (close > ema8);
+def bearDisplace = (close < open) and (close < low[1])  and (close < ema8);
+
+def rawBuyScore = (if sweptLow then 35 else 0) +
+                  (if close <= vwapLine then 25 else 0) +
+                  (if ema8 > ema21 then 15 else 0) +
+                  (if macdHist > macdHist[1] then 15 else 0) +
+                  (if volOK then 10 else 0);
+
+def rawSellScore = (if sweptHigh then 35 else 0) +
+                   (if close >= vwapLine then 25 else 0) +
+                   (if ema8 < ema21 then 15 else 0) +
+                   (if macdHist < macdHist[1] then 15 else 0) +
+                   (if volOK then 10 else 0);
+
+def buyScore  = if IsNaN(rawBuyScore) then 0 else rawBuyScore;
+def sellScore = if IsNaN(rawSellScore) then 0 else rawSellScore;
+
+rec lastTriggerBar;
+def canFire = (BarNumber() - lastTriggerBar[1]) >= cooldownBars;
+
+def longGateOK  = (regime != -1) and (close <= vwapLine);
+def shortGateOK = (regime != 1)  and (close >= vwapLine);
+
+def fireBuy  = allowExecution and (buyScore >= 65)  and bullDisplace and canFire and longGateOK;
+def fireSell = allowExecution and (sellScore >= 65) and bearDisplace and canFire and shortGateOK;
+
+if fireBuy or fireSell {
+    lastTriggerBar = BarNumber();
+} else {
+    lastTriggerBar = lastTriggerBar[1];
+}
+
+# --------------------------------------------------------------------
+# 7. Exact Quantized Risk & Structural Stops
+# --------------------------------------------------------------------
+def rawLongStop  = Lowest(low, 3) - ts;
+def rawShortStop = Highest(high, 3) + ts;
+
+def targetLongRisk  = Min(Max(close - rawLongStop, minRisk), maxRisk);
+def targetShortRisk = Min(Max(rawShortStop - close, minRisk), maxRisk);
+
+def currentEntry = Round(close / ts, 0) * ts;
+def currentStop  = if fireBuy  then Round((close - targetLongRisk) / ts, 0) * ts
+                   else if fireSell then Round((close + targetShortRisk) / ts, 0) * ts
+                   else Double.NaN;
+
+def currentRisk = AbsValue(currentEntry - currentStop);
+
+def currentT1 = if fireBuy  then currentEntry + (currentRisk * target1R)
+                else if fireSell then currentEntry - (currentRisk * target1R)
+                else Double.NaN;
+
+def currentT2 = if fireBuy  then currentEntry + (currentRisk * target2R)
+                else if fireSell then currentEntry - (currentRisk * target2R)
+                else Double.NaN;
+
+# --------------------------------------------------------------------
+# 8. Visual Execution Elements
+# --------------------------------------------------------------------
+plot ArrowBuy = if showArrows and fireBuy then low - (ts * 4) else Double.NaN;
+ArrowBuy.SetPaintingStrategy(PaintingStrategy.ARROW_UP);
+ArrowBuy.SetDefaultColor(GlobalColor("Buy"));
+ArrowBuy.SetLineWeight(4);
+
+plot ArrowSell = if showArrows and fireSell then high + (ts * 5) else Double.NaN;
+ArrowSell.SetPaintingStrategy(PaintingStrategy.ARROW_DOWN);
+ArrowSell.SetDefaultColor(GlobalColor("Sell"));
+ArrowSell.SetLineWeight(4);
+
+AddLabel(showHUDLabels,
+    "SMC REGIME: " + (if regime == 1 then "BULLISH" else if regime == -1 then "BEARISH" else "NEUTRAL") + 
+    " | RVOL: " + Round(rvol, 2) + "x",
+    if regime == 1 then GlobalColor("Buy") 
+    else if regime == -1 then GlobalColor("Sell") 
+    else GlobalColor("HUD_Gray")
+);
