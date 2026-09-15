@@ -770,5 +770,190 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   font-variant-numeric: tabular-nums;
 }
 
+/* ==========================================================================
+   Bento-Grid Institutional UI Shell & Anti-Fatigue Dark Slate Design System
+   ========================================================================== */
+
+.qx-app-shell {
+  min-height: 100vh;
+  background-color: #0b0f17;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+/* 1. Top Telemetry Header Bar (56px) */
+.qx-top-header {
+  height: 56px;
+  background-color: #121824;
+  border-bottom: 1px solid #1e293b;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.qx-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.qx-brand-title {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  font-size: 15px;
+  color: #f8fafc;
+}
+
+.qx-brand-accent {
+  color: #38bdf8;
+}
+
+.qx-live-badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+  font-family: monospace;
+  font-weight: 600;
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.qx-header-telemetry {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 12px;
+  font-family: monospace;
+  color: #94a3b8;
+}
+
+.qx-telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qx-telemetry-item strong {
+  color: #f8fafc;
+}
+
+.qx-pct-up {
+  color: #34d399;
+}
+
+.qx-pct-down {
+  color: #f87171;
+}
+
+/* 2. Main Workspace Layout Body */
+.qx-workspace-body {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 56px);
+  overflow: hidden;
+}
+
+/* Left Sidebar (64px) */
+.qx-left-sidebar {
+  width: 64px;
+  background-color: #121824;
+  border-right: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 12px;
+  z-index: 50;
+}
+
+.qx-sidebar-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background-color: #1a2234;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.qx-sidebar-btn:hover {
+  background-color: #243048;
+  color: #38bdf8;
+  border-color: #38bdf8;
+}
+
+.qx-sidebar-btn.qx-sidebar-active {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.qx-sidebar-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.qx-sidebar-label {
+  font-size: 9px;
+  margin-top: 3px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Main Stage & Bento Grid Container */
+.qx-main-stage {
+  flex: 1;
+  padding: 16px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #0b0f17;
+}
+
+.qx-bento-grid-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+/* Responsive Grid Overrides */
+@media (max-width: 1024px) {
+  .qx-header-telemetry {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .qx-left-sidebar {
+    width: 48px;
+  }
+  .qx-sidebar-btn {
+    width: 38px;
+    height: 38px;
+  }
+  .qx-sidebar-label {
+    display: none;
+  }
+}
+
+
 
 
