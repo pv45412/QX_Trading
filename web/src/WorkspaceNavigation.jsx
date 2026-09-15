@@ -19,7 +19,17 @@ export default function WorkspaceNavigation({ route, context }) {
   ];
 
   const handleJump = (hash) => {
-    document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const el = document.querySelector(hash);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      const href = workspaceHref('relative_strength', context);
+      const origin = typeof location !== 'undefined' ? location.origin : 'http://127.0.0.1:5174';
+      const url = new URL(href, origin);
+      url.hash = hash;
+      window.history.pushState(null, '', url.pathname + url.search + url.hash);
+      window.dispatchEvent(new Event('workspacecontextchange'));
+    }
   };
 
   const handleNavigate = (e, targetPage) => {

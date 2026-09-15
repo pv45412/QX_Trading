@@ -14,7 +14,7 @@ from qx.execution.pipeline import Phase3PipelineIntegrator
 from qx.options.chains import OptionContract
 from qx.options_scanner.models import UnderlyingQuote, VetoReasonEnum
 from qx.portfolio.models import PortfolioPosition, PortfolioSnapshot
-from qx.portfolio.read_only_service import ReadOnlyPortfolioService
+from qx.portfolio.read_only_service import MockReadOnlyBrokerProvider, ReadOnlyPortfolioService
 from qx.signals.freshness import FreshnessChecker
 
 
@@ -50,8 +50,7 @@ def test_pipeline_successful_execution_path() -> None:
         )
     ]
 
-    portfolio_service = ReadOnlyPortfolioService()
-    # Initialize fresh portfolio snapshot with 10% Tech exposure
+    # Initialize fresh portfolio snapshot with 10% Tech exposure via MockReadOnlyBrokerProvider
     positions = [
         PortfolioPosition(
             symbol="AAPL",
@@ -62,13 +61,13 @@ def test_pipeline_successful_execution_path() -> None:
             current_price=210.0,
         )
     ]
-    portfolio_service.fetch_fresh_snapshot(
+    provider = MockReadOnlyBrokerProvider(
         equity=500000.0,
         cash=200000.0,
         buying_power=400000.0,
         positions=positions,
-        now=now_dt,
     )
+    portfolio_service = ReadOnlyPortfolioService(provider=provider)
 
     integrator = Phase3PipelineIntegrator(portfolio_service=portfolio_service)
 
@@ -90,6 +89,7 @@ def test_pipeline_successful_execution_path() -> None:
     assert proposal.executable is True
     assert proposal.veto_result.passed is True
     assert proposal.order_request is not None
+    assert proposal.order_request.symbol == "NVDA_270917C120"
     assert proposal.order_request.publication_state == "VERIFIED"
     assert proposal.order_request.executable is True
 
@@ -110,7 +110,10 @@ def test_pipeline_fail_closed_missing_option_chain() -> None:
         timestamp=now_dt,
     )
 
-    integrator = Phase3PipelineIntegrator()
+    provider = MockReadOnlyBrokerProvider(equity=500000.0, cash=200000.0, buying_power=400000.0)
+    portfolio_service = ReadOnlyPortfolioService(provider=provider)
+
+    integrator = Phase3PipelineIntegrator(portfolio_service=portfolio_service)
     proposal = integrator.evaluate_pipeline(
         symbol="NVDA",
         trend_bias="BULLISH",
@@ -139,7 +142,10 @@ def test_pipeline_fail_closed_stale_quote_timestamp() -> None:
         timestamp=stale_quote_ts,
     )
 
-    integrator = Phase3PipelineIntegrator()
+    provider = MockReadOnlyBrokerProvider(equity=500000.0, cash=200000.0, buying_power=400000.0)
+    portfolio_service = ReadOnlyPortfolioService(provider=provider)
+
+    integrator = Phase3PipelineIntegrator(portfolio_service=portfolio_service)
     proposal = integrator.evaluate_pipeline(
         symbol="NVDA",
         trend_bias="BULLISH",
@@ -165,34 +171,48 @@ def test_pipeline_fail_closed_sector_concentration_veto() -> None:
         timestamp=now_dt,
     )
 
-    portfolio_service = ReadOnlyPortfolioService()
-    # Initialize portfolio with 24% Tech exposure already
+    # Initialize portfolio with 27% Tech exposure already (exceeds 25% limit)
     positions = [
         PortfolioPosition(
             symbol="AMD",
             asset_class="STOCK",
             sector="Technology",
-            quantity=800.0,
+            quantity=900.0,
             entry_price=150.0,
-            current_price=150.0,  # $120,000 / $500,000 = 24%
+            current_price=150.0,  # $135,000 / $500,000 = 27%
         )
     ]
-    portfolio_service.fetch_fresh_snapshot(
+    target_opt = OptionContract(
+        symbol="NVDA",
+        expiration=datetime(2027, 9, 17).date(),
+        contract_symbol="NVDA_270917C120",
+        strike=120.0,
+        option_type="call",
+        bid=10.0,
+        ask=10.5,
+        last_price=10.2,
+        volume=100,
+        open_interest=500,
+        implied_volatility=0.30,
+        dte=368,
+        delta=0.80,
+    )
+    provider = MockReadOnlyBrokerProvider(
         equity=500000.0,
         cash=100000.0,
         buying_power=200000.0,
         positions=positions,
-        now=now_dt,
     )
+    portfolio_service = ReadOnlyPortfolioService(provider=provider)
 
     integrator = Phase3PipelineIntegrator(portfolio_service=portfolio_service)
 
-    # Adding NVDA (3% impact) -> 27% projected > 25% limit
     proposal = integrator.evaluate_pipeline(
         symbol="NVDA",
         trend_bias="BULLISH",
         quote=quote,
         signal_timestamp=now_dt,
+        option_contracts=[target_opt],
         sector="Technology",
         bos_confirmed=True,
         now=now_dt,
@@ -215,24 +235,24 @@ def test_pipeline_fail_closed_duplicate_position_veto() -> None:
         timestamp=now_dt,
     )
 
-    portfolio_service = ReadOnlyPortfolioService()
+    # Active OPTION position in NVDA triggers duplicate veto
     positions = [
         PortfolioPosition(
             symbol="NVDA",
-            asset_class="STOCK",
+            asset_class="OPTION",
             sector="Technology",
-            quantity=100.0,
-            entry_price=110.0,
-            current_price=120.0,
+            quantity=5.0,
+            entry_price=10.0,
+            current_price=12.0,
         )
     ]
-    portfolio_service.fetch_fresh_snapshot(
+    provider = MockReadOnlyBrokerProvider(
         equity=500000.0,
         cash=200000.0,
         buying_power=400000.0,
         positions=positions,
-        now=now_dt,
     )
+    portfolio_service = ReadOnlyPortfolioService(provider=provider)
 
     integrator = Phase3PipelineIntegrator(portfolio_service=portfolio_service)
 

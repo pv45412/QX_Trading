@@ -51,32 +51,32 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
 
   return (
     <div id="options-ideas-hub" style={{
-      background: 'linear-gradient(135deg, #0b0f19 0%, #111827 100%)',
-      borderRadius: '16px',
-      border: '1px solid rgba(56, 189, 248, 0.25)',
+      background: 'var(--qx-bg-panel)',
+      borderRadius: '12px',
+      border: '1px solid var(--qx-border)',
       padding: '24px',
-      color: '#f3f4f6',
+      color: 'var(--qx-text-primary)',
       fontFamily: 'Inter, system-ui, sans-serif',
-      boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+      boxShadow: 'none',
       marginTop: '24px'
     }}>
       {/* Research-Only / Simulated Warning Banner */}
       <div style={{
-        background: 'rgba(239, 68, 68, 0.12)',
-        border: '1px solid rgba(239, 68, 68, 0.35)',
-        borderRadius: '10px',
+        background: 'rgba(217, 119, 119, 0.1)',
+        border: '1px solid rgba(217, 119, 119, 0.3)',
+        borderRadius: '8px',
         padding: '12px 16px',
         marginBottom: '20px',
         display: 'flex',
         alignItems: 'center',
         gap: '12px'
       }}>
-        <ShieldAlert style={{ color: '#ef4444', width: '22px', height: '22px', flexShrink: 0 }} />
+        <ShieldAlert style={{ color: 'var(--qx-red-base)', width: '22px', height: '22px', flexShrink: 0 }} />
         <div>
-          <span style={{ fontWeight: '800', color: '#f87171', fontSize: '13px', letterSpacing: '0.5px' }}>
+          <span style={{ fontWeight: '800', color: 'var(--qx-red-base)', fontSize: '12px', letterSpacing: '0.5px' }}>
             [SIMULATED / RESEARCH ONLY]
           </span>
-          <span style={{ color: '#d1d5db', fontSize: '12px', marginLeft: '10px' }}>
+          <span style={{ color: 'var(--qx-text-secondary)', fontSize: '12px', marginLeft: '10px' }}>
             Option contracts and Greeks are modeled research prompts and are not verified from a live option chain. Live execution is blocked.
           </span>
         </div>
@@ -235,7 +235,7 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
                       <span style={{ fontSize: '18px', fontWeight: '800', color: '#ffffff' }}>{item.symbol}</span>
                       <span style={{ fontSize: '12px', color: '#9ca3af' }}>{item.name}</span>
                       <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.15)', color: '#10b981', padding: '2px 8px', borderRadius: '4px', fontWeight: '700' }}>
-                        ${item.price.toFixed(2)}
+                        ${(Number(item.price) || 0).toFixed(2)}
                       </span>
                     </div>
                     <div style={{ fontSize: '13px', fontWeight: '700', color: '#38bdf8', marginTop: '6px' }}>
@@ -331,7 +331,7 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
                       <span style={{ fontSize: '18px', fontWeight: '800', color: '#ffffff' }}>{item.symbol}</span>
                       <span style={{ fontSize: '12px', color: '#9ca3af' }}>{item.name}</span>
                       <span style={{ fontSize: '11px', background: 'rgba(239, 68, 68, 0.15)', color: '#ef4444', padding: '2px 8px', borderRadius: '4px', fontWeight: '700' }}>
-                        ${item.price.toFixed(2)}
+                        ${(Number(item.price) || 0).toFixed(2)}
                       </span>
                     </div>
                     <div style={{ fontSize: '13px', fontWeight: '700', color: '#f59e0b', marginTop: '6px' }}>

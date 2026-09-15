@@ -237,7 +237,7 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
                 AUTOMATED POSITION VERDICT
               </div>
               <h2 style={{ margin: '4px 0 0 0', fontSize: '28px', color: '#fff', fontWeight: '800' }}>
-                {style.emoji} {report.action_verdict} <span style={{ fontSize: '18px', color: '#94a3b8', fontWeight: 'normal' }}>({(report.confidence_score * 100).toFixed(0)}% Confidence)</span>
+                {style.emoji} {report.action_verdict} <span style={{ fontSize: '18px', color: '#94a3b8', fontWeight: 'normal' }}>({(Number(report?.confidence_score || 0) * 100).toFixed(0)}% Confidence)</span>
               </h2>
               <p style={{ margin: '8px 0 0 0', fontSize: '14px', color: '#cbd5e1', maxWidth: '650px' }}>
                 {report.verdict_summary}
@@ -249,7 +249,7 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
               <div style={{ fontSize: '24px', fontWeight: 'bold', color: report.unrealized_pnl >= 0 ? '#00c853' : '#ff3d00' }}>
                 {report.unrealized_pnl >= 0 ? '+' : ''}${report.unrealized_pnl.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 <span style={{ fontSize: '14px', marginLeft: '6px' }}>
-                  ({report.unrealized_pnl_pct >= 0 ? '+' : ''}{(report.unrealized_pnl_pct * 100).toFixed(1)}%)
+                  ({report.unrealized_pnl_pct >= 0 ? '+' : ''}{(Number(report?.unrealized_pnl_pct || 0) * 100).toFixed(1)}%)
                 </span>
               </div>
             </div>
@@ -313,9 +313,9 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
                               {leg.action}
                             </td>
                             <td style={{ padding: '8px', textTransform: 'uppercase', color: '#e2e8f0' }}>{leg.option_type}</td>
-                            <td style={{ padding: '8px', color: '#fff', fontWeight: 'bold' }}>${leg.strike.toFixed(2)}</td>
+                            <td style={{ padding: '8px', color: '#fff', fontWeight: 'bold' }}>${(Number(leg?.strike) || 0).toFixed(2)}</td>
                             <td style={{ padding: '8px', color: '#94a3b8' }}>{leg.dte} Days</td>
-                            <td style={{ padding: '8px', textAlign: 'right', color: '#fff', fontWeight: 'bold' }}>${leg.estimated_premium.toFixed(2)}</td>
+                            <td style={{ padding: '8px', textAlign: 'right', color: '#fff', fontWeight: 'bold' }}>${(Number(leg?.estimated_premium) || 0).toFixed(2)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -334,32 +334,32 @@ export default function QXPositionAdvisor({ defaultSymbol = 'VST' }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginTop: '16px' }}>
             <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
               <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>P&L & PRICE METRICS</div>
-              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>${report.current_price.toFixed(2)}</div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>Entry: <b>${report.entry_price.toFixed(2)}</b></div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>${(Number(report?.current_price) || 0).toFixed(2)}</div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>Entry: <b>${(Number(report?.entry_price) || 0).toFixed(2)}</b></div>
               <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Position: <b>{report.position_type}</b></div>
             </div>
 
             <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
               <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>RISK : REWARD PARAMETERS</div>
               <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>
-                {report.risk_metrics.risk_reward_ratio ? report.risk_metrics.risk_reward_ratio.toFixed(2) : '1.50'}:1 R:R
+                {report.risk_metrics?.risk_reward_ratio ? Number(report.risk_metrics.risk_reward_ratio).toFixed(2) : '1.50'}:1 R:R
               </div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>Stop Loss: <b>${report.adjusted_stop_loss.toFixed(2)}</b></div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Target Price: <b>${report.adjusted_target_price.toFixed(2)}</b></div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>Stop Loss: <b>${(Number(report?.adjusted_stop_loss) || 0).toFixed(2)}</b></div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Target Price: <b>${(Number(report?.adjusted_target_price) || 0).toFixed(2)}</b></div>
             </div>
 
             <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
               <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>MOVING AVERAGE TREND</div>
-              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>RSI: {report.technical_metrics.rsi_14}</div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>SMA 20: <b>${report.technical_metrics.sma_20}</b></div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>SMA 50: <b>${report.technical_metrics.sma_50}</b></div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>RSI: {report.technical_metrics?.rsi_14}</div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>SMA 20: <b>${report.technical_metrics?.sma_20}</b></div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>SMA 50: <b>${report.technical_metrics?.sma_50}</b></div>
             </div>
 
             <div style={{ background: '#111827', border: '1px solid #1f293d', borderRadius: '8px', padding: '14px' }}>
               <div style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 'bold' }}>VOLATILITY & RANGE</div>
-              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>ATR: ${report.technical_metrics.atr_14}</div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>52w High: <b>${report.technical_metrics.high_52w}</b></div>
-              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Off Peak: <b>{(report.technical_metrics.pct_from_high * 100).toFixed(1)}%</b></div>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '4px' }}>ATR: ${report.technical_metrics?.atr_14}</div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1', marginTop: '4px' }}>52w High: <b>${report.technical_metrics?.high_52w}</b></div>
+              <div style={{ fontSize: '12px', color: '#cbd5e1' }}>Off Peak: <b>{(Number(report?.technical_metrics?.pct_from_high || 0) * 100).toFixed(1)}%</b></div>
             </div>
           </div>
 

@@ -1,67 +1,56 @@
-# QX Phase 3 — Integration, Validation & Read-Only Portfolio Context Walkthrough
+# Phase 3 Completion Pass — Financial Correctness Walkthrough
 
-## Summary of Completed Integration Work
+## Summary of Completed Financial Correctness Work
 
-The Phase 3 Integration Pass connects all signal quality, validation, option chain, and portfolio context components into a single, unified production pipeline with strict read-only security boundaries and fail-closed publication gating.
-
----
-
-### 1. Read-Only Portfolio Context & Caching Layer (`read_only_service.py`, `models.py`)
-- Created `ReadOnlyPortfolioService` and `PortfolioCache` in [`read_only_service.py`](file:///c:/Project/2026/src/qx/portfolio/read_only_service.py).
-- **Mandatory Security Boundary**: Contains **zero** methods for submitting, modifying, canceling, or routing orders, or transferring funds. Read-only permissions enforced at both API connector and service interface level.
-- **Configurable Caching (~30s)**: Refreshes account equity, cash/buying power, current positions, market values, cost basis, open orders, and net portfolio Greeks every 30s (configurable 15–60s). Signal scanners read asynchronously from cache and never trigger synchronous broker HTTP requests on scanner loops.
-- Evaluates `FreshnessState` (`FRESH`, `STALE_WARNED`, `STALE_BLOCKED`).
+The Phase 3 Completion Pass resolves all 13 financial safety, option contract execution, position sizing, Greek multiplier, and read-only protocol requirements prior to connecting a live brokerage account.
 
 ---
 
-### 2. Explicit Portfolio Veto Reasons & Veto Checks (`veto_service.py`, `models.py`)
-- Expanded `VetoReasonEnum` in [`models.py`](file:///c:/Project/2026/src/qx/options_scanner/models.py) with explicit typed portfolio veto reasons:
-  - `PORTFOLIO_CONCENTRATION`, `SYMBOL_CONCENTRATION`, `SECTOR_CONCENTRATION`
-  - `DUPLICATE_RISK`, `ACCOUNT_RISK_LIMIT`, `INSUFFICIENT_BUYING_POWER`
-  - `GREEKS_UNAVAILABLE`, `PORTFOLIO_DATA_STALE`
-- Enhanced `check_portfolio_risk()` in [`veto_service.py`](file:///c:/Project/2026/src/qx/options_scanner/services/veto_service.py) to evaluate single-symbol concentration, sector concentration limits ($25\%$), net option delta exposure, and duplicate open trade risk.
+### 1. Read-Only Broker Portfolio Provider Protocol (`read_only_service.py`)
+- Created `ReadOnlyBrokerPortfolioProvider` protocol declaring read-only methods:
+  `get_account_snapshot()`, `get_positions()`, `get_open_orders()`.
+- **Zero Order/Transfer Methods**: Interface exposes no order placement, cancellation, modification, or funds transfer capabilities.
+- **Removed Synthetic Fallbacks**: Completely removed `$500,000` equity default values. If no provider is present or returns `None`, the system fails closed with `publication_state: BLOCKED` and `executable: False`.
+- **Thread-Safe Cache**: Enforced thread safety in `PortfolioCache` using `threading.Lock()`.
 
 ---
 
-### 3. Decoupled 4-Tier Trade Scorer (`trade_scorer.py`)
-- Created `DecoupledTradeScorer` in [`trade_scorer.py`](file:///c:/Project/2026/src/qx/options_scanner/services/trade_scorer.py) preserving 4 distinct scores:
-  1. `signal_quality_score` (Pure technical setup quality: BOS, RVOL, VWAP, FVG).
-  2. `portfolio_fit_score` (Portfolio sector and symbol concentration fit).
-  3. `risk_score` (Account equity risk limit fit).
-  4. `final_trade_score` (Composite trade recommendation).
-- **Transparency Principle**: Portfolio vetoes are **never hidden** inside technical indicator scores.
+### 2. Schwab Greeks Parsing (`schwab/options.py`)
+- Updated `_contract_from_payload()` in [`schwab/options.py`](file:///c:/Project/2026/src/qx/brokers/schwab/options.py) to parse `delta`, `gamma`, `theta`, and `vega` directly from Schwab API payload dictionaries.
 
 ---
 
-### 4. Account Equity-Based Position Sizer (`position_sizer.py`)
-- Created `AccountEquityPositionSizer` in [`position_sizer.py`](file:///c:/Project/2026/src/qx/options_scanner/services/position_sizer.py).
-- **Financial Safety Principle**: Sizes positions strictly from `Account Equity * Max Risk Per Trade %` (e.g., $\$500,000 \times 0.50\% = \$2,500$ max loss limit) divided by the actual defined stop-loss risk per contract.
-- Buying power alone is **never** used to determine position size.
+### 3. Option Proposal Construction & Contract Symbol Execution (`pipeline.py`)
+- When an option strategy is selected, `Phase3PipelineIntegrator` in [`pipeline.py`](file:///c:/Project/2026/src/qx/execution/pipeline.py) constructs `OrderRequest` using:
+  - `symbol = target_contract.contract_symbol` (e.g. `NVDA_270917C120`).
+  - `limit_price = target_contract.mid` (e.g. `$15.25`).
+- Option proposals **never** use the underlying stock symbol and stock limit price.
 
 ---
 
-### 5. Dual Timestamp Freshness Gating (`freshness.py`)
-- Enhanced `FreshnessChecker` in [`freshness.py`](file:///c:/Project/2026/src/qx/signals/freshness.py) with `check_dual_freshness()`.
-- Evaluates both `quote_timestamp` age and `signal_timestamp` age against soft warning and hard execution thresholds.
-- If hard threshold is breached, execution is blocked (`publication_state = BLOCKED`, `executable = False`).
+### 4. Strategy Max Loss Position Sizer (`position_sizer.py`)
+- Updated `AccountEquityPositionSizer` in [`position_sizer.py`](file:///c:/Project/2026/src/qx/options_scanner/services/position_sizer.py):
+  - Long Option max risk = `premium * 100`.
+  - Defined-Risk Spread max risk = `analytical_max_loss`.
+- **Fail-Closed Sizing**: Removed entry == stop 5% risk fallback. Missing/undefined stop loss or non-positive max loss returns `recommended_units = 0` and marks `is_valid: False`.
 
 ---
 
-### 6. Production Pipeline Integrator & End-to-End Suite (`pipeline.py`, `test_phase3_integration_pipeline.py`)
-- Built `Phase3PipelineIntegrator` in [`pipeline.py`](file:///c:/Project/2026/src/qx/execution/pipeline.py) assembling the complete flow:
-  ```
-  Market Data → Signal Validator → Verified Option Chain → Cached Portfolio Snapshot → Portfolio Risk Veto → Decoupled Scoring → Position Sizing → Dual Freshness Gate → Publication Gate
-  ```
-- Added integration test suite in [`test_phase3_integration_pipeline.py`](file:///c:/Project/2026/tests/unit/test_phase3_integration_pipeline.py) verifying:
-  - **Successful Path**: Verified quote + Signal validation + Verified option chain + Cached portfolio snapshot + Risk check + Freshness check → `VERIFIED` + `executable = True` proposal.
-  - **Fail-Closed Paths**: Stale quote timestamps, missing option chain evidence, sector concentration breaches ($27\% > 25\%$), and duplicate open trade risks.
+### 5. 100x Option Multiplier Math (`greeks_risk.py`, `read_only_service.py`)
+- Standardized 100x contract multiplier across portfolio market values (`quantity * price * 100`) and net portfolio Greeks (`quantity * greek * 100`) via `calculate_portfolio_greeks()`.
+
+---
+
+### 6. Dynamic Proposed Exposure & Refined Duplicate Risk (`pipeline.py`, `veto_service.py`)
+- Replaced hardcoded `proposed_addition_pct = 3.0` with dynamic calculation: `(capital_required / account_equity) * 100.0`.
+- Refined duplicate trade risk: holding an underlying stock position alone is investment exposure, not a duplicate option trade veto unless an active QX option trade in the symbol exists.
 
 ---
 
 ## Verification Results
 
-### Unit & Integration Test Execution
-All 21 tests across Phase 2 Hardening, Phase 3 Signal Quality, and Phase 3 Integration Pipeline pass 100%:
+### Unit & Correctness Test Execution
+All 32 tests across Phase 2 Hardening, Phase 3 Signal Quality, Integration Pipeline, and Financial Correctness pass 100%:
 
 ```
 tests/unit/test_phase2_hardening.py::test_dynamic_basis_tracking_order_router PASSED
@@ -85,4 +74,15 @@ tests/unit/test_phase3_integration_pipeline.py::test_pipeline_fail_closed_missin
 tests/unit/test_phase3_integration_pipeline.py::test_pipeline_fail_closed_stale_quote_timestamp PASSED
 tests/unit/test_phase3_integration_pipeline.py::test_pipeline_fail_closed_sector_concentration_veto PASSED
 tests/unit/test_phase3_integration_pipeline.py::test_pipeline_fail_closed_duplicate_position_veto PASSED
+tests/unit/test_phase3_financial_correctness.py::test_missing_portfolio_snapshot_never_produces_synthetic_account PASSED
+tests/unit/test_phase3_financial_correctness.py::test_stale_or_missing_broker_snapshot_cannot_become_verified PASSED
+tests/unit/test_phase3_financial_correctness.py::test_option_orders_use_contract_symbol_and_option_price PASSED
+tests/unit/test_phase3_financial_correctness.py::test_long_option_sizing_uses_premium_multiplier_max_loss PASSED
+tests/unit/test_phase3_financial_correctness.py::test_vertical_spread_sizing_uses_analytical_max_loss PASSED
+tests/unit/test_phase3_financial_correctness.py::test_option_greeks_and_market_value_use_100x_multiplier PASSED
+tests/unit/test_phase3_financial_correctness.py::test_proposed_concentration_calculated_dynamically PASSED
+tests/unit/test_phase3_financial_correctness.py::test_holding_underlying_alone_does_not_trigger_duplicate_option_veto PASSED
+tests/unit/test_phase3_financial_correctness.py::test_schwab_option_chain_parser_populates_greeks PASSED
+tests/unit/test_phase3_financial_correctness.py::test_sizing_error_fails_closed_with_zero_units PASSED
+tests/unit/test_phase3_financial_correctness.py::test_portfolio_cache_thread_safety_lock PASSED
 ```

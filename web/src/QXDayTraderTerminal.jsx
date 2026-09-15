@@ -96,7 +96,8 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
     price: null
   };
   
-  const activePrice = (detailData.symbol === selectedTicker && detailData.price) ? detailData.price : currentTickerObj.price;
+  const rawActivePrice = (detailData.symbol === selectedTicker && detailData.price) ? detailData.price : (currentTickerObj.price || 100.0);
+  const activePrice = (rawActivePrice != null && Number.isFinite(Number(rawActivePrice)) && Number(rawActivePrice) > 0) ? Number(rawActivePrice) : 100.0;
 
   // Dynamic Setup Blueprint Parameters centered around activePrice
   const aiSignals = (detailData.symbol === selectedTicker && detailData.ai_signals && detailData.ai_signals.length > 0) ? detailData.ai_signals : [
@@ -134,9 +135,11 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
   const tapePrints = detailData.tape_prints || [];
 
   // Risk Calculator
-  const maxDollarRisk = (accountSize * (riskPct / 100)).toFixed(2);
-  const stopDistance = Math.max(0.10, Math.abs(activePrice - (activePrice * 0.995))).toFixed(2);
-  const shareSize = Math.floor(maxDollarRisk / stopDistance);
+  const maxDollarRiskVal = accountSize * (riskPct / 100);
+  const maxDollarRisk = maxDollarRiskVal.toFixed(2);
+  const stopDistanceVal = Math.max(0.10, Math.abs(activePrice - (activePrice * 0.995)));
+  const stopDistance = stopDistanceVal.toFixed(2);
+  const shareSize = stopDistanceVal > 0 ? Math.floor(maxDollarRiskVal / stopDistanceVal) : 0;
 
 
   const closePosition = (id) => {

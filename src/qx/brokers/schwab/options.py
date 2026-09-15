@@ -114,6 +114,10 @@ def _contract_from_payload(
         open_interest=int(payload.get("openInterest", 0) or 0),
         implied_volatility=_safe_float(payload.get("volatility", payload.get("impliedVolatility", 0.0))),
         dte=dte,
+        delta=_safe_float(payload.get("delta", 0.0)),
+        gamma=_safe_float(payload.get("gamma", 0.0)),
+        theta=_safe_float(payload.get("theta", 0.0)),
+        vega=_safe_float(payload.get("vega", 0.0)),
     )
 
 

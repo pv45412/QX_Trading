@@ -45,6 +45,8 @@ from qx.streaming import ConnectionManager
 from qx.ops import HealthChecker, MetricsExporter, SystemHealthReport
 from qx.portfolio import evaluate_portfolio_summary, calculate_portfolio_greeks, PortfolioPosition, PortfolioSummary, PortfolioGreeks
 from qx.options_flow import analyze_option_flow, OptionFlowTrade, UnderlyingContext, MarketRegimeContext, OptionFlowAnalysis
+from qx.reports.daily_summary import generate_daily_system_summary
+
 
 order_router_instance = OrderRouter()
 ws_manager_instance = ConnectionManager()
@@ -163,6 +165,13 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
     @app.get("/api/refresh")
     def refresh_status() -> dict[str, Any]:
         return refresh.status()
+
+    @app.get("/api/reports/daily_summary")
+    def get_daily_summary() -> dict[str, Any]:
+        snapshot_data = metrics(cache_dir)
+        etf_rows = snapshot_data.get("rows", [])
+        return generate_daily_system_summary(etf_rows=etf_rows)
+
 
     @app.post("/api/refresh", status_code=202)
     def start_refresh(request: Request, tasks: BackgroundTasks) -> dict[str, Any]:

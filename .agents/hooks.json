@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "description": "QX Platform Antigravity IDE Workspace Hooks",
+  "hooks": {
+    "preflight_check": {
+      "type": "command",
+      "command": ".venv/Scripts/python.exe -m qx.tools.run_preflight_checks",
+      "working_directory": "."
+    }
+  }
+}

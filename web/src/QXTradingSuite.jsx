@@ -129,11 +129,11 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
               </span>
             </div>
             <div style={{ fontSize: '22px', fontWeight: 700, color: '#f8fafc', marginBottom: '8px' }}>
-              ${gexData.current_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              ${gexData.current_price ? Number(gexData.current_price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '100.00'}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#cbd5e1' }}>
               <div>Net Gamma: <strong style={{ color: '#10b981' }}>+{gexData.net_gamma} M</strong></div>
-              <div>Gamma Flip: <strong style={{ color: '#f59e0b' }}>${gexData.gamma_flip.toFixed(2)}</strong></div>
+              <div>Gamma Flip: <strong style={{ color: '#f59e0b' }}>${(Number(gexData.gamma_flip) || 0).toFixed(2)}</strong></div>
               <div>Top Call Wall: <strong style={{ color: '#3b82f6' }}>${gexData.top_call_strike}</strong></div>
               <div>Top Put Wall: <strong style={{ color: '#ef4444' }}>${gexData.top_put_strike}</strong></div>
               <div>1-Sigma Move: <strong>±${gexData.exp_move_1sig}</strong></div>
@@ -152,13 +152,13 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
               </span>
             </div>
             <div style={{ fontSize: '14px', fontWeight: 600, color: '#f8fafc', marginBottom: '10px' }}>
-              VWAP: ${gexData.vwap.toFixed(2)}
+              VWAP: ${(Number(gexData.vwap) || 0).toFixed(2)}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#cbd5e1' }}>
-              <div>VWAP Upper +1SD: <strong>${gexData.vwap_upper1.toFixed(2)}</strong></div>
-              <div>VWAP Lower -1SD: <strong>${gexData.vwap_lower1.toFixed(2)}</strong></div>
-              <div>15m ORB High: <strong style={{ color: '#10b981' }}>${gexData.orb_15m_high.toFixed(2)}</strong></div>
-              <div>15m ORB Low: <strong style={{ color: '#ef4444' }}>${gexData.orb_15m_low.toFixed(2)}</strong></div>
+              <div>VWAP Upper +1SD: <strong>${(Number(gexData.vwap_upper1) || 0).toFixed(2)}</strong></div>
+              <div>VWAP Lower -1SD: <strong>${(Number(gexData.vwap_lower1) || 0).toFixed(2)}</strong></div>
+              <div>15m ORB High: <strong style={{ color: '#10b981' }}>${(Number(gexData.orb_15m_high) || 0).toFixed(2)}</strong></div>
+              <div>15m ORB Low: <strong style={{ color: '#ef4444' }}>${(Number(gexData.orb_15m_low) || 0).toFixed(2)}</strong></div>
               <div style={{ gridColumn: 'span 2' }}>EMA Alignment: <strong>{gexData.ema_stack}</strong></div>
             </div>
           </div>
@@ -176,7 +176,7 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
               </span>
             </div>
             <div style={{ fontSize: '26px', fontWeight: 800, color: '#10b981', marginBottom: '8px' }}>
-              {(investorData.quality_score * 100).toFixed(0)} / 100
+              {(Number(investorData.quality_score || 0) * 100).toFixed(0)} / 100
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#cbd5e1' }}>
               <div>EPS Growth (Qtr): <strong style={{ color: '#10b981' }}>{investorData.eps_growth}</strong></div>

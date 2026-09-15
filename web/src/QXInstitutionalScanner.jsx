@@ -219,10 +219,10 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
               qx_score: item.qx_score || Math.max(65, 98 - idx * 3),
               setup_type: 'Relative Strength Leader',
               signal: 'BUY CALL / LONG',
-              entry: ( (item.price || 100) * 1.002).toFixed(2),
-              stop: ( (item.price || 100) * 0.992).toFixed(2),
-              target1: ( (item.price || 100) * 1.015).toFixed(2),
-              target2: ( (item.price || 100) * 1.030).toFixed(2),
+              entry: (item.price || 100) * 1.002,
+              stop: (item.price || 100) * 0.992,
+              target1: (item.price || 100) * 1.015,
+              target2: (item.price || 100) * 1.030,
               risk_reward: '2.5 : 1',
               options_fit: '7DTE Liquid Call Spread',
               notes: 'Source-backed relative strength leader from verified market movers dataset.',
@@ -421,19 +421,19 @@ export default function QXInstitutionalScanner({ onSelectSymbol }) {
               <div className="qx-blueprint-grid">
                 <div className="qx-bp-item">
                   <small>TRIGGER ENTRY</small>
-                  <strong style={{ color: '#38bdf8' }}>${selectedCandidate.entry.toFixed(2)}</strong>
+                  <strong style={{ color: '#38bdf8' }}>${(Number(selectedCandidate.entry) || 0).toFixed(2)}</strong>
                 </div>
                 <div className="qx-bp-item">
                   <small>STOP LOSS</small>
-                  <strong style={{ color: '#f87171' }}>${selectedCandidate.stop.toFixed(2)}</strong>
+                  <strong style={{ color: '#f87171' }}>${(Number(selectedCandidate.stop) || 0).toFixed(2)}</strong>
                 </div>
                 <div className="qx-bp-item">
                   <small>TARGET 1 (2R)</small>
-                  <strong style={{ color: '#34d399' }}>${selectedCandidate.target1.toFixed(2)}</strong>
+                  <strong style={{ color: '#34d399' }}>${(Number(selectedCandidate.target1) || 0).toFixed(2)}</strong>
                 </div>
                 <div className="qx-bp-item">
                   <small>TARGET 2 (4R)</small>
-                  <strong style={{ color: '#059669' }}>${selectedCandidate.target2.toFixed(2)}</strong>
+                  <strong style={{ color: '#059669' }}>${(Number(selectedCandidate.target2) || 0).toFixed(2)}</strong>
                 </div>
               </div>
             </div>

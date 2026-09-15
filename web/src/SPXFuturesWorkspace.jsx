@@ -299,7 +299,7 @@ export default function SPXFuturesWorkspace() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
           {/* Dealer Positioning Key Metrics */}
           <div style={{ background: 'rgba(15, 23, 42, 0.75)', padding: '16px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
-            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#00f2fe' }}>Dealer Positioning Metrics (SPX ${spxData.spx_close.toFixed(2)})</h3>
+            <h3 style={{ margin: '0 0 12px 0', fontSize: '15px', color: '#00f2fe' }}>Dealer Positioning Metrics (SPX ${(Number(spxData?.spx_close) || 0).toFixed(2)})</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', fontSize: '13px', color: '#cbd5e1' }}>
               <div>Net Gamma: <strong style={{ color: '#00e676' }}>+$2.15 Billion</strong></div>
               <div>Gamma Flip Price: <strong style={{ color: '#ffab00' }}>$7,630.00</strong></div>
@@ -323,7 +323,7 @@ export default function SPXFuturesWorkspace() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 215, 0, 0.15)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid #ffd700' }}>
                 <span>📍 SPOT SPX CLOSE</span>
-                <strong style={{ color: '#ffd700' }}>${spxData.spx_close.toFixed(2)}</strong>
+                <strong style={{ color: '#ffd700' }}>${(Number(spxData?.spx_close) || 0).toFixed(2)}</strong>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255, 171, 0, 0.12)', padding: '6px 10px', borderRadius: '4px', borderLeft: '4px solid #ffab00' }}>
                 <span>⚡ GAMMA FLIP LEVEL (Volatility Pivot)</span>
