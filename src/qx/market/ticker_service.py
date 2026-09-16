@@ -128,10 +128,13 @@ def fetch_terminal_detail(symbol: str, provider=None) -> dict[str, Any]:
     quote = fetch_ticker_quote(symbol, provider=provider)
     p = quote.price
 
+    publication_state = "BLOCKED"
+    signal_state = "BLOCKED"
+    primary_playbook = "BLOCKED"
+
     # Generate dynamic AI signals using QX Unified SMC Rules Engine
     try:
         from qx.signals.smc_rules_engine import generate_smc_trade_signals
-        # Fetch 5m intraday bars if provider is available
         bars_df = None
         if provider is not None:
             try:
@@ -140,50 +143,33 @@ def fetch_terminal_detail(symbol: str, provider=None) -> dict[str, Any]:
             except Exception:
                 bars_df = None
 
-        if bars_df is None or len(bars_df) < 5:
-            # Construct synthetic 5m bars dataframe centered around quote.price p
-            steps = np.linspace(p * 0.995, p, 20)
-            bars_df = pd.DataFrame({
-                "open": steps - 0.05,
-                "high": steps + 0.15,
-                "low": steps - 0.15,
-                "close": steps,
-                "volume": np.random.randint(1000, 5000, size=20)
-            })
-
-        smc_res = generate_smc_trade_signals(quote.symbol, bars_df)
-        ai_signals = [
-            {
-                "id": sig.id,
-                "ticker": sig.ticker,
-                "type": sig.type,
-                "strategy": sig.strategy,
-                "confidence": sig.confidence,
-                "entry": f"{sig.entry:.2f}",
-                "stop": f"{sig.stop:.2f}",
-                "target1": f"{sig.target1:.2f}",
-                "target2": f"{sig.target2:.2f}",
-                "riskReward": sig.risk_reward,
-                "rationale": sig.rationale,
-            }
-            for sig in smc_res.signals
-        ]
+        if bars_df is not None and len(bars_df) >= 5:
+            smc_res = generate_smc_trade_signals(quote.symbol, bars_df, provider_connected=True)
+            publication_state = smc_res.publication_state
+            signal_state = smc_res.signal_state
+            primary_playbook = smc_res.primary_playbook
+            ai_signals = [
+                {
+                    "id": sig.id,
+                    "ticker": sig.ticker,
+                    "type": sig.type,
+                    "strategy": sig.strategy,
+                    "confidence": sig.confidence,
+                    "setup_quality": sig.setup_quality,
+                    "calibration_status": sig.calibration_status,
+                    "entry": f"{sig.entry:.2f}",
+                    "stop": f"{sig.stop:.2f}",
+                    "target1": f"{sig.target1:.2f}",
+                    "target2": f"{sig.target2:.2f}",
+                    "riskReward": sig.risk_reward,
+                    "rationale": sig.rationale,
+                }
+                for sig in smc_res.signals
+            ]
+        else:
+            ai_signals = []
     except Exception:
-        ai_signals = [
-            {
-                "id": 1,
-                "ticker": quote.symbol,
-                "type": "BULLISH",
-                "strategy": f"0DTE {quote.symbol} Gamma Flip Bounce",
-                "confidence": 94,
-                "entry": f"{p * 0.998:.2f}",
-                "stop": f"{p * 0.993:.2f}",
-                "target1": f"{p * 1.006:.2f}",
-                "target2": f"{p * 1.012:.2f}",
-                "riskReward": "1 : 2.4",
-                "rationale": f"Dealer positioning flipped long gamma at ${p*0.995:.2f} support. Intraday VWAP +1SD reclaimed on volume surge.",
-            },
-        ]
+        ai_signals = []
 
     # Generate Level 2 Order Book Depth centered around actual price p
     level2_asks = [
@@ -213,6 +199,9 @@ def fetch_terminal_detail(symbol: str, provider=None) -> dict[str, Any]:
         "change_pct": quote.change_pct,
         "gex_regime": quote.gex_regime,
         "as_of": quote.as_of,
+        "publication_state": publication_state,
+        "signal_state": signal_state,
+        "primary_playbook": primary_playbook,
         "ai_signals": ai_signals,
         "level2_asks": level2_asks,
         "level2_bids": level2_bids,

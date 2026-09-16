@@ -1,0 +1,55 @@
+# QX Rules Engine Research Configuration Schema
+version: research_v1
+
+direction_engine:
+  weights:
+    structure: 0.30
+    vwap: 0.15
+    ema: 0.10
+    delta: 0.15
+    sector_rs: 0.10
+    market_alignment: 0.10
+    higher_timeframe: 0.10
+
+playbooks:
+  playbook_a_pullback:
+    version: "1.0"
+    min_direction_score: 50.0
+    rvol_normalized_min: 1.30
+    max_extension_atr: 1.50
+    min_risk_reward: 1.50
+
+  playbook_b_liquidity_sweep:
+    version: "1.0"
+    directional_rules:
+      bullish_sweep:
+        max_prior_direction_score: 20.0  # Bearish or neutral prior trend allowed
+        require_low_sweep: true
+        require_reclaim: true
+      bearish_sweep:
+        min_prior_direction_score: -20.0 # Bullish or neutral prior trend allowed
+        require_high_sweep: true
+        require_reclaim: true
+    rvol_normalized_min: 1.50
+    vscore_extreme_threshold: -2.0
+    min_risk_reward: 2.00
+
+  playbook_c_orb_breakout:
+    version: "1.0"
+    orb_minutes: 15
+    min_direction_score: 60.0
+    rvol_normalized_min: 1.80
+    require_candle_body_close: true
+    min_risk_reward: 1.50
+
+order_block_validation:
+  min_displacement_atr: 1.00
+  min_body_multiplier: 1.50
+  require_structural_consequence: true  # Must produce BOS or CHoCH
+
+risk_limits:
+  max_dollar_risk_pct: 1.0
+  point_bounds:
+    NQ: { min: 12.0, max: 40.0 }
+    ES: { min: 1.75, max: 5.50 }
+    CL: { min: 0.15, max: 0.45 }

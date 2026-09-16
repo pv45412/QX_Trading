@@ -20,7 +20,7 @@ def test_analyze_smc_structure():
     })
 
     res = analyze_smc_structure(bars)
-    assert res.regime in ("BULLISH", "BEARISH", "CONSOLIDATION")
+    assert res.regime in ("BULLISH", "BEARISH", "CONSOLIDATION", "NEUTRAL")
     assert 0.0 <= res.structure_score <= 100.0
 
 
@@ -54,6 +54,5 @@ def test_generate_smc_trade_signals():
     res = generate_smc_trade_signals("XLK", bars)
     assert res.symbol == "XLK"
     assert res.price == 183.74
-    assert len(res.signals) >= 2
-    assert res.signals[0].playbook_id == 1
-    assert res.signals[0].entry > 0
+    assert res.primary_playbook == "NO_SETUP"
+    assert len(res.signals) == 0

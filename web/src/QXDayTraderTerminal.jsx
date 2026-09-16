@@ -100,34 +100,7 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
   const activePrice = (rawActivePrice != null && Number.isFinite(Number(rawActivePrice)) && Number(rawActivePrice) > 0) ? Number(rawActivePrice) : 100.0;
 
   // Dynamic Setup Blueprint Parameters centered around activePrice
-  const aiSignals = (detailData.symbol === selectedTicker && detailData.ai_signals && detailData.ai_signals.length > 0) ? detailData.ai_signals : [
-    {
-      id: 1,
-      ticker: selectedTicker,
-      type: 'BULLISH',
-      strategy: `${selectedTicker} Key Level Bounce`,
-      confidence: 88,
-      entry: (activePrice * 0.998).toFixed(2),
-      stop: (activePrice * 0.993).toFixed(2),
-      target1: (activePrice * 1.006).toFixed(2),
-      target2: (activePrice * 1.012).toFixed(2),
-      riskReward: '1 : 2.4',
-      rationale: `Holding above 21D EMA support level ($${(activePrice * 0.995).toFixed(2)}). Intraday VWAP +1SD reclaimed on volume surge.`,
-    },
-    {
-      id: 2,
-      ticker: selectedTicker,
-      type: 'BULLISH',
-      strategy: '15-Min ORB High Breakout',
-      confidence: 84,
-      entry: (activePrice * 1.002).toFixed(2),
-      stop: (activePrice * 0.997).toFixed(2),
-      target1: (activePrice * 1.009).toFixed(2),
-      target2: (activePrice * 1.015).toFixed(2),
-      riskReward: '1 : 2.1',
-      rationale: 'Opening 15-min range high broken with relative volume expansion.',
-    },
-  ];
+  const aiSignals = (detailData.symbol === selectedTicker && Array.isArray(detailData.ai_signals)) ? detailData.ai_signals : [];
 
   // Level 2 & Tape Prints strictly from API
   const level2Asks = detailData.level2_asks || [];
@@ -204,64 +177,84 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
               </span>
             </div>
 
-            {aiSignals.map(sig => (
-              <div key={sig.id} className={`ai-signal-card ${sig.type.toLowerCase()}`}>
-                <div className="signal-meta">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span className="signal-type" style={{ color: sig.type === 'BULLISH' ? '#00e676' : '#ff1744' }}>
-                      {sig.type === 'BULLISH' ? '▲ BUY CALL / LONG' : '▼ BUY PUT / SHORT'}
-                    </span>
-                    <span style={{ fontSize: '12px', fontWeight: 600, color: '#f8fafc' }}>
-                      {sig.strategy}
-                    </span>
+            {aiSignals.length === 0 ? (
+              (detailData.signal_state === 'BLOCKED' || detailData.primary_playbook === 'BLOCKED' || detailData.publication_state === 'BLOCKED') ? (
+                <div className="blocked-signal-card" style={{ padding: '24px', textAlign: 'center', color: '#ff1744', background: 'rgba(255, 23, 68, 0.08)', borderRadius: '8px', border: '1px solid rgba(255, 23, 68, 0.3)', margin: '10px 0' }}>
+                  <Shield size={24} style={{ color: '#ff1744', marginBottom: '8px' }} />
+                  <div style={{ fontWeight: 700, fontSize: '14px', color: '#ff5252', marginBottom: '4px' }}>SIGNAL ENGINE BLOCKED — DATA NOT ELIGIBLE</div>
+                  <div style={{ fontSize: '12px', color: '#cbd5e1' }}>
+                    Market data feed is stale, offline, or missing required bar completeness. Rules Engine State: <strong>BLOCKED</strong>.
                   </div>
-                  <span className="confidence-pill">{sig.confidence}% Rule Confidence</span>
                 </div>
+              ) : (
+                <div className="no-setup-card" style={{ padding: '24px', textAlign: 'center', color: '#94a3b8', background: 'rgba(15, 23, 42, 0.6)', borderRadius: '8px', border: '1px dashed rgba(255,255,255,0.1)', margin: '10px 0' }}>
+                  <AlertCircle size={24} style={{ color: '#00f2fe', marginBottom: '8px' }} />
+                  <div style={{ fontWeight: 600, fontSize: '14px', color: '#e2e8f0', marginBottom: '4px' }}>NO SETUP DETECTED — MONITORING MARKET</div>
+                  <div style={{ fontSize: '12px', color: '#94a3b8' }}>
+                    Market data complete and verified. No structural SMC order block setup detected for {selectedTicker}. Rules Engine State: <strong>NO_SETUP</strong>.
+                  </div>
+                </div>
+              )
+            ) : (
+              aiSignals.map(sig => (
+                <div key={sig.id} className={`ai-signal-card ${sig.type.toLowerCase()}`}>
+                  <div className="signal-meta">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span className="signal-type" style={{ color: sig.type === 'BULLISH' ? '#00e676' : '#ff1744' }}>
+                        {sig.type === 'BULLISH' ? '▲ BUY CALL / LONG' : '▼ BUY PUT / SHORT'}
+                      </span>
+                      <span style={{ fontSize: '12px', fontWeight: 600, color: '#f8fafc' }}>
+                        {sig.strategy}
+                      </span>
+                    </div>
+                    <span className="confidence-pill">{sig.confidence}% Rule Confidence</span>
+                  </div>
 
-                <div style={{ fontSize: '12px', color: '#cbd5e1', marginBottom: '8px' }}>
-                  {sig.rationale}
-                </div>
+                  <div style={{ fontSize: '12px', color: '#cbd5e1', marginBottom: '8px' }}>
+                    {sig.rationale}
+                  </div>
 
-                <div className="signal-levels">
-                  <div className="signal-level-item">
-                    <small>ENTRY</small>
-                    <strong style={{ color: '#00f2fe' }}>${sig.entry}</strong>
+                  <div className="signal-levels">
+                    <div className="signal-level-item">
+                      <small>ENTRY</small>
+                      <strong style={{ color: '#00f2fe' }}>${sig.entry}</strong>
+                    </div>
+                    <div className="signal-level-item">
+                      <small>STOP LOSS</small>
+                      <strong style={{ color: '#ff1744' }}>${sig.stop}</strong>
+                    </div>
+                    <div className="signal-level-item">
+                      <small>TARGET 1</small>
+                      <strong style={{ color: '#00e676' }}>${sig.target1}</strong>
+                    </div>
+                    <div className="signal-level-item">
+                      <small>R : R RATIO</small>
+                      <strong style={{ color: '#ffab00' }}>{sig.riskReward}</strong>
+                    </div>
                   </div>
-                  <div className="signal-level-item">
-                    <small>STOP LOSS</small>
-                    <strong style={{ color: '#ff1744' }}>${sig.stop}</strong>
-                  </div>
-                  <div className="signal-level-item">
-                    <small>TARGET 1</small>
-                    <strong style={{ color: '#00e676' }}>${sig.target1}</strong>
-                  </div>
-                  <div className="signal-level-item">
-                    <small>R : R RATIO</small>
-                    <strong style={{ color: '#ffab00' }}>{sig.riskReward}</strong>
-                  </div>
-                </div>
 
-                <div
-                  style={{
-                    marginTop: '10px',
-                    width: '100%',
-                    padding: '8px',
-                    borderRadius: '6px',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    background: 'rgba(255,255,255,0.03)',
-                    color: '#94a3b8',
-                    fontWeight: 600,
-                    fontSize: '11px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                  }}
-                >
-                  <Shield size={13} /> Order Execution Offline (Connect Schwab Brokerage Feed to Execute)
+                  <div
+                    style={{
+                      marginTop: '10px',
+                      width: '100%',
+                      padding: '8px',
+                      borderRadius: '6px',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      background: 'rgba(255,255,255,0.03)',
+                      color: '#94a3b8',
+                      fontWeight: 600,
+                      fontSize: '11px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                    }}
+                  >
+                    <Shield size={13} /> Order Execution Offline (Connect Schwab Brokerage Feed to Execute)
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
 
