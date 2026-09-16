@@ -1,0 +1,360 @@
+{
+  "generated_at": "2026-09-16T21:05:48.541Z",
+  "base_url": "http://127.0.0.1:5174",
+  "read_only": true,
+  "sensitive_status_fields_redacted": true,
+  "review_as_of": "2026-09-15",
+  "desktop": [
+    {
+      "filename": "01-markets-relative-strength.png",
+      "route": "relative_strength",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "02-today-command-center.png",
+      "route": "command_center",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "03-today-morning-report.png",
+      "route": "morning_report",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "04-today-daily-workflow.png",
+      "route": "daily_workflow",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "05-markets-spx-nq-futures.png",
+      "route": "spx_nq_futures",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "06-markets-sector-rotation.png",
+      "route": "sector_rotation",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "07-scanner-scanner.png",
+      "route": "scan",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "08-scanner-broad-watchlist.png",
+      "route": "broad_watchlist",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "09-scanner-heatmap.png",
+      "route": "heatmap",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "10-research-ticker-history.png",
+      "route": "ticker_history",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "11-research-options-ideas.png",
+      "route": "options_ideas",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "12-research-options-flow.png",
+      "route": "options_flow",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "13-research-liquidity-map.png",
+      "route": "liquidity_map",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "14-research-backtest.png",
+      "route": "backtest",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "15-research-strategy-lab.png",
+      "route": "strategy_lab",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "16-journal-idea-tracking.png",
+      "route": "idea_tracking",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "17-journal-outcome-journal.png",
+      "route": "journal",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "18-system-data-cache.png",
+      "route": "data_cache",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "19-system-schwab-api.png",
+      "route": "schwab",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "20-system-jobs.png",
+      "route": "jobs",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "21-system-run-history.png",
+      "route": "run_history",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "22-system-strategy-rules.png",
+      "route": "strategy_rules",
+      "status": "CAPTURED"
+    }
+  ],
+  "quick_jumps": [
+    {
+      "filename": "23-quick-options-ideas-hub.png",
+      "anchor": "options-ideas-hub",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "24-quick-research-studio.png",
+      "anchor": "research-studio",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "25-quick-options-scanner.png",
+      "anchor": "options-scanner-v1",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "26-quick-spx-command.png",
+      "anchor": "spx-dashboard",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "27-quick-prompt-studio.png",
+      "anchor": "daily-prompt",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "28-quick-day-trader-terminal.png",
+      "anchor": "qx-terminal",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "29-quick-qx-suite.png",
+      "anchor": "qx-suite",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "30-quick-sector-ranking.png",
+      "anchor": "ranking",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "31-quick-market-movers.png",
+      "anchor": "movers",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "32-quick-ai-review.png",
+      "anchor": "ai-review",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "33-quick-holdings.png",
+      "anchor": "holdings",
+      "status": "CAPTURED"
+    }
+  ],
+  "responsive": [
+    {
+      "filename": "today-desktop.png",
+      "viewport": "desktop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "scanner-desktop.png",
+      "viewport": "desktop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "day-trader-terminal-desktop.png",
+      "viewport": "desktop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "holdings-portfolio-desktop.png",
+      "viewport": "desktop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "research-desktop.png",
+      "viewport": "desktop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "system-desktop.png",
+      "viewport": "desktop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "today-laptop.png",
+      "viewport": "laptop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "scanner-laptop.png",
+      "viewport": "laptop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "day-trader-terminal-laptop.png",
+      "viewport": "laptop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "holdings-portfolio-laptop.png",
+      "viewport": "laptop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "research-laptop.png",
+      "viewport": "laptop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "system-laptop.png",
+      "viewport": "laptop",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "today-mobile.png",
+      "viewport": "mobile",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "scanner-mobile.png",
+      "viewport": "mobile",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "day-trader-terminal-mobile.png",
+      "viewport": "mobile",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "holdings-portfolio-mobile.png",
+      "viewport": "mobile",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "research-mobile.png",
+      "viewport": "mobile",
+      "status": "CAPTURED"
+    },
+    {
+      "filename": "system-mobile.png",
+      "viewport": "mobile",
+      "status": "CAPTURED"
+    }
+  ],
+  "lifecycle": [
+    {
+      "state": "NO_SETUP",
+      "collapsed": "lifecycle-01-no-setup-collapsed.png",
+      "expanded": "lifecycle-01-no-setup-why-expanded.png",
+      "fixture": true
+    },
+    {
+      "state": "WATCH",
+      "collapsed": "lifecycle-02-watch-collapsed.png",
+      "expanded": "lifecycle-02-watch-why-expanded.png",
+      "fixture": true
+    },
+    {
+      "state": "ARMED",
+      "collapsed": "lifecycle-03-armed-collapsed.png",
+      "expanded": "lifecycle-03-armed-why-expanded.png",
+      "fixture": true
+    },
+    {
+      "state": "TRIGGERED",
+      "collapsed": "lifecycle-04-triggered-collapsed.png",
+      "expanded": "lifecycle-04-triggered-why-expanded.png",
+      "fixture": true
+    },
+    {
+      "state": "TRADEABLE",
+      "collapsed": "lifecycle-05-tradeable-collapsed.png",
+      "expanded": "lifecycle-05-tradeable-why-expanded.png",
+      "fixture": true
+    },
+    {
+      "state": "BLOCKED",
+      "collapsed": "lifecycle-06-blocked-collapsed.png",
+      "expanded": "lifecycle-06-blocked-why-expanded.png",
+      "fixture": true
+    },
+    {
+      "state": "PORTFOLIO_VETOED",
+      "collapsed": "lifecycle-07-portfolio-vetoed-collapsed.png",
+      "expanded": "lifecycle-07-portfolio-vetoed-why-expanded.png",
+      "fixture": true
+    },
+    {
+      "state": "PORTFOLIO_APPROVED",
+      "collapsed": "lifecycle-08-portfolio-approved-collapsed.png",
+      "expanded": "lifecycle-08-portfolio-approved-why-expanded.png",
+      "fixture": true
+    }
+  ],
+  "journeys": [
+    {
+      "name": "day_trader",
+      "status": "BROKEN",
+      "steps": [
+        "Opened Today / Command Center.",
+        "Opened Day Trader Terminal.",
+        "Selected the first available terminal symbol and inspected its legacy signal detail."
+      ],
+      "breaks": [
+        "The current Today/Terminal workspace has no linked canonical QX lifecycle or WHY panel."
+      ],
+      "errors": []
+    },
+    {
+      "name": "swing_trader",
+      "status": "BROKEN",
+      "steps": [
+        "Opened Scanner workspace."
+      ],
+      "breaks": [
+        "No scanner candidate was available in the current loaded data.",
+        "Scanner detail is not connected to canonical lifecycle, higher-timeframe evidence, or portfolio-risk stages."
+      ],
+      "errors": []
+    },
+    {
+      "name": "long_term_investor",
+      "status": "BROKEN",
+      "steps": [
+        "Opened Markets / Relative Strength workspace.",
+        "Inspected ETF holdings and concentration view.",
+        "Inspected the current symbol-research entry surface without submitting analysis."
+      ],
+      "breaks": [
+        "Holdings are ETF composition data, not a broker portfolio; no linked long-term position-risk and thesis journey exists."
+      ],
+      "errors": []
+    }
+  ],
+  "browser_errors": [],
+  "non_get_requests": []
+}
