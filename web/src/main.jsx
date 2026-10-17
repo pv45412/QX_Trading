@@ -3,32 +3,36 @@ import {createRoot} from 'react-dom/client';
 import {RefreshCw} from 'lucide-react';
 import './style.css';
 import './dashboard.css';
-import Holdings from './Holdings';
-import ReferenceRanking from './ReferenceRanking';
 import useAnalytics from './useAnalytics';
-import LiveRefresh from './LiveRefresh';
-import MoversWorkspace from './MoversWorkspace';
-import AIReview from './AIReview';
 import {workspaceContext,workspaceHref,updateWorkspaceContext} from './workspace-context';
-import WorkspaceNavigation from './WorkspaceNavigation';
 import {resolveWorkspaceRoute} from './workspace-routes';
-import QXTradingSuite from './QXTradingSuite';
-import QXDayTraderTerminal from './QXDayTraderTerminal';
-import SPXFuturesWorkspace from './SPXFuturesWorkspace';
-import QXDailyNewsPrompt from './QXDailyNewsPrompt';
-import QXInstitutionalScanner from './QXInstitutionalScanner';
-import QXOptionsScanner from './QXOptionsScanner';
-import QXOptionsIdeas from './QXOptionsIdeas';
-import QXPositionAdvisor from './QXPositionAdvisor';
-import QXResearchStudio from './QXResearchStudio';
-import QXStrategyWorkspaces from './QXStrategyWorkspaces';
-import QXSystemControl from './QXSystemControl';
 import QXBentoDashboardLayout from './QXBentoDashboardLayout';
 import { ErrorBoundary } from './ErrorBoundary';
 
 
 
 const RSLine = lazy(()=>import('./RSLine'));
+const Holdings = lazy(()=>import('./Holdings'));
+const ReferenceRanking = lazy(()=>import('./ReferenceRanking'));
+const LiveRefresh = lazy(()=>import('./LiveRefresh'));
+const MoversWorkspace = lazy(()=>import('./MoversWorkspace'));
+const AIReview = lazy(()=>import('./AIReview'));
+const QXTradingSuite = lazy(()=>import('./QXTradingSuite'));
+const QXDayTraderTerminal = lazy(()=>import('./QXDayTraderTerminal'));
+const SPXFuturesWorkspace = lazy(()=>import('./SPXFuturesWorkspace'));
+const QXDailyNewsPrompt = lazy(()=>import('./QXDailyNewsPrompt'));
+const QXInstitutionalScanner = lazy(()=>import('./QXInstitutionalScanner'));
+const QXOptionsScanner = lazy(()=>import('./QXOptionsScanner'));
+const QXOptionsIdeas = lazy(()=>import('./QXOptionsIdeas'));
+const QXPositionAdvisor = lazy(()=>import('./QXPositionAdvisor'));
+const QXResearchStudio = lazy(()=>import('./QXResearchStudio'));
+const QXStrategyWorkspaces = lazy(()=>import('./QXStrategyWorkspaces'));
+const QXSystemControl = lazy(()=>import('./QXSystemControl'));
+const QXTradeWorkspace = lazy(()=>import('./QXTradeWorkspace'));
+const QXOpportunitiesWorkspace = lazy(()=>import('./QXOpportunitiesWorkspace'));
+const QXTodayWorkspace = lazy(()=>import('./QXTodayWorkspace'));
+const QXPortfolioWorkspace = lazy(()=>import('./QXPortfolioWorkspace'));
+const QXResearchWorkspace = lazy(()=>import('./QXResearchWorkspace'));
 const percent = n => Number.isFinite(n) ? `${n >= 0 ? '+' : ''}${(n*100).toFixed(2)}%` : '—';
 
 function App() {
@@ -44,20 +48,87 @@ function App() {
  const route=resolveWorkspaceRoute(query.get('page')||'relative_strength');
 
  useEffect(()=>{
-  if(!context.etf||!context.symbol){
+  document.title=route?.title?`QX Platform | ${route.title}`:'QX Platform | Workspace Unavailable';
+ },[route?.title]);
+
+ useEffect(()=>{
+  if(!route?.target&&(!context.etf||!context.symbol)){
    updateWorkspaceContext({etf:context.etf||'XLK',symbol:context.symbol||context.etf||'XLK'},{replace:true});
   }
- },[context.etf,context.symbol]);
+ },[context.etf,context.symbol,route?.target]);
 
  if(!route) return (
   <QXBentoDashboardLayout route={{workspace:'Markets',title:'Relative Strength',page:'relative_strength'}} context={context}>
-   <p role="alert">Workspace page unavailable. <a href={workspaceHref('relative_strength',context)}>Return to Markets</a></p>
+   <p role="alert">Workspace page unavailable. <a href={workspaceHref('today',context)}>Return to Today</a></p>
   </QXBentoDashboardLayout>
  );
 
  const pageKey = route.page;
+ const surfaceKey = route.surface || pageKey;
 
- if (pageKey === 'spx_nq_futures') {
+ if (pageKey === 'today') {
+  const todayContext={horizon:context.horizon,timeframe:context.timeframe};
+  return (
+   <QXBentoDashboardLayout route={route} context={todayContext}>
+    <div style={{width:'100%',gridColumn:'span 12'}}>
+     <ErrorBoundary title="Today Market Attention Workspace">
+      <QXTodayWorkspace context={todayContext}/>
+     </ErrorBoundary>
+    </div>
+   </QXBentoDashboardLayout>
+  );
+ }
+
+ if (pageKey === 'trade') {
+  return (
+   <QXBentoDashboardLayout route={route} context={context}>
+    <div style={{width:'100%',gridColumn:'span 12'}}>
+     <ErrorBoundary title="Canonical Trade Workspace">
+      <QXTradeWorkspace context={context}/>
+     </ErrorBoundary>
+    </div>
+   </QXBentoDashboardLayout>
+  );
+ }
+
+ if (pageKey === 'opportunities') {
+  return (
+   <QXBentoDashboardLayout route={route} context={context}>
+    <div style={{width:'100%',gridColumn:'span 12'}}>
+     <ErrorBoundary title="Canonical Opportunities Workspace">
+      <QXOpportunitiesWorkspace context={context}/>
+     </ErrorBoundary>
+    </div>
+   </QXBentoDashboardLayout>
+  );
+ }
+
+ if (pageKey === 'portfolio') {
+  return (
+   <QXBentoDashboardLayout route={route} context={context}>
+    <div style={{width:'100%',gridColumn:'span 12'}}>
+     <ErrorBoundary title="Canonical Portfolio Workspace">
+      <Suspense fallback={<p role="status">Loading Portfolio…</p>}><QXPortfolioWorkspace context={context}/></Suspense>
+     </ErrorBoundary>
+    </div>
+   </QXBentoDashboardLayout>
+  );
+ }
+
+ const researchSurfaces = new Set(['ticker_history','options_ideas','options_flow','liquidity_map','backtest','strategy_lab','relative_strength','spx_nq_futures','sector_rotation']);
+ if (pageKey === 'research' || researchSurfaces.has(surfaceKey)) {
+  return (
+   <QXBentoDashboardLayout route={route} context={context}>
+    <div style={{width:'100%',gridColumn:'span 12'}}>
+     <ErrorBoundary title="Research Workspace">
+      <Suspense fallback={<p role="status">Loading Research...</p>}><QXResearchWorkspace context={context} route={route}/></Suspense>
+     </ErrorBoundary>
+    </div>
+   </QXBentoDashboardLayout>
+  );
+ }
+
+ if (surfaceKey === 'spx_nq_futures') {
   return (
    <QXBentoDashboardLayout route={route} context={context}>
     <div style={{ width: '100%', gridColumn: 'span 12' }}>
@@ -70,7 +141,7 @@ function App() {
  }
 
 
- if (pageKey === 'scan' || pageKey === 'broad_watchlist' || pageKey === 'heatmap') {
+ if (surfaceKey === 'scan' || surfaceKey === 'broad_watchlist' || surfaceKey === 'heatmap') {
   return (
    <QXBentoDashboardLayout route={route} context={context}>
     <div style={{ width: '100%', gridColumn: 'span 12' }}>
@@ -92,7 +163,7 @@ function App() {
   );
  }
 
- if (pageKey === 'command_center' || pageKey === 'morning_report' || pageKey === 'daily_workflow') {
+ if (surfaceKey === 'command_center' || surfaceKey === 'morning_report' || surfaceKey === 'daily_workflow') {
   return (
    <QXBentoDashboardLayout route={route} context={context}>
     <div style={{ width: '100%', gridColumn: 'span 12' }}>
@@ -107,25 +178,7 @@ function App() {
   );
  }
 
- if (pageKey === 'ticker_history' || pageKey === 'options_ideas' || pageKey === 'options_flow' || pageKey === 'liquidity_map' || pageKey === 'backtest' || pageKey === 'strategy_lab') {
-  return (
-   <QXBentoDashboardLayout route={route} context={context}>
-    <div style={{ width: '100%', gridColumn: 'span 12' }}>
-     <ErrorBoundary title="QX Research Studio">
-       <QXResearchStudio defaultSymbol={context.symbol||'XLK'} />
-     </ErrorBoundary>
-     <ErrorBoundary title="QX Options Ideas">
-       <QXOptionsIdeas />
-     </ErrorBoundary>
-     <ErrorBoundary title="QX Strategy Workspaces">
-       <QXStrategyWorkspaces />
-     </ErrorBoundary>
-    </div>
-   </QXBentoDashboardLayout>
-  );
- }
-
- if (pageKey === 'idea_tracking' || pageKey === 'journal') {
+ if (surfaceKey === 'idea_tracking' || surfaceKey === 'journal') {
   return (
    <QXBentoDashboardLayout route={route} context={context}>
     <div style={{ width: '100%', gridColumn: 'span 12' }}>
@@ -137,12 +190,12 @@ function App() {
   );
  }
 
- if (route?.workspace === 'System' || pageKey === 'schwab' || pageKey === 'data_cache' || pageKey === 'jobs' || pageKey === 'run_history' || pageKey === 'strategy_rules') {
+ if (pageKey === 'system' || surfaceKey === 'schwab' || surfaceKey === 'data_cache' || surfaceKey === 'jobs' || surfaceKey === 'run_history' || surfaceKey === 'strategy_rules') {
   return (
    <QXBentoDashboardLayout route={route} context={context}>
     <div style={{ width: '100%', gridColumn: 'span 12' }}>
      <ErrorBoundary title="QX System Operations Control">
-       <QXSystemControl currentSubRoute={pageKey} />
+       <QXSystemControl currentSubRoute={surfaceKey} context={context}/>
      </ErrorBoundary>
     </div>
    </QXBentoDashboardLayout>
@@ -157,6 +210,8 @@ function MarketsDashboard({context, route}) {
 
  const symbol=context.etf||'XLK';
  const [revision,setRevision]=useState(0);
+ const [terminalDetail,setTerminalDetail]=useState(null);
+ const [terminalDetailLoading,setTerminalDetailLoading]=useState(false);
  const [hydrated, setHydrated] = useState(false);
  const [progress, setProgress] = useState(25);
  const [step, setStep] = useState(1);
@@ -293,7 +348,7 @@ function MarketsDashboard({context, route}) {
         ⚡ QX Execution Terminals & Intraday Workspaces
       </h2>
       <ErrorBoundary title="QX Day Trader Terminal">
-        <QXDayTraderTerminal activeSymbol={context.symbol||symbol} onSelectSymbol={val => chooseSymbol(val, true)} />
+        <QXDayTraderTerminal activeSymbol={context.symbol||symbol} onSelectSymbol={val => chooseSymbol(val, true)} onDetailData={setTerminalDetail} onDetailLoading={value => { setTerminalDetailLoading(value); if (value) setTerminalDetail(null); }} />
       </ErrorBoundary>
       <ErrorBoundary title="SPX & Futures Command Dashboard">
         <SPXFuturesWorkspace />
@@ -311,7 +366,7 @@ function MarketsDashboard({context, route}) {
         <QXInstitutionalScanner onSelectSymbol={val => chooseSymbol(val, true)} />
       </ErrorBoundary>
       <ErrorBoundary title="QX Intelligence Suite">
-        <QXTradingSuite symbol={context.symbol||symbol}/>
+        <QXTradingSuite symbol={context.symbol||symbol} liveData={terminalDetail} detailLoading={terminalDetailLoading}/>
       </ErrorBoundary>
     </div>
 
@@ -320,4 +375,10 @@ function MarketsDashboard({context, route}) {
   </QXBentoDashboardLayout>
  );
 }
-createRoot(document.getElementById('root')).render(<App/>);
+createRoot(document.getElementById('root')).render(<Suspense fallback={<p role="status">Loading workspace...</p>}><App/></Suspense>);
+
+function TargetPhaseNotice({title, message}) {
+ return <section className="qx-target-phase-notice" aria-label={`${title} Phase 1 status`}>
+  <strong>{title.toUpperCase()} TARGET ROUTE</strong><span>{message}</span>
+ </section>;
+}

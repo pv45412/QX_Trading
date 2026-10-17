@@ -1,7 +1,7 @@
 import React, {useEffect,useState} from 'react';
 import {ResponsiveContainer,LineChart,Line,XAxis,YAxis,Tooltip,CartesianGrid,ReferenceLine} from 'recharts';
 
-export default function RSLine({symbol}) {
+export default function RSLine({symbol,onAvailabilityChange}) {
  const [result,setResult]=useState(null),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
  useEffect(()=>{
   const controller=new AbortController();let active=true;
@@ -12,6 +12,9 @@ export default function RSLine({symbol}) {
    .then(data=>{if(active)setResult(data);}).catch(e=>{if(active&&e.name!=='AbortError')setError(e.message);}).finally(()=>clearTimeout(timeout));
   return ()=>{active=false;clearTimeout(timeout);controller.abort();};
  },[symbol,attempt]);
+ useEffect(()=>{
+  onAvailabilityChange?.(result ? 'SOURCE_BACKED' : error ? 'UNAVAILABLE' : 'LOADING');
+ },[result,error,onAvailabilityChange]);
  return <section aria-label={`${symbol} relative-strength history`}>
   <p className="chart-provenance">ETF / SPY closing-price ratio · cached history</p>
   {error?<div className="chart-placeholder"><p role="status">{error}</p><button onClick={()=>setAttempt(n=>n+1)}>Retry chart</button></div>:!result?<div className="chart-placeholder"><p role="status">Loading RS history...</p></div>:<>

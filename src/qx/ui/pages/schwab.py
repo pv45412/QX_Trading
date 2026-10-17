@@ -59,10 +59,10 @@ def render_schwab_page(streamlit: Any) -> None:
     streamlit.code(
         "\n".join(
             [
-                "SCANNER_SCHWAB_CLIENT_ID=your_app_key",
-                "SCANNER_SCHWAB_CLIENT_SECRET=your_app_secret",
-                "SCANNER_SCHWAB_REDIRECT_URI=https://127.0.0.1",
-                "SCANNER_SCHWAB_TOKEN_PATH=data/secrets/schwab_token.json",
+                "QX_SCHWAB_CLIENT_ID=your_app_key",
+                "QX_SCHWAB_CLIENT_SECRET=your_app_secret",
+                "QX_SCHWAB_REDIRECT_URI=https://127.0.0.1",
+                "QX_SCHWAB_TOKEN_PATH=data/secrets/schwab_token.json",
             ]
         ),
         language="dotenv",

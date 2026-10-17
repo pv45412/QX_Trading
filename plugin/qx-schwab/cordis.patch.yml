@@ -1,0 +1,22 @@
+# QX Schwab plugin — host bundle rows for the running DSH profile.
+# Registers the SMC rules-engine skills, the qx_schwab_* tools, a live web
+# dashboard at /qx/schwab, and an optional background poller.
+- insert:
+    - id: qx-schwab
+      name: '@qx/schwab-plugin'
+      inject: [skills, tools, webServer]
+      config:
+        pythonPath: 'C:/Project/2026/.venv/Scripts/python.exe'
+        workspaceRoot: 'C:/Project/2026'
+        watchlist:
+          - SPY
+          - QQQ
+          - AAPL
+          - MSFT
+          - NVDA
+          - TSLA
+          - AMD
+          - META
+        pollEnabled: false
+        pollIntervalSeconds: 180
+        scanTimeoutMs: 90000

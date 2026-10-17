@@ -1,0 +1,2213 @@
+[
+  {
+    "name": "today-day",
+    "url": "http://127.0.0.1:5174/?page=today&horizon=DAY&timeframe=5m",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "What Matters Now?",
+      "Market Pulse",
+      "Market Drivers",
+      "Active QX Opportunities",
+      "Positions Requiring Attention",
+      "Material Events / Data Health"
+    ],
+    "pairs": [
+      {
+        "label": "Bid",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Ask",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volume",
+        "value": "1,209,655,257"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:01:49 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "9/16/2026, 3:55:00 PM"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "STALE"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:01:53 PM"
+      },
+      {
+        "label": "Bid",
+        "value": "762.71"
+      },
+      {
+        "label": "Ask",
+        "value": "762.72"
+      },
+      {
+        "label": "Volume",
+        "value": "19,503,775"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:01:49 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "9/16/2026, 3:55:00 PM"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "STALE"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:01:51 PM"
+      },
+      {
+        "label": "Bid",
+        "value": "716.99"
+      },
+      {
+        "label": "Ask",
+        "value": "717.02"
+      },
+      {
+        "label": "Volume",
+        "value": "16,743,259"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:01:49 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "9/16/2026, 3:55:00 PM"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "STALE"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:01:51 PM"
+      }
+    ],
+    "fieldLabels": [],
+    "alerts": [
+      "NO CURRENT QUALIFYING OPPORTUNITIESNo current canonical LIVE observations require attention."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 16,
+      "BLOCKED": 3,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "View all opportunities",
+      "Open Portfolio",
+      "Open System",
+      "SPY canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP",
+      "QQQ canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP",
+      "SPX canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "today-swing",
+    "url": "http://127.0.0.1:5174/?page=today&horizon=SWING&timeframe=1h",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "What Matters Now?",
+      "Market Pulse",
+      "Market Drivers",
+      "Active QX Opportunities",
+      "Positions Requiring Attention",
+      "Material Events / Data Health"
+    ],
+    "pairs": [
+      {
+        "label": "Bid",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Ask",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volume",
+        "value": "1,209,655,257"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:01:55 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "LOCAL_BAR_CACHE"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "INVALID"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:02:00 PM"
+      },
+      {
+        "label": "Bid",
+        "value": "762.69"
+      },
+      {
+        "label": "Ask",
+        "value": "762.72"
+      },
+      {
+        "label": "Volume",
+        "value": "19,505,038"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:01:55 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "LOCAL_BAR_CACHE"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "INVALID"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:01:58 PM"
+      },
+      {
+        "label": "Bid",
+        "value": "717.00"
+      },
+      {
+        "label": "Ask",
+        "value": "717.04"
+      },
+      {
+        "label": "Volume",
+        "value": "16,744,991"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:01:55 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "LOCAL_BAR_CACHE"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "INVALID"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:01:58 PM"
+      }
+    ],
+    "fieldLabels": [],
+    "alerts": [
+      "NO CURRENT QUALIFYING OPPORTUNITIESNo current canonical LIVE observations require attention."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 16,
+      "BLOCKED": 3,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "View all opportunities",
+      "Open Portfolio",
+      "Open System",
+      "SPY canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP",
+      "QQQ canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP",
+      "SPX canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "today-invest",
+    "url": "http://127.0.0.1:5174/?page=today&horizon=INVEST&timeframe=1d",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "What Matters Now?",
+      "Market Pulse",
+      "Market Drivers",
+      "Active QX Opportunities",
+      "Positions Requiring Attention",
+      "Material Events / Data Health"
+    ],
+    "pairs": [
+      {
+        "label": "Bid",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Ask",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volume",
+        "value": "1,209,655,257"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:02:02 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "LOCAL_BAR_CACHE"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:02:07 PM"
+      },
+      {
+        "label": "Bid",
+        "value": "762.70"
+      },
+      {
+        "label": "Ask",
+        "value": "762.72"
+      },
+      {
+        "label": "Volume",
+        "value": "19,510,535"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:02:02 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "SPY_1Y.CSV"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "9/14/2026, 8:00:00 PM"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "STALE"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:02:05 PM"
+      },
+      {
+        "label": "Bid",
+        "value": "717.01"
+      },
+      {
+        "label": "Ask",
+        "value": "717.02"
+      },
+      {
+        "label": "Volume",
+        "value": "16,748,613"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Regime",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Quote Source",
+        "value": "SCHWAB"
+      },
+      {
+        "label": "Quote Mode",
+        "value": "REALTIME"
+      },
+      {
+        "label": "Quote Timestamp",
+        "value": "9/17/2026, 1:02:02 PM"
+      },
+      {
+        "label": "Quote Freshness",
+        "value": "FRESH"
+      },
+      {
+        "label": "Bar Source",
+        "value": "QQQ_1Y.CSV"
+      },
+      {
+        "label": "Bar Data As Of",
+        "value": "9/14/2026, 8:00:00 PM"
+      },
+      {
+        "label": "Bar Freshness",
+        "value": "STALE"
+      },
+      {
+        "label": "Evaluation",
+        "value": "9/17/2026, 1:02:05 PM"
+      }
+    ],
+    "fieldLabels": [],
+    "alerts": [
+      "NO CURRENT QUALIFYING OPPORTUNITIESNo current canonical LIVE observations require attention."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 16,
+      "BLOCKED": 3,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "View all opportunities",
+      "Open Portfolio",
+      "Open System",
+      "SPY canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP",
+      "QQQ canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP",
+      "SPX canonical pipeline blockedNO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "opportunities",
+    "url": "http://127.0.0.1:5174/?page=opportunities&horizon=DAY&timeframe=5m",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Opportunities",
+      "Canonical Opportunities",
+      "Verified Market Movement"
+    ],
+    "pairs": [],
+    "fieldLabels": [
+      "Search",
+      "LifecycleALLBLOCKEDNO_SETUPWATCHARMEDTRIGGEREDNOT_TRADEABLETRADEABLEOPTIONS_NOT_SUITABLEOPTIONS_SUITABLEPORTFOLIO_VETOEDPORTFOLIO_APPROVEDEXPIRED",
+      "DirectionALLBULLISHBEARISHNEUTRALUNAVAILABLE",
+      "SortEvaluation newestSymbolLifecycle stateLegacy 1D return"
+    ],
+    "alerts": [
+      "NO CURRENT QUALIFYING OPPORTUNITIESNo current canonical LIVE observations match the selected filters."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 1,
+      "BLOCKED": 1,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade",
+      "Evaluate in Trade"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "trade-day",
+    "url": "http://127.0.0.1:5174/?page=trade&symbol=SPY&horizon=DAY&timeframe=5m",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Trade Workspace",
+      "What is happening?",
+      "What does QX see?",
+      "What are we waiting for?",
+      "Where is QX wrong?",
+      "Is there a trade?",
+      "Deterministic Lifecycle"
+    ],
+    "pairs": [
+      {
+        "label": "Bias",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest event",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest BOS",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest CHoCH",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected high",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected low",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Symbol",
+        "value": "SPY"
+      },
+      {
+        "label": "Timeframe",
+        "value": "5m"
+      },
+      {
+        "label": "Evaluation timestamp",
+        "value": "2026-09-17T17:02:18.863231Z"
+      },
+      {
+        "label": "Evaluation ID",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Pipeline",
+        "value": "core_v1"
+      },
+      {
+        "label": "Bias",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Score",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest BOS",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest CHoCH",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Event timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Knowledge timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected high",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected low",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trend",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Gamma",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Score",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Evidence coverage",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Coverage status",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Primary playbook",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Playbook state",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trigger level",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trigger condition",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Confirmation",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Event timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Knowledge timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Invalidation level",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Invalidation condition",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Status",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Participation",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Participation coverage",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Structural R:R",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Observed entry",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Best target",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Suitability",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Primary strategy",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Expiration",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Candidates",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Max loss",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Max profit",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Data as of",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Decision",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Binding constraint",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Approved contract cap",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Snapshot evidence",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Data as of",
+        "value": "UNAVAILABLE"
+      }
+    ],
+    "fieldLabels": [
+      "Symbol",
+      "Timeframe1m5m15m1h1d"
+    ],
+    "alerts": [
+      "Outside market hours — no current bar data.",
+      "2 canonical data dependencies require attention.",
+      "BLOCKEDEvaluation cannot proceed with the available canonical evidence."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 51,
+      "BLOCKED": 6,
+      "PARTIAL": 1,
+      "STALE": 1,
+      "FRESH": 2,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 2
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "View Portfolio Impact"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "trade-swing",
+    "url": "http://127.0.0.1:5174/?page=trade&symbol=SPY&horizon=SWING&timeframe=1h",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Trade Workspace",
+      "What is happening?",
+      "What does QX see?",
+      "What are we waiting for?",
+      "Where is QX wrong?",
+      "Is there a trade?",
+      "Deterministic Lifecycle"
+    ],
+    "pairs": [
+      {
+        "label": "Bias",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest event",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest BOS",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest CHoCH",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected high",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected low",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Symbol",
+        "value": "SPY"
+      },
+      {
+        "label": "Timeframe",
+        "value": "1h"
+      },
+      {
+        "label": "Evaluation timestamp",
+        "value": "2026-09-17T17:02:23.211843Z"
+      },
+      {
+        "label": "Evaluation ID",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Pipeline",
+        "value": "core_v1"
+      },
+      {
+        "label": "Bias",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Score",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest BOS",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest CHoCH",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Event timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Knowledge timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected high",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected low",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trend",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Gamma",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Score",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Evidence coverage",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Coverage status",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Primary playbook",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Playbook state",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trigger level",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trigger condition",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Confirmation",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Event timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Knowledge timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Invalidation level",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Invalidation condition",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Status",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Participation",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Participation coverage",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Structural R:R",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Observed entry",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Best target",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Suitability",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Primary strategy",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Expiration",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Candidates",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Max loss",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Max profit",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Data as of",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Decision",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Binding constraint",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Approved contract cap",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Snapshot evidence",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Data as of",
+        "value": "UNAVAILABLE"
+      }
+    ],
+    "fieldLabels": [
+      "Symbol",
+      "Timeframe1m5m15m1h1d"
+    ],
+    "alerts": [
+      "Outside market hours — no current bar data.",
+      "3 canonical data dependencies require attention.",
+      "BLOCKEDEvaluation cannot proceed with the available canonical evidence."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 52,
+      "BLOCKED": 6,
+      "PARTIAL": 1,
+      "STALE": 1,
+      "FRESH": 1,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 2
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "View Portfolio Impact"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "trade-invest",
+    "url": "http://127.0.0.1:5174/?page=trade&symbol=SPY&horizon=INVEST&timeframe=1d",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Trade Workspace",
+      "What is happening?",
+      "What does QX see?",
+      "What are we waiting for?",
+      "Where is QX wrong?",
+      "Is there a trade?",
+      "Deterministic Lifecycle"
+    ],
+    "pairs": [
+      {
+        "label": "Bias",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest event",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest BOS",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest CHoCH",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected high",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected low",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Symbol",
+        "value": "SPY"
+      },
+      {
+        "label": "Timeframe",
+        "value": "1d"
+      },
+      {
+        "label": "Evaluation timestamp",
+        "value": "2026-09-17T17:02:27.527690Z"
+      },
+      {
+        "label": "Evaluation ID",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Pipeline",
+        "value": "core_v1"
+      },
+      {
+        "label": "Bias",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Score",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest BOS",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Latest CHoCH",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Event timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Knowledge timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected high",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Protected low",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trend",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Volatility",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Gamma",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Session",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Direction",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Score",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Evidence coverage",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Coverage status",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Primary playbook",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Playbook state",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trigger level",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Trigger condition",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Confirmation",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Event timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Knowledge timestamp",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Invalidation level",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Invalidation condition",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Status",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Participation",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Participation coverage",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Structural R:R",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Observed entry",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Best target",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Suitability",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Primary strategy",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Expiration",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Candidates",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Max loss",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Max profit",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Data as of",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Decision",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Binding constraint",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Approved contract cap",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Snapshot evidence",
+        "value": "UNAVAILABLE"
+      },
+      {
+        "label": "Data as of",
+        "value": "UNAVAILABLE"
+      }
+    ],
+    "fieldLabels": [
+      "Symbol",
+      "Timeframe1m5m15m1h1d"
+    ],
+    "alerts": [
+      "Outside market hours — no current bar data.",
+      "3 canonical data dependencies require attention.",
+      "BLOCKEDEvaluation cannot proceed with the available canonical evidence."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 51,
+      "BLOCKED": 6,
+      "PARTIAL": 1,
+      "STALE": 2,
+      "FRESH": 1,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 2
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "View Portfolio Impact"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "portfolio",
+    "url": "http://127.0.0.1:5174/?page=portfolio&horizon=DAY",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Portfolio",
+      "Account / Portfolio Summary",
+      "Positions",
+      "Risk & Exposure",
+      "Positions Requiring Attention",
+      "Trade / Opportunity Impact",
+      "Data Quality / Partial Evidence"
+    ],
+    "pairs": [],
+    "fieldLabels": [],
+    "alerts": [
+      "NO LINKED CANDIDATEOpen Portfolio from a timestamped Trade evaluation to inspect canonical Phase 10 impact."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 12,
+      "BLOCKED": 0,
+      "PARTIAL": 3,
+      "STALE": 0,
+      "FRESH": 1,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 1
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Open Trade",
+      "Open Trade",
+      "Open Trade",
+      "Open Trade",
+      "Open Trade",
+      "Open Trade",
+      "Open Trade"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "research-symbol",
+    "url": "http://127.0.0.1:5174/?page=research&symbol=SPY&research_mode=symbol",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Research",
+      "Symbol Research",
+      "SPY market and structure context",
+      "Research interpretation boundary"
+    ],
+    "pairs": [],
+    "fieldLabels": [
+      "Research symbol"
+    ],
+    "alerts": [],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 1,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Open in Trade",
+      "Check in Portfolio",
+      "SymbolSymbol",
+      "ETFETF / Sector",
+      "RS / RotationRelative Strength / Rotation",
+      "OptionsOptions / Strategy Research",
+      "HistoricalHistorical / Backtest",
+      "Long-TermLong-Term Thesis"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "research-etf",
+    "url": "http://127.0.0.1:5174/?page=research&etf=XLK&research_mode=etf_sector",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Research",
+      "ETF / Sector Research",
+      "XLK relative-strength history",
+      "XLK constituents",
+      "XLK ETF Constituents & Weight Analysis",
+      "Concentration Breakdown"
+    ],
+    "pairs": [
+      {
+        "label": "Current RS",
+        "value": "0.2426"
+      },
+      {
+        "label": "21-session high",
+        "value": "0.2464"
+      },
+      {
+        "label": "21D RS change",
+        "value": "-0.88%"
+      },
+      {
+        "label": "Sessions",
+        "value": "252"
+      },
+      {
+        "label": "Holdings shown",
+        "value": "10"
+      },
+      {
+        "label": "Largest holding",
+        "value": "NVDA 14.36%"
+      },
+      {
+        "label": "Top 3 concentration",
+        "value": "36.98%"
+      },
+      {
+        "label": "Top 10 total weight",
+        "value": "60.66%"
+      },
+      {
+        "label": "Top RS Outperformer",
+        "value": "MU +15.07%"
+      }
+    ],
+    "fieldLabels": [
+      "Research symbol",
+      "Sector ETFXLCXLYXLPXLEXLFXLVXLIXLKXLBXLREXLU"
+    ],
+    "alerts": [
+      "Saved holdings; freshness unverified. Weights may have changed."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 0,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Open in Trade",
+      "Check in Portfolio",
+      "SymbolSymbol",
+      "ETFETF / Sector",
+      "RS / RotationRelative Strength / Rotation",
+      "OptionsOptions / Strategy Research",
+      "HistoricalHistorical / Backtest",
+      "Long-TermLong-Term Thesis",
+      "ETFdb reference"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "research-rs",
+    "url": "http://127.0.0.1:5174/?page=research&symbol=SPY&research_mode=relative_strength",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Research",
+      "Relative Strength / Rotation",
+      "Sector ranking and rotation",
+      "NEW RS LINE HIGHS",
+      "CORRECTION LEADERS",
+      "UP ON DOWN DAYS",
+      "Sector Relative Strength & Rotation Studio",
+      "Institutional Sector Rotation Matrix (RRG Style)",
+      "Market movers context",
+      "Market Movers",
+      "Top Gainers (7)",
+      "Top Losers (22)",
+      "Schwab Top Movers · S&P 500"
+    ],
+    "pairs": [],
+    "fieldLabels": [
+      "Research symbol",
+      "Universe Sector & industry ETFsS&P 500S&P 100Nasdaq 100Dow JonesRussell 1000 - membership unavailableRussell 2000 - membership unverified",
+      "Sector All sectorsAirlinesCloud ComputingCommunication ServicesConsumer DiscretionaryConsumer StaplesCybersecurityEnergyFinancialsGold MinersHealth CareHome ConstructionIBD 50IndustrialsInformation TechnologyInsuranceMaterialsMetals & MiningNatural GasOil & Gas E&POil ServicesReal EstateRegional BanksRetailSocial SentimentSoftwareSteelTelecommunicationsTransportationUtilities"
+    ],
+    "alerts": [
+      "29/29 ETFs have aligned cached history · freshness unverifiedThrough 2026-09-15",
+      "Not requested"
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 0,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Open in Trade",
+      "Check in Portfolio",
+      "SymbolSymbol",
+      "ETFETF / Sector",
+      "RS / RotationRelative Strength / Rotation",
+      "OptionsOptions / Strategy Research",
+      "HistoricalHistorical / Backtest",
+      "Long-TermLong-Term Thesis"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "research-options",
+    "url": "http://127.0.0.1:5174/?page=research&symbol=SPY&research_mode=options_strategy",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Research",
+      "Options / Strategy Research",
+      "Exploratory options ideas",
+      "QX Options Value & LEAPS Workbench",
+      "🟢 Quality Market Leaders (Bullish LEAP & Growth Setups)",
+      "🔴 Quality Decliners & Pullbacks (Downside Hedges & High-IV Premium)",
+      "Side-by-Side Pick Comparison (NVDA Bullish vs TSLA Bearish)",
+      "Strategy and payoff laboratory",
+      "Modular Strategy Workspaces & Leg Payoff Engine",
+      "Bull Call Debit Spread"
+    ],
+    "pairs": [],
+    "fieldLabels": [
+      "Research symbol",
+      "Underlying:",
+      "Spot Price:",
+      "Action",
+      "Type",
+      "Strike ($)",
+      "Premium ($)",
+      "Quantity",
+      "DTE",
+      "Action",
+      "Type",
+      "Strike ($)",
+      "Premium ($)",
+      "Quantity",
+      "DTE"
+    ],
+    "alerts": [],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 1,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 1
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Open in Trade",
+      "Check in Portfolio",
+      "SymbolSymbol",
+      "ETFETF / Sector",
+      "RS / RotationRelative Strength / Rotation",
+      "OptionsOptions / Strategy Research",
+      "HistoricalHistorical / Backtest",
+      "Long-TermLong-Term Thesis"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "research-historical",
+    "url": "http://127.0.0.1:5174/?page=research&symbol=SPY&research_mode=historical",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Research",
+      "Historical / Backtest",
+      "SPY historical structure context",
+      "Rectangle breakout backtest"
+    ],
+    "pairs": [],
+    "fieldLabels": [
+      "Research symbol"
+    ],
+    "alerts": [],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 1,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 1
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Open in Trade",
+      "Check in Portfolio",
+      "SymbolSymbol",
+      "ETFETF / Sector",
+      "RS / RotationRelative Strength / Rotation",
+      "OptionsOptions / Strategy Research",
+      "HistoricalHistorical / Backtest",
+      "Long-TermLong-Term Thesis"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "research-long-term",
+    "url": "http://127.0.0.1:5174/?page=research&symbol=SPY&research_mode=long_term",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "Research",
+      "Long-Term Thesis",
+      "SPY longer-horizon context",
+      "Thesis notebook"
+    ],
+    "pairs": [],
+    "fieldLabels": [
+      "Research symbol",
+      "Research thesis"
+    ],
+    "alerts": [],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 1,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 0,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Open in Trade",
+      "Check in Portfolio",
+      "SymbolSymbol",
+      "ETFETF / Sector",
+      "RS / RotationRelative Strength / Rotation",
+      "OptionsOptions / Strategy Research",
+      "HistoricalHistorical / Backtest",
+      "Long-TermLong-Term Thesis"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "system-overview",
+    "url": "http://127.0.0.1:5174/?page=system",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "System",
+      "Operational readiness"
+    ],
+    "pairs": [],
+    "fieldLabels": [],
+    "alerts": [],
+    "statuses": {
+      "AVAILABLE": 3,
+      "UNAVAILABLE": 1,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 2,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "system-providers",
+    "url": "http://127.0.0.1:5174/?page=schwab&symbol=XLK&etf=XLK",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "System",
+      "Schwab provider",
+      "Local Schwab Credentials",
+      "Manual Local OAuth"
+    ],
+    "pairs": [],
+    "fieldLabels": [
+      "Client ID (saved ending u64J)",
+      "Client Secret",
+      "Redirect URI",
+      "Schwab Callback URL"
+    ],
+    "alerts": [
+      "LEGACY COMPATIBILITY VIEWThis route remains available during migration and does not replace canonical Trade state."
+    ],
+    "statuses": {
+      "AVAILABLE": 0,
+      "UNAVAILABLE": 2,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 1,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Data Cache",
+      "Schwab API",
+      "Jobs",
+      "Run History",
+      "Strategy Rules"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "system-data",
+    "url": "http://127.0.0.1:5174/?page=data_cache&symbol=XLK&etf=XLK",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "System",
+      "Local bar-data inventory",
+      "Observed cache periods"
+    ],
+    "pairs": [],
+    "fieldLabels": [],
+    "alerts": [
+      "LEGACY COMPATIBILITY VIEWThis route remains available during migration and does not replace canonical Trade state.",
+      "Inventory is source-backed local filesystem evidence. It does not establish completed-session freshness, provider health, or strategy sufficiency."
+    ],
+    "statuses": {
+      "AVAILABLE": 1,
+      "UNAVAILABLE": 0,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 1,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Data Cache",
+      "Schwab API",
+      "Jobs",
+      "Run History",
+      "Strategy Rules"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "system-jobs",
+    "url": "http://127.0.0.1:5174/?page=jobs&symbol=XLK&etf=XLK",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "System",
+      "Local scheduler"
+    ],
+    "pairs": [],
+    "fieldLabels": [],
+    "alerts": [
+      "LEGACY COMPATIBILITY VIEWThis route remains available during migration and does not replace canonical Trade state.",
+      "Task execution and schedule mutation are not exposed in this consolidated read-only workspace."
+    ],
+    "statuses": {
+      "AVAILABLE": 1,
+      "UNAVAILABLE": 0,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 1,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Data Cache",
+      "Schwab API",
+      "Jobs",
+      "Run History",
+      "Strategy Rules"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "system-runs",
+    "url": "http://127.0.0.1:5174/?page=run_history&symbol=XLK&etf=XLK",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "System",
+      "Persisted run history"
+    ],
+    "pairs": [],
+    "fieldLabels": [],
+    "alerts": [
+      "LEGACY COMPATIBILITY VIEWThis route remains available during migration and does not replace canonical Trade state."
+    ],
+    "statuses": {
+      "AVAILABLE": 1,
+      "UNAVAILABLE": 0,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 5,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Data Cache",
+      "Schwab API",
+      "Jobs",
+      "Run History",
+      "Strategy Rules"
+    ],
+    "horizontalOverflow": false
+  },
+  {
+    "name": "system-rules",
+    "url": "http://127.0.0.1:5174/?page=strategy_rules&symbol=XLK&etf=XLK",
+    "pending": 0,
+    "pageErrors": [],
+    "consoleErrors": [],
+    "failedApi": [],
+    "headings": [
+      "System",
+      "Canonical configuration metadata"
+    ],
+    "pairs": [],
+    "fieldLabels": [],
+    "alerts": [
+      "LEGACY COMPATIBILITY VIEWThis route remains available during migration and does not replace canonical Trade state.",
+      "System does not change Phase 3-10 rules, thresholds, weights, or lifecycle semantics."
+    ],
+    "statuses": {
+      "AVAILABLE": 1,
+      "UNAVAILABLE": 0,
+      "BLOCKED": 0,
+      "PARTIAL": 0,
+      "STALE": 0,
+      "FRESH": 0,
+      "DEGRADED": 1,
+      "ERROR": 0,
+      "RESEARCH_ONLY": 0
+    },
+    "links": [
+      "Today",
+      "Opportunities",
+      "Trade",
+      "Portfolio",
+      "Research",
+      "System",
+      "Data Cache",
+      "Schwab API",
+      "Jobs",
+      "Run History",
+      "Strategy Rules"
+    ],
+    "horizontalOverflow": false
+  }
+]

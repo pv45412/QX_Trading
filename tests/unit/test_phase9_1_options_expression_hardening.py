@@ -1,5 +1,7 @@
 """Unit tests for Phase 9.1 Options Expression Hardening."""
 
+from datetime import datetime, timezone
+
 import pytest
 
 from qx.config.rules_config import RulesEngineConfig
@@ -14,6 +16,10 @@ from qx.options_expression.models import (
     OptionGreekProvenance
 )
 from qx.options_expression.engine import OptionsExpressionEngine
+from qx.options_expression.math import calculate_combined_greek_evidence
+from qx.options_expression.greeks import is_greek_available
+from qx.portfolio.models import AccountRiskContext, FreshnessState
+from qx.portfolio.portfolio_risk_engine import PortfolioRiskEngine
 
 def make_tradeability_result():
     return TradeabilityResult(
@@ -85,9 +91,50 @@ def make_options_context(multiplier=100.0):
         underlying_symbol="NVDA",
         underlying_price=100.0,
         data_as_of="2026-09-15T10:00:00Z",
+        source="TEST",
+        freshness="FRESH",
+        sync_status="SYNCED",
         chain=chain,
         iv_rank=50.0,
     )
+
+
+def test_partial_option_snapshot_blocks_before_candidate_construction():
+    engine = OptionsExpressionEngine()
+    ctx = make_options_context()
+    ctx.sync_status = "PARTIAL"
+
+    result = engine.evaluate_options_expression(make_tradeability_result(), ctx)
+
+    assert result.state == OptionsExpressionState.BLOCKED
+    assert result.reason_codes == ["OPTION_CHAIN_SYNC_UNAVAILABLE"]
+
+
+def test_phase9_candidate_enters_phase10_without_double_multiplier_scaling():
+    expression = OptionsExpressionEngine().evaluate_options_expression(
+        make_tradeability_result(), make_options_context()
+    )
+    candidate = next(
+        item
+        for item in expression.candidate_strategies
+        if item.candidate_id == expression.primary_candidate_id
+    )
+    account = AccountRiskContext(
+        account_id="qxacct_test",
+        equity=200000.0,
+        cash=100000.0,
+        buying_power=150000.0,
+        data_as_of=datetime.now(timezone.utc),
+        freshness=FreshnessState.FRESH,
+        broker_provenance="TEST",
+        sync_status="SYNCED",
+    )
+
+    risk = PortfolioRiskEngine().evaluate_portfolio_risk(candidate, expression, account)
+
+    assert candidate.contract_multiplier == 100.0
+    assert risk.candidate_buying_power_required == pytest.approx(candidate.net_debit)
+    assert risk.portfolio_delta_after == pytest.approx(candidate.combined_delta)
 
 # 1. Contract Multiplier
 def test_contract_multiplier_loaded_from_metadata():
@@ -161,15 +208,21 @@ def test_event_risk_default_policy_does_not_automatically_block():
     assert res.state == OptionsExpressionState.SUITABLE # Still suitable despite penalty
 
 # 3. Greek provenance explicitly
-def test_broker_greeks_labeled_broker_provided():
+def test_broker_greek_provenance_preserves_source_timestamp():
     engine = OptionsExpressionEngine()
     tr = make_tradeability_result()
     ctx = make_options_context()
+    ctx.chain["2026-10-15"][100.0]["CALL"].greeks = OptionGreeks(
+        delta=0.5, provenance=OptionGreekProvenance.BROKER_PROVIDED,
+        broker_source="SCHWAB", quote_timestamp="2026-09-15T10:00:00Z"
+    )
     res = engine.evaluate_options_expression(tr, ctx)
     cand = res.candidate_strategies[0]
     assert cand.legs[0].greeks.provenance == OptionGreekProvenance.BROKER_PROVIDED
+    assert cand.legs[0].greeks.broker_source == "SCHWAB"
+    assert cand.legs[0].greeks.quote_timestamp == "2026-09-15T10:00:00Z"
 
-def test_model_greeks_record_model_inputs():
+def test_model_calculated_greeks_preserve_pricing_inputs():
     engine = OptionsExpressionEngine()
     tr = make_tradeability_result()
     ctx = make_options_context()
@@ -182,16 +235,209 @@ def test_model_greeks_record_model_inputs():
     assert cand.legs[0].greeks.provenance == OptionGreekProvenance.MODEL_CALCULATED
     assert cand.legs[0].greeks.pricing_model == "BLACK_SCHOLES"
     assert cand.legs[0].greeks.risk_free_rate == 0.05
+    assert cand.legs[0].greeks.dividend_yield == 0.0
+    assert cand.legs[0].greeks.volatility_input == 0.3
+    assert cand.legs[0].greeks.calculation_timestamp == "2026-09-15T10:00:00Z"
 
-def test_unavailable_greeks_not_fabricated():
+
+def test_complete_model_greek_metadata_remains_available_through_phase10():
+    context = make_options_context()
+    for strikes in context.chain.values():
+        for contracts in strikes.values():
+            for contract in contracts.values():
+                contract.greeks = OptionGreeks(
+                    delta=contract.greeks.delta,
+                    gamma=contract.greeks.gamma,
+                    theta=contract.greeks.theta,
+                    vega=contract.greeks.vega,
+                    provenance=OptionGreekProvenance.MODEL_CALCULATED,
+                    pricing_model="BLACK_SCHOLES",
+                    risk_free_rate=0.05,
+                    dividend_yield=0.0,
+                    volatility_input=0.30,
+                    calculation_timestamp="2026-09-15T10:00:00Z",
+                )
+    expression = OptionsExpressionEngine().evaluate_options_expression(
+        make_tradeability_result(), context
+    )
+    candidate = next(
+        item
+        for item in expression.candidate_strategies
+        if item.candidate_id == expression.primary_candidate_id
+    )
+    account = AccountRiskContext(
+        account_id="qxacct_test",
+        equity=200000.0,
+        cash=100000.0,
+        buying_power=150000.0,
+        data_as_of=datetime.now(timezone.utc),
+        freshness=FreshnessState.FRESH,
+        broker_provenance="TEST",
+        sync_status="SYNCED",
+    )
+
+    risk = PortfolioRiskEngine().evaluate_portfolio_risk(
+        candidate, expression, account
+    )
+
+    assert set(candidate.combined_greek_provenance.values()) == {
+        "MODEL_CALCULATED"
+    }
+    assert all(
+        metadata["source_metadata_valid"]
+        for metadata in candidate.combined_greek_metadata.values()
+    )
+    assert risk.state.value != "BLOCKED"
+
+
+def test_incomplete_model_greek_metadata_normalizes_values_to_none():
+    greeks = OptionGreeks(
+        delta=0.5,
+        gamma=0.02,
+        theta=-0.05,
+        vega=0.10,
+        provenance=OptionGreekProvenance.MODEL_CALCULATED,
+        pricing_model="BLACK_SCHOLES",
+        calculation_timestamp="2026-09-15T10:00:00Z",
+    )
+
+    assert greeks.delta is greeks.gamma is greeks.theta is greeks.vega is None
+
+def test_unavailable_greek_remains_none():
     engine = OptionsExpressionEngine()
     tr = make_tradeability_result()
     ctx = make_options_context()
-    ctx.chain["2026-10-15"][100.0]["CALL"].greeks = OptionGreeks(delta=0.5, provenance=OptionGreekProvenance.UNAVAILABLE)
+    greeks = OptionGreeks(delta=0.5, gamma=None, theta=None, vega=None, provenance=OptionGreekProvenance.UNAVAILABLE)
+    ctx.chain["2026-10-15"][100.0]["CALL"].greeks = greeks
     res = engine.evaluate_options_expression(tr, ctx)
-    cand = res.candidate_strategies[0]
-    assert cand.legs[0].greeks.provenance == OptionGreekProvenance.UNAVAILABLE
-    assert cand.legs[0].greeks.gamma is None
+    assert greeks.provenance == OptionGreekProvenance.UNAVAILABLE
+    assert greeks.delta is greeks.gamma is greeks.theta is greeks.vega is None
+    assert res.candidate_strategies == []
+
+
+def _two_leg_greek_evidence(missing: str):
+    context = make_options_context()
+    legs = [
+        context.chain["2026-10-15"][100.0]["CALL"],
+        context.chain["2026-10-15"][110.0]["CALL"],
+    ]
+    setattr(legs[1].greeks, missing, None)
+    return calculate_combined_greek_evidence(legs, [1, -1])
+
+
+def test_missing_leg_gamma_does_not_become_zero():
+    values, availability, coverage, _, _ = _two_leg_greek_evidence("gamma")
+
+    assert values["gamma"] is None
+    assert availability["gamma"] == "UNAVAILABLE"
+    assert coverage["gamma"] == 0.5
+
+
+def test_missing_leg_theta_does_not_become_zero():
+    values, availability, coverage, _, _ = _two_leg_greek_evidence("theta")
+
+    assert values["theta"] is None
+    assert availability["theta"] == "UNAVAILABLE"
+    assert coverage["theta"] == 0.5
+
+
+def test_missing_leg_vega_does_not_become_zero():
+    values, availability, coverage, _, _ = _two_leg_greek_evidence("vega")
+
+    assert values["vega"] is None
+    assert availability["vega"] == "UNAVAILABLE"
+    assert coverage["vega"] == 0.5
+
+
+def test_incomplete_multileg_greeks_mark_candidate_incomplete():
+    values, availability, coverage, provenance, _ = _two_leg_greek_evidence("gamma")
+
+    assert values["delta"] == 25.0
+    assert availability["delta"] == "AVAILABLE"
+    assert values["gamma"] is None
+    assert coverage["gamma"] < 1.0
+    assert provenance["gamma"] == "UNAVAILABLE"
+
+
+def test_numeric_greek_with_unavailable_provenance_is_unavailable():
+    assert is_greek_available(
+        0.5, OptionGreekProvenance.UNAVAILABLE, {"broker_source": "SCHWAB"}
+    ) is False
+    greeks = OptionGreeks(
+        delta=0.5,
+        gamma=0.02,
+        theta=-0.05,
+        vega=0.1,
+        provenance=OptionGreekProvenance.UNAVAILABLE,
+    )
+    assert greeks.delta is greeks.gamma is greeks.theta is greeks.vega is None
+
+
+def _combined_with_numeric_unavailable_provenance(name: str):
+    context = make_options_context()
+    legs = [
+        context.chain["2026-10-15"][100.0]["CALL"],
+        context.chain["2026-10-15"][110.0]["CALL"],
+    ]
+    values = {"delta": 0.25, "gamma": 0.01, "theta": -0.03, "vega": 0.08}
+    legs[1].greeks = OptionGreeks(
+        **values,
+        provenance=OptionGreekProvenance.UNAVAILABLE,
+    )
+    combined, availability, coverage, _, _ = calculate_combined_greek_evidence(
+        legs, [1, -1]
+    )
+    return combined[name], availability[name], coverage[name]
+
+
+def test_numeric_delta_with_unavailable_provenance_not_used():
+    value, availability, coverage = _combined_with_numeric_unavailable_provenance("delta")
+    assert value is None
+    assert availability == "UNAVAILABLE"
+    assert coverage == 0.5
+
+
+def test_numeric_gamma_with_unavailable_provenance_not_used():
+    value, availability, coverage = _combined_with_numeric_unavailable_provenance("gamma")
+    assert value is None
+    assert availability == "UNAVAILABLE"
+    assert coverage == 0.5
+
+
+def test_numeric_theta_with_unavailable_provenance_not_used():
+    value, availability, coverage = _combined_with_numeric_unavailable_provenance("theta")
+    assert value is None
+    assert availability == "UNAVAILABLE"
+    assert coverage == 0.5
+
+
+def test_numeric_vega_with_unavailable_provenance_not_used():
+    value, availability, coverage = _combined_with_numeric_unavailable_provenance("vega")
+    assert value is None
+    assert availability == "UNAVAILABLE"
+    assert coverage == 0.5
+
+
+def test_multileg_combined_greek_excludes_unavailable_provenance():
+    for name in ("delta", "gamma", "theta", "vega"):
+        value, availability, coverage = _combined_with_numeric_unavailable_provenance(
+            name
+        )
+        assert value is None
+        assert availability == "UNAVAILABLE"
+        assert coverage < 1.0
+
+
+def test_known_zero_with_valid_provenance_remains_available():
+    greeks = OptionGreeks(
+        delta=0.0,
+        gamma=0.0,
+        theta=0.0,
+        vega=0.0,
+        provenance=OptionGreekProvenance.BROKER_PROVIDED,
+    )
+    assert greeks.gamma == 0.0
+    assert is_greek_available(0.0, greeks.provenance) is True
 
 # 4. IV Rank distinct
 def test_iv_rank_not_fabricated():
@@ -255,4 +501,3 @@ def test_structural_target_fields_preserved():
     assert debit_spread.short_strike == 110.0
     assert debit_spread.target_fit_distance == 0.0
     assert debit_spread.target_fit_score == 0.0
-

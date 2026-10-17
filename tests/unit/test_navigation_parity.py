@@ -29,7 +29,10 @@ def react_registry():
 
 
 def test_react_routes_cover_every_streamlit_view_with_matching_home_and_label(react_registry):
-    routes = [route for route in react_registry["routes"] if route["page"] != "relative_strength"]
+    routes = [
+        route for route in react_registry["routes"]
+        if route.get("legacy") and route["page"] != "relative_strength"
+    ]
     assert {route["title"] for route in routes} == set(PAGE_ROUTE_TABS.values())
     for route in routes:
         assert PAGE_ROUTE_TABS[route["page"]] == route["title"]

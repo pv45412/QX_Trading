@@ -1,0 +1,47 @@
+[
+  {
+    "id": "QX-MUX93PVY",
+    "symbol": "AAPL",
+    "side": "LONG",
+    "quantity": 10,
+    "reason": "QX score 74.0 - Phases 92, CVD 80, VScore 70.3, RS 74",
+    "status": "STAGED (paper — live execution gated behind EX3 human approval)",
+    "at": "2026-10-06T22:29:14.062Z"
+  },
+  {
+    "id": "QX-MUXGKJ2R",
+    "symbol": "MSFT",
+    "side": "LONG",
+    "quantity": 0,
+    "reason": "Confirmed from dashboard (score 83)",
+    "status": "STAGED (paper — live execution gated behind EX3 human approval)",
+    "at": "2026-10-07T01:58:15.699Z"
+  },
+  {
+    "id": "QX-MUXGKJW6",
+    "symbol": "MSFT",
+    "side": "LONG",
+    "quantity": 0,
+    "reason": "Confirmed from dashboard (score 83)",
+    "status": "STAGED (paper — live execution gated behind EX3 human approval)",
+    "at": "2026-10-07T01:58:16.758Z"
+  },
+  {
+    "id": "QX-MUXGKL2V",
+    "symbol": "MSFT",
+    "side": "LONG",
+    "quantity": 0,
+    "reason": "Confirmed from dashboard (score 83)",
+    "status": "STAGED (paper — live execution gated behind EX3 human approval)",
+    "at": "2026-10-07T01:58:18.295Z"
+  },
+  {
+    "id": "QX-MUXGKLU8",
+    "symbol": "MSFT",
+    "side": "LONG",
+    "quantity": 0,
+    "reason": "Confirmed from dashboard (score 83)",
+    "status": "STAGED (paper — live execution gated behind EX3 human approval)",
+    "at": "2026-10-07T01:58:19.280Z"
+  }
+]

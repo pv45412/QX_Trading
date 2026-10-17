@@ -1,0 +1,14 @@
+{
+  "name": "@qx/schwab-plugin",
+  "version": "1.0.0",
+  "description": "Schwab data + SMC rules engine: scan symbols, alert on screen when rules are met, and confirm-to-execute (paper, fail-closed).",
+  "type": "module",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "files": ["lib/index.js", "python/qx_schwab_worker.py", "cordis.patch.yml"],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

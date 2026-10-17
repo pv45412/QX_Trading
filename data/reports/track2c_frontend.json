@@ -1,0 +1,132 @@
+{
+  "status": "MEASURED_FIXTURE_AND_LIVE_V2",
+  "measured_at": "2026-09-16T15:21:13.154Z",
+  "initial_load_wall_ms": 290,
+  "interactions": [
+    {
+      "interaction": "state:WATCH",
+      "elapsed_ms": 44.8999999910593
+    },
+    {
+      "interaction": "state:ARMED",
+      "elapsed_ms": 35.099999994039536
+    },
+    {
+      "interaction": "state:TRIGGERED",
+      "elapsed_ms": 29.900000005960464
+    },
+    {
+      "interaction": "state:TRADEABLE",
+      "elapsed_ms": 25.299999997019768
+    },
+    {
+      "interaction": "state:BLOCKED",
+      "elapsed_ms": 24.899999991059303
+    },
+    {
+      "interaction": "state:PORTFOLIO_VETOED",
+      "elapsed_ms": 24.599999994039536
+    },
+    {
+      "interaction": "state:PORTFOLIO_APPROVED",
+      "elapsed_ms": 23.799999997019768
+    },
+    {
+      "interaction": "symbol:SPY->QQQ",
+      "elapsed_ms": 53.5
+    }
+  ],
+  "canonical_api_request_count": 0,
+  "frontend_evaluation_latency_status": "MEASURED_BROWSER_TO_LOCAL_V2",
+  "scanner_refresh": {
+    "status": "UNAVAILABLE_NOT_PRESENT_IN_V2_LIFECYCLE_HARNESS"
+  },
+  "chart_redraw_count": {
+    "status": "UNAVAILABLE_NO_CHART_IN_V2_LIFECYCLE_HARNESS"
+  },
+  "polling": {
+    "status": "OBSERVED_NO_POLLING",
+    "observation_window_ms": 1000,
+    "observed_request_count_after_settle": 0
+  },
+  "navigation": [
+    {
+      "duration_ms": 189.29999999701977,
+      "dom_content_loaded_ms": 187.29999999701977,
+      "load_event_ms": 189.29999999701977
+    }
+  ],
+  "lifecycle_renders": [
+    {
+      "phase": "mount",
+      "actualDuration": 12.400000005960464
+    },
+    {
+      "phase": "update",
+      "actualDuration": 10.400000020861626
+    },
+    {
+      "phase": "update",
+      "actualDuration": 9.599999994039536
+    },
+    {
+      "phase": "update",
+      "actualDuration": 8.100000023841858
+    },
+    {
+      "phase": "update",
+      "actualDuration": 8.400000005960464
+    },
+    {
+      "phase": "update",
+      "actualDuration": 5.5
+    },
+    {
+      "phase": "update",
+      "actualDuration": 8.900000005960464
+    },
+    {
+      "phase": "update",
+      "actualDuration": 7
+    },
+    {
+      "phase": "update",
+      "actualDuration": 8.599999994039536
+    }
+  ],
+  "v2_api_ms": [
+    548.3999999910593,
+    333.40000000596046
+  ],
+  "memory": {
+    "used_js_heap_size": 13400000,
+    "total_js_heap_size": 20500000
+  },
+  "live_lifecycle_renders": [
+    {
+      "phase": "mount",
+      "actualDuration": 1.5999999940395355
+    },
+    {
+      "phase": "update",
+      "actualDuration": 1.300000011920929
+    },
+    {
+      "phase": "update",
+      "actualDuration": 29.50000001490116
+    },
+    {
+      "phase": "update",
+      "actualDuration": 0.7000000029802322
+    },
+    {
+      "phase": "update",
+      "actualDuration": 15.000000014901161
+    }
+  ],
+  "live_canonical_api_request_count": 2,
+  "duplicate_api_calls_by_symbol": {
+    "SPY": 1,
+    "QQQ": 1
+  }
+}

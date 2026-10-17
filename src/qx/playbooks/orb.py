@@ -67,6 +67,11 @@ class OpeningRangeBreakoutEvaluator(BasePlaybookEvaluator):
         )
 
         if not (r1_passed and orb_complete and orb_high is not None and orb_low is not None):
+            reason_code = (
+                "INSUFFICIENT_EVIDENCE_COVERAGE"
+                if not r1_passed
+                else "ORB_WINDOW_INCOMPLETE"
+            )
             return PlaybookEvaluation(
                 playbook_id=self.playbook_id,
                 playbook_version=self.playbook_version,
@@ -75,6 +80,7 @@ class OpeningRangeBreakoutEvaluator(BasePlaybookEvaluator):
                 direction="NEUTRAL",
                 state=SignalState.NO_SETUP,
                 setup_detected=False,
+                reason_code=reason_code,
                 publication_state=ctx.publication_state,
                 direction_score=dir_score,
                 direction_evidence_coverage=dir_cov,

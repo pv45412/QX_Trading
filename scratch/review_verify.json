@@ -1,0 +1,166 @@
+[
+  {
+    "finding": "F02",
+    "title": "Bearish watch uses call trigger + long-side stop/target",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "state": "BREAKOUT_WATCH",
+      "trigger": 105,
+      "invalidation": 102.8,
+      "target": 109.4
+    }
+  },
+  {
+    "finding": "F01",
+    "title": "Chased latched signal still promoted to entry readiness",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "state": "TRIGGER_CONFIRMED",
+      "chase_limit": 103.0,
+      "price": 130,
+      "extension_detected": true
+    }
+  },
+  {
+    "finding": "F03",
+    "title": "Short chase limit points upward; downward chase not detected",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "chase_limit": 103.0,
+      "price": 90,
+      "extension_detected": false,
+      "second_value": -13.0
+    }
+  },
+  {
+    "finding": "F11",
+    "title": "Breadth reports zero missing when half the members lack data",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "denominator": 1,
+      "covered": 1,
+      "missing_data": 0,
+      "weight_covered_pct": 50.0
+    }
+  },
+  {
+    "finding": "F07",
+    "title": "Completed-bar mode drops the final supplied bar unconditionally",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "input_last_index": 199,
+      "output_index": 198
+    }
+  },
+  {
+    "finding": "F12",
+    "title": "Pullback view requires a TOPS state that cannot occur",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "trend": "BULLISH",
+      "momentum": "BULLISH",
+      "pullback_rows": false
+    }
+  },
+  {
+    "finding": "F09",
+    "title": "Stale snapshot still reports IDEAS_AVAILABLE in ready_now",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "stale": true,
+      "verdict": "IDEAS_AVAILABLE",
+      "shown": 1
+    }
+  },
+  {
+    "finding": "F14",
+    "title": "Freshness test accepts a non-realtime stub quote",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "verdict": "READY_FOR_CONFIRMATION",
+      "quote": {
+        "last": 100,
+        "source": "schwab",
+        "realtime": false
+      },
+      "failed": []
+    }
+  },
+  {
+    "finding": "F16a",
+    "title": "Negative limit passes the presence check",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "limit_price_check_passed": true,
+      "estimated_cost": -1.0,
+      "failed": [
+        "limit_sanity"
+      ]
+    }
+  },
+  {
+    "finding": "F16b",
+    "title": "Missing equity passes the concentration check",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "concentration_passed": true,
+      "detail": "equity unavailable"
+    }
+  },
+  {
+    "finding": "F15",
+    "title": "Repeated identical MARKET submissions create duplicate fills",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "count": 2,
+      "statuses": [
+        "FILLED",
+        "FILLED"
+      ]
+    }
+  },
+  {
+    "finding": "F05",
+    "title": "Options FIFO matches different contracts as one instrument",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "realized_gross": 500.0,
+      "correct_match_would_be": 100
+    }
+  },
+  {
+    "finding": "F17a",
+    "title": "Short fallback sign produces a large negative unrealized",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "total_unrealized": -1900.0,
+      "expected_if_signed_liability_convention": 100
+    }
+  },
+  {
+    "finding": "F17b",
+    "title": "Partial close leaves the residual quantity unreported",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "partial_flag": true,
+      "unmatched_closes": []
+    }
+  },
+  {
+    "finding": "F08",
+    "title": "Explorer accepts a timeframe argument without applying it",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "applies_interval": false,
+      "passes_minutes": false
+    }
+  },
+  {
+    "finding": "F04",
+    "title": "Discover UI derives an EXECUTABLE label in the browser",
+    "verdict": "REPRODUCED",
+    "detail": {
+      "ui_mentions_executable": true
+    }
+  }
+]

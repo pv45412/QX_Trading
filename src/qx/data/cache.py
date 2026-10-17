@@ -61,15 +61,30 @@ def _read_cached_bars(cache_path: Path) -> pd.DataFrame:
     bars = _parse_cached_bars(content)
     provenance = {"schema_version": 1, "actual_source": "unknown", "retrieved_at": None,
                   "last_bar_label": None, "fallback_used": None}
-    try:
-        metadata = json.loads(cache_path.with_suffix(".meta.json").read_text(encoding="utf-8"))
-        if (isinstance(metadata, dict) and metadata.get("sha256") == sha256(content).hexdigest()
-                and valid_provenance(metadata.get("provenance"))):
-            provenance = metadata["provenance"]
-    except (OSError, ValueError):
-        pass
+    metadata = validated_cache_metadata(cache_path, content=content)
+    if metadata is not None:
+        provenance = metadata["provenance"]
     bars.attrs["provenance"] = provenance
     return bars
+
+
+def validated_cache_metadata(
+    cache_path: Path,
+    *,
+    content: bytes | None = None,
+) -> dict[str, object] | None:
+    try:
+        source_bytes = content if content is not None else cache_path.read_bytes()
+        metadata = json.loads(cache_path.with_suffix(".meta.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    content_sha256 = sha256(source_bytes).hexdigest()
+    if not isinstance(metadata, dict) or metadata.get("sha256") != content_sha256:
+        return None
+    provenance = metadata.get("provenance")
+    if not valid_provenance(provenance):
+        return None
+    return {"content_sha256": content_sha256, "provenance": provenance}
 
 
 def _atomic_write(path: Path, content: bytes) -> None:

@@ -1,57 +1,84 @@
-# Phase 8 Tradeability Implementation Plan
+# Track 1 Canonical Integration Implementation Plan
 
 ## Technical Goal and Requirements
 
-Complete Phase 8 as an underlying-only tradeability assessment that consumes a validated `TriggeredSetupResult` plus current deterministic market evidence.
+Complete the Phase 3-10 canonical pipeline and expose it through API v2, historical replay, and deterministic v1 shadow comparison without starting Track 2 or Phase 11 and without deleting legacy modules.
 
-Phase 8 will:
+The canonical flow is:
 
-- Evaluate only setups whose signal state is `TRIGGERED`.
-- Return only `TRADEABLE`, `NOT_TRADEABLE`, `EXPIRED`, or `BLOCKED`.
-- Keep participation independent from Direction Score.
-- Enforce publication, setup validity, freshness, trigger age, extension, gap, spread/liquidity, structural R:R, and configured participation gates.
-- Preserve Delta provenance and reliability.
-- Use the observed underlying price as the entry reference without representing a fill.
-- Exclude options expression, portfolio/account risk, position sizing, order routing, execution eligibility, lifecycle, and outcome calibration.
+`Structure -> Regime -> Direction -> Playbooks -> Trigger -> Tradeability -> Options Expression -> Portfolio Risk`
+
+Every evaluation uses one explicit UTC `evaluation_timestamp`, `pipeline_version="core_v1"`, typed stage outputs, stop-state-aware `None` downstream fields, and per-stage latency instrumentation where skipped stages are recorded as `SKIPPED`.
 
 ## Component Impact and File Demarcations
 
-- `src/qx/tradeability/models.py`: authoritative Phase 7 input, evidence timestamps, lifecycle fields, and Phase 8 invariants.
-- `src/qx/tradeability/engine.py`: trigger-state, invalidation, source-validity, freshness, timing, extension, gap, spread, R:R, and participation gates.
-- `src/qx/tradeability/rvol.py`: same-slot baseline construction, validation, empirical percentile, and keyed cache.
-- `src/qx/config/rules_config.py`: configurable evidence freshness, trigger age, participation, RVOL, extension, gap, spread, and R:R assumptions.
-- `src/qx/config/rules_config_v1.json`: versioned Phase 8 research configuration.
-- `src/qx/config/rules_config_v1.yaml`: YAML mirror of the Phase 8 configuration.
-- `src/qx/signals/smc_rules_engine.py`: isolate the Phase 8 boundary and remove unapproved later-phase behavior from the modified pipeline.
-- `tests/unit/test_phase8_tradeability.py`: deterministic unit and invariant coverage.
-- `tests/unit/test_phase8_characterization.py`: playbook replay evidence.
-- `walkthrough.md`: implementation and verification evidence.
+- `src/qx/pipeline/models.py`: canonical context/result contracts and version metadata.
+- `src/qx/pipeline/orchestrator.py`: complete Phase 3-10 flow, stop states, point-in-time filtering, and instrumentation.
+- `src/qx/pipeline/adapters.py`: historical replay through the same orchestrator with point-in-time snapshots.
+- `src/qx/pipeline/shadow_telemetry.py`: SQLite WAL shadow comparison schema and persistence.
+- `src/qx/interfaces/web.py`: canonical API v2 route and failure-isolated v1 shadow execution.
+- `src/qx/config/rules_config.py`: typed deterministic shadow-mode configuration.
+- `src/qx/config/rules_config_v1.json`: authoritative `research_v1` shadow symbol list.
+- `src/qx/config/rules_config_v1.yaml`: human-readable mirror of the shadow configuration.
+- `src/qx/regime/market_regime.py`: evaluation-time propagation instead of engine-local wall-clock time.
+- `src/qx/options_expression/engine.py`: shared evaluation timestamp support.
+- `src/qx/portfolio/portfolio_risk_engine.py`: shared evaluation timestamp and injected config support.
+- `migration_matrix.md`: Track 1 migration disposition, including `src/qx/execution/ = ADAPT / REVIEW`.
+- `tests/unit/test_track1_canonical_integration.py`: required pipeline, replay, API, shadow, timestamp, and telemetry tests.
 
 ## Data Schema and API Contracts
 
-- Public evaluation accepts a `TriggeredSetupResult` and a separate immutable current-market evidence object.
-- Setup identity, playbook, direction, trigger, invalidation, source validity, gap metadata, and publication state come from Phase 7.
-- Quote, completed-bar evidence, ATR, RVOL, Delta, spread, structural targets, and freshness timestamps come from shared deterministic context.
-- The result uses `observed_entry_reference_price`; no `fill_price`, option contract, account, sizing, or execution fields are allowed.
-- `trade_state` remains exactly `NONE - OPTIONS EXPRESSION NOT YET EVALUATED`.
+- `QXEvaluationContext` contains symbol, timeframe, explicit evaluation timestamp, point-in-time bars, quote/evidence, optional options context, optional account snapshot, config, publication state, and I/O/cache measurements.
+- `QXEvaluationResult` contains typed optional stage outputs, lifecycle state, evaluation timestamp, publication state, `core_v1`, config/engine versions, reason/evidence fields, and stage latencies.
+- `POST /api/v2/qx/evaluate/{symbol}` builds a point-in-time context and calls only the canonical orchestrator for evaluation.
+- `HistoricalReplayAdapter.replay()` returns `QXEvaluationResult` values and never selects bars, option snapshots, or account snapshots newer than the evaluation bar.
+- `shadow_telemetry` is the canonical SQLite comparison store and contains all approved identity, output, agreement, latency, error, publication, and version columns.
 
 ## Risk Drivers and Edge Cases
 
-- A bullish price at or below invalidation and a bearish price at or above invalidation must be permanently `NOT_TRADEABLE`.
-- A non-`TRIGGERED`, structurally invalid, trigger-invalid, expired, or stale setup must fail closed.
-- Same-slot RVOL data must not be reused across symbols, timeframes, slots, or incompatible lookbacks.
-- Missing Delta must not fabricate evidence; stale or low-quality Delta must lose configured reliability.
-- Missing bid/ask remains `UNKNOWN` and never fabricates a spread.
-- No structural target or non-positive directional risk fails the R:R gate.
-- High participation never overrides a failed hard gate.
-- Same-bar evaluation cannot use evidence before it becomes knowable.
+- No data from after `evaluation_timestamp` may enter any stage.
+- Missing or stale required evidence must fail closed without constructing objects for skipped downstream stages.
+- `NO_SETUP`, `WATCH`, non-triggered `ARMED`, failed tradeability, failed options suitability, and final portfolio states must stop at their exact boundaries.
+- V2 or telemetry failures during shadow mode must never alter the legacy v1 response.
+- Shadow eligibility must come only from versioned `EXPLICIT_SYMBOLS` configuration.
+- SQLite writes must use WAL, a 10-second busy timeout, and normal synchronous mode.
 
 ## Verification
 
-1. Run dedicated Phase 8 unit and characterization tests.
-2. Run Phase 0-8 maintained regression tests.
-3. Run the full `tests/unit/` suite with an isolated writable temp directory.
-4. Run `pytest tests/regression/` when present.
-5. Run `python -m qx.tools.run_preflight_checks`.
+1. Run focused Track 1 unit and API integration tests.
+2. Run `tests/unit/ -ra` with the repository virtual environment.
+3. Run applicable integration/API tests.
+4. Run `tests/regression/` when available.
+5. Run `qx.tools.run_preflight_checks`; report service availability failures separately from code-test failures.
 
-Phase 8 is complete only when the new tests pass, maintained regressions remain green, no prohibited post-Phase-8 behavior remains in the Phase 8 path, and Phase 9 has not begun.
+## Live Index Quote Field Availability Addendum
+
+### Technical Goal and Requirements
+
+Distinguish a connected broker response that does not publish a field from a failed or unavailable data connection. Preserve the source-backed SPX last value and volume while keeping absent executable bid/ask values null.
+
+### Component Impact and File Demarcations
+
+- `src/qx/interfaces/market_quotes.py`: publish asset type and field-level availability, source, and reason evidence.
+- `web/src/qx-today-model.js`: retain field evidence in the Today presentation model.
+- `web/src/QXTodayWorkspace.jsx`: render `NOT PUBLISHED` for non-executable index bid/ask fields and expose the broker reason.
+- Backend and frontend quote tests: verify no SPY proxy or synthetic spread is introduced.
+
+### Data Schema and API Contracts
+
+- Every quote value field exposes `availability`, `source`, and an optional `reason_code` under `field_evidence`.
+- Missing bid/ask values on an `INDEX` are `NOT_PUBLISHED` with reason `INDEX_NO_EXECUTABLE_ORDER_BOOK`.
+- Other missing values remain `UNAVAILABLE`; existing numeric fields and top-level quote status remain backward compatible.
+
+### Risk Drivers and Edge Cases
+
+- A live connection does not guarantee every instrument publishes every market field.
+- SPX must never inherit SPY bid/ask values or a calculated synthetic spread.
+- Missing equity or ETF bid/ask values must remain `UNAVAILABLE`, not be classified as an index limitation.
+
+### Verification
+
+1. Validate the raw Schwab `$SPX`, `SPY`, and `QQQ` quote payloads.
+2. Run focused backend and frontend quote tests.
+3. Run the Today browser QA test against the live app.
+4. Run regression and preflight checks.

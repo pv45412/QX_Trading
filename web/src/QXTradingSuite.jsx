@@ -1,30 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, Zap, TrendingUp, BarChart2, Activity, Layers, Award, RefreshCw } from 'lucide-react';
+import { ErrorBoundary } from './ErrorBoundary';
+import QXLifecyclePanel from './QXLifecyclePanel';
+import useQxV2Evaluation from './useQxV2Evaluation';
+import { isQxV2UiEnabled } from './qx-v2-feature';
 
-export default function QXTradingSuite({ symbol = 'SPX' }) {
+export default function QXTradingSuite({ symbol = 'SPX', liveData = null, detailLoading = false }) {
   const [mode, setMode] = useState('day_trader'); // 'day_trader' or 'investor'
-  const [liveData, setLiveData] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-    fetch(`/api/terminal/detail/${encodeURIComponent(symbol)}`)
-      .then(res => res.ok ? res.json() : null)
-      .then(data => {
-        if (isMounted && data) {
-          setLiveData(data);
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        if (isMounted) setLoading(false);
-      });
-    return () => { isMounted = false; };
-  }, [symbol]);
+  const loading = detailLoading;
+  const v2Enabled = isQxV2UiEnabled();
+  const v2 = useQxV2Evaluation(symbol, v2Enabled);
+  const currentLiveData = liveData?.symbol === symbol ? liveData : null;
 
   // Compute dynamic levels based on live price or mark as missing
-  const price = liveData?.price || null;
+  const price = currentLiveData?.price || null;
   const isIndex = symbol === 'SPX';
 
   
@@ -36,7 +25,7 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
     current_price: price,
     net_gamma: isIndex ? 1420.50 : Math.round(price * 0.45 * 10) / 10,
     gamma_flip: roundToStep(price * 0.994, step),
-    regime: liveData?.gexRegime || 'Long Gamma (Volatility Suppressed)',
+    regime: currentLiveData?.gexRegime || currentLiveData?.gex_regime || 'Long Gamma (Volatility Suppressed)',
     exp_move_1sig: roundToStep(price * 0.0055, 0.1),
     exp_move_2sig: roundToStep(price * 0.011, 0.1),
     top_call_strike: roundToStep(price * 1.008, step),
@@ -115,6 +104,17 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
           </button>
         </div>
       </div>
+
+      {v2Enabled && (
+        <ErrorBoundary title="Canonical QX V2 Lifecycle">
+          <QXLifecyclePanel
+            result={v2.data}
+            loading={v2.loading}
+            error={v2.error}
+            onRetry={v2.retry}
+          />
+        </ErrorBoundary>
+      )}
 
       {mode === 'day_trader' ? (
         <div className="qx-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginTop: '16px' }}>
@@ -216,4 +216,3 @@ export default function QXTradingSuite({ symbol = 'SPX' }) {
     </section>
   );
 }
-

@@ -1,0 +1,623 @@
+{
+  "generated_at": "2026-09-16T20:02:23.777090+00:00",
+  "auth": {
+    "configured": true,
+    "refresh_token_valid": true,
+    "market_data_ok": true
+  },
+  "symbols": {
+    "SPX": {
+      "quote": {
+        "available": true,
+        "last": 7552.24,
+        "data_as_of": "2026-09-16T20:02:23.031000+00:00",
+        "resolved_symbol": "$SPX"
+      },
+      "1m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:59:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 7553.33,
+        "observed_vwap": null,
+        "below_vwap": null,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BULLISH",
+          "latest_event_type": "BULLISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS",
+            "BEARISH_BOS",
+            "BEARISH_BOS",
+            "BULLISH_CHOCH",
+            "BULLISH_BOS"
+          ],
+          "protected_high": null,
+          "protected_low": null,
+          "last_two_highs": [
+            7622.77,
+            7612.01
+          ],
+          "last_two_lows": [
+            7572.88,
+            7507.77
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_UP",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": 57.14285714285714,
+          "direction_label": "LEAN_BULLISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "NO_SETUP",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "NO_SETUP",
+              "reason": "NO_LIQUIDITY_APPROACH_OR_SWEEP",
+              "failed": [
+                "QX-PB-B-002"
+              ]
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "5m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:55:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 7553.33,
+        "observed_vwap": null,
+        "below_vwap": null,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BEARISH",
+          "latest_event_type": "BEARISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS"
+          ],
+          "protected_high": null,
+          "protected_low": null,
+          "last_two_highs": [
+            7626.79,
+            7622.77
+          ],
+          "last_two_lows": [
+            7577.73,
+            7576.8
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_DOWN",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": -57.14285714285714,
+          "direction_label": "LEAN_BEARISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "ARMED",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "ARMED",
+              "reason": "SETUP_FORMED_WAITING_FOR_TRIGGER",
+              "failed": []
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "15m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:45:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 7553.33,
+        "observed_vwap": null,
+        "below_vwap": null,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BEARISH",
+          "latest_event_type": "BEARISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS"
+          ],
+          "protected_high": 7626.79,
+          "protected_low": null,
+          "last_two_highs": [
+            7647.99,
+            7626.79
+          ],
+          "last_two_lows": [
+            7572.69,
+            7576.8
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_DOWN",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": -57.14285714285714,
+          "direction_label": "LEAN_BEARISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "ARMED",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "ARMED",
+              "reason": "SETUP_FORMED_WAITING_FOR_TRIGGER",
+              "failed": []
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "options": {
+        "available": true,
+        "underlying_symbol": "SPX",
+        "data_as_of": "2026-09-16T20:02:26.180000+00:00",
+        "freshness": "STALE",
+        "contracts": 4790
+      }
+    },
+    "SPY": {
+      "quote": {
+        "available": true,
+        "last": 754.15,
+        "data_as_of": "2026-09-16T20:02:29.118000+00:00",
+        "resolved_symbol": "SPY"
+      },
+      "1m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:59:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 754.095,
+        "observed_vwap": 756.163194556507,
+        "below_vwap": true,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BEARISH",
+          "latest_event_type": "BEARISH_BOS",
+          "today_event_types": [
+            "BULLISH_BOS",
+            "BULLISH_BOS",
+            "BULLISH_BOS",
+            "BULLISH_BOS",
+            "BEARISH_CHOCH",
+            "BEARISH_BOS",
+            "BEARISH_BOS",
+            "BULLISH_CHOCH",
+            "BEARISH_CHOCH",
+            "BEARISH_BOS",
+            "BEARISH_BOS"
+          ],
+          "protected_high": 760.21,
+          "protected_low": null,
+          "last_two_highs": [
+            761.23,
+            760.21
+          ],
+          "last_two_lows": [
+            756.05,
+            749.6
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_DOWN",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": -57.14285714285714,
+          "direction_label": "LEAN_BEARISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "NO_SETUP",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "NO_SETUP",
+              "reason": "NO_LIQUIDITY_APPROACH_OR_SWEEP",
+              "failed": [
+                "QX-PB-B-002"
+              ]
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "5m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:55:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 754.095,
+        "observed_vwap": 756.2084848293972,
+        "below_vwap": true,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BEARISH",
+          "latest_event_type": "BEARISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS"
+          ],
+          "protected_high": null,
+          "protected_low": null,
+          "last_two_highs": [
+            761.67,
+            761.23
+          ],
+          "last_two_lows": [
+            756.51,
+            759.26
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_DOWN",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": -57.14285714285714,
+          "direction_label": "LEAN_BEARISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "NO_SETUP",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "NO_SETUP",
+              "reason": "NO_LIQUIDITY_APPROACH_OR_SWEEP",
+              "failed": [
+                "QX-PB-B-002"
+              ]
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "15m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:45:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 754.095,
+        "observed_vwap": 756.1106482702127,
+        "below_vwap": true,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BEARISH",
+          "latest_event_type": "BEARISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS"
+          ],
+          "protected_high": 761.67,
+          "protected_low": null,
+          "last_two_highs": [
+            763.52,
+            761.67
+          ],
+          "last_two_lows": [
+            756.15,
+            756.51
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_DOWN",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": -57.14285714285714,
+          "direction_label": "LEAN_BEARISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "ARMED",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "ARMED",
+              "reason": "SETUP_FORMED_WAITING_FOR_TRIGGER",
+              "failed": []
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "options": {
+        "available": true,
+        "underlying_symbol": "SPY",
+        "data_as_of": "2026-09-16T20:02:31.648000+00:00",
+        "freshness": "FRESH",
+        "contracts": 2760
+      }
+    },
+    "QQQ": {
+      "quote": {
+        "available": true,
+        "last": 705.06,
+        "data_as_of": "2026-09-16T20:02:33.104000+00:00",
+        "resolved_symbol": "QQQ"
+      },
+      "1m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:59:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 704.75,
+        "observed_vwap": 706.8787800099697,
+        "below_vwap": true,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BULLISH",
+          "latest_event_type": "BULLISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS",
+            "BEARISH_BOS",
+            "BEARISH_BOS",
+            "BEARISH_BOS",
+            "BEARISH_BOS",
+            "BULLISH_CHOCH",
+            "BULLISH_BOS"
+          ],
+          "protected_high": null,
+          "protected_low": null,
+          "last_two_highs": [
+            711.65,
+            710.62
+          ],
+          "last_two_lows": [
+            704.02,
+            700.0
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_UP",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": 57.14285714285714,
+          "direction_label": "LEAN_BULLISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "NO_SETUP",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "NO_SETUP",
+              "reason": "NO_LIQUIDITY_APPROACH_OR_SWEEP",
+              "failed": [
+                "QX-PB-B-002"
+              ]
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "5m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:55:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 704.75,
+        "observed_vwap": 706.9274464539349,
+        "below_vwap": true,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BEARISH",
+          "latest_event_type": "BEARISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS"
+          ],
+          "protected_high": 711.65,
+          "protected_low": null,
+          "last_two_highs": [
+            711.88,
+            711.65
+          ],
+          "last_two_lows": [
+            704.53,
+            703.63
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_DOWN",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": -57.14285714285714,
+          "direction_label": "LEAN_BEARISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "ARMED",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "ARMED",
+              "reason": "SETUP_FORMED_WAITING_FOR_TRIGGER",
+              "failed": []
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "15m": {
+        "available": true,
+        "bar_start": "2026-09-16T19:45:00+00:00",
+        "evaluation_timestamp": "2026-09-16T20:00:00+00:00",
+        "close": 704.75,
+        "observed_vwap": 706.8267926733317,
+        "below_vwap": true,
+        "opening_range_breakdown_observed": true,
+        "structure": {
+          "regime": "BEARISH",
+          "latest_event_type": "BEARISH_BOS",
+          "today_event_types": [
+            "BEARISH_BOS"
+          ],
+          "protected_high": 711.88,
+          "protected_low": null,
+          "last_two_highs": [
+            712.95,
+            711.88
+          ],
+          "last_two_lows": [
+            703.91,
+            703.63
+          ]
+        },
+        "canonical": {
+          "trend": "TREND_DOWN",
+          "volatility": "NORMAL",
+          "session": "BALANCED",
+          "direction_score": -57.14285714285714,
+          "direction_label": "LEAN_BEARISH",
+          "coverage": "INSUFFICIENT",
+          "lifecycle": "ARMED",
+          "playbooks": [
+            {
+              "id": "playbook_a_pullback",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-A-002"
+              ]
+            },
+            {
+              "id": "playbook_b_liquidity_sweep",
+              "state": "ARMED",
+              "reason": "SETUP_FORMED_WAITING_FOR_TRIGGER",
+              "failed": []
+            },
+            {
+              "id": "playbook_c_orb_breakout",
+              "state": "NO_SETUP",
+              "reason": "INSUFFICIENT_EVIDENCE_COVERAGE",
+              "failed": [
+                "QX-PB-C-001",
+                "QX-PB-C-002"
+              ]
+            }
+          ]
+        }
+      },
+      "options": {
+        "available": true,
+        "underlying_symbol": "QQQ",
+        "data_as_of": "2026-09-16T20:02:35.667000+00:00",
+        "freshness": "STALE",
+        "contracts": 2640
+      }
+    }
+  }
+}

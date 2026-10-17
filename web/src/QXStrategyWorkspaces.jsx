@@ -24,7 +24,7 @@ export default function QXStrategyWorkspaces() {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://127.0.0.1:8510/api/strategies/workspace/${activeStrategy}`);
+        const res = await fetch(`/api/strategies/workspace/${activeStrategy}`);
         if (!res.ok) throw new Error('Failed to load strategy workspace preset');
         const data = await res.json();
         setWorkspaceInfo(data);
@@ -45,7 +45,7 @@ export default function QXStrategyWorkspaces() {
 
     async function calculatePayoff() {
       try {
-        const res = await fetch('http://127.0.0.1:8510/api/strategies/payoff', {
+        const res = await fetch('/api/strategies/payoff', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -201,15 +201,17 @@ export default function QXStrategyWorkspaces() {
 
         {/* Underlying Selector */}
         <div className="mt-4 md:mt-0 flex items-center gap-3 bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-          <label className="text-xs font-medium text-slate-400">Underlying:</label>
+          <label htmlFor="strategy-underlying-symbol" className="text-xs font-medium text-slate-400">Underlying:</label>
           <input
+            id="strategy-underlying-symbol"
             type="text"
             value={symbol}
             onChange={(e) => setSymbol(e.target.value.toUpperCase())}
             className="w-16 bg-slate-950 border border-slate-700 text-slate-200 text-sm font-bold rounded px-2 py-1 uppercase text-center focus:outline-none focus:border-sky-500"
           />
-          <label className="text-xs font-medium text-slate-400">Spot Price:</label>
+          <label htmlFor="strategy-underlying-price" className="text-xs font-medium text-slate-400">Spot Price:</label>
           <input
+            id="strategy-underlying-price"
             type="number"
             value={underlyingPrice}
             onChange={(e) => setUnderlyingPrice(e.target.value)}
@@ -294,8 +296,9 @@ export default function QXStrategyWorkspaces() {
 
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <div>
-                    <label className="text-slate-500 block mb-0.5">Action</label>
+                    <label htmlFor={`strategy-leg-${index}-action`} className="text-slate-500 block mb-0.5">Action</label>
                     <select
+                      id={`strategy-leg-${index}-action`}
                       value={leg.action}
                       onChange={(e) => handleLegChange(index, 'action', e.target.value)}
                       className="w-full bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-slate-200 font-semibold focus:outline-none"
@@ -306,8 +309,9 @@ export default function QXStrategyWorkspaces() {
                   </div>
 
                   <div>
-                    <label className="text-slate-500 block mb-0.5">Type</label>
+                    <label htmlFor={`strategy-leg-${index}-type`} className="text-slate-500 block mb-0.5">Type</label>
                     <select
+                      id={`strategy-leg-${index}-type`}
                       value={leg.option_type}
                       onChange={(e) => handleLegChange(index, 'option_type', e.target.value)}
                       className="w-full bg-slate-900 border border-slate-700 rounded px-1.5 py-1 text-slate-200 font-semibold focus:outline-none"
@@ -318,8 +322,9 @@ export default function QXStrategyWorkspaces() {
                   </div>
 
                   <div>
-                    <label className="text-slate-500 block mb-0.5">Strike ($)</label>
+                    <label htmlFor={`strategy-leg-${index}-strike`} className="text-slate-500 block mb-0.5">Strike ($)</label>
                     <input
+                      id={`strategy-leg-${index}-strike`}
                       type="number"
                       value={leg.strike}
                       onChange={(e) => handleLegChange(index, 'strike', e.target.value)}
@@ -330,8 +335,9 @@ export default function QXStrategyWorkspaces() {
 
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <div>
-                    <label className="text-slate-500 block mb-0.5">Premium ($)</label>
+                    <label htmlFor={`strategy-leg-${index}-premium`} className="text-slate-500 block mb-0.5">Premium ($)</label>
                     <input
+                      id={`strategy-leg-${index}-premium`}
                       type="number"
                       step="0.1"
                       value={leg.premium}
@@ -341,8 +347,9 @@ export default function QXStrategyWorkspaces() {
                   </div>
 
                   <div>
-                    <label className="text-slate-500 block mb-0.5">Quantity</label>
+                    <label htmlFor={`strategy-leg-${index}-quantity`} className="text-slate-500 block mb-0.5">Quantity</label>
                     <input
+                      id={`strategy-leg-${index}-quantity`}
                       type="number"
                       value={leg.quantity}
                       onChange={(e) => handleLegChange(index, 'quantity', e.target.value)}
@@ -351,8 +358,9 @@ export default function QXStrategyWorkspaces() {
                   </div>
 
                   <div>
-                    <label className="text-slate-500 block mb-0.5">DTE</label>
+                    <label htmlFor={`strategy-leg-${index}-dte`} className="text-slate-500 block mb-0.5">DTE</label>
                     <input
+                      id={`strategy-leg-${index}-dte`}
                       type="number"
                       value={leg.dte}
                       onChange={(e) => handleLegChange(index, 'dte', e.target.value)}

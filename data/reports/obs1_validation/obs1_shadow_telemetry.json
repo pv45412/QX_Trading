@@ -1,0 +1,837 @@
+{
+  "task_id": "OBS1",
+  "title": "Sustained Shadow Validation v2",
+  "timestamp": "2026-09-17T13:14:53.117184+00:00",
+  "completed_at": "2026-09-17T13:15:55.892738+00:00",
+  "pipeline_version": "core_v1",
+  "config_version": "research_v1",
+  "execution_locked": true,
+  "phase_11_locked": true,
+  "live_observations_count": 36,
+  "replay_observations_count": 200,
+  "session_simulation_observations_count": 312,
+  "total_observations": 548,
+  "live_analysis": {
+    "total_observations": 36,
+    "lifecycle_counts": {
+      "BLOCKED": 32,
+      "NO_SETUP": 4
+    },
+    "transition_counts": {
+      "NO_SETUP->BLOCKED": 4
+    },
+    "playbook_counts": {
+      "UNAVAILABLE": 32,
+      "playbook_a_pullback": 4
+    },
+    "trend_regime_counts": {
+      "TREND_DOWN": 2,
+      "TREND_UP": 2,
+      "UNAVAILABLE": 32
+    },
+    "direction_counts": {
+      "BEARISH": 1,
+      "LEAN_BEARISH": 1,
+      "LEAN_BULLISH": 2,
+      "UNAVAILABLE": 32
+    },
+    "agreement_counts": {
+      "INDETERMINATE": 36
+    },
+    "reason_code_counts": {
+      "NO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP": 32
+    },
+    "evidence_coverage_counts": {
+      "INSUFFICIENT": 4,
+      "UNAVAILABLE": 32
+    },
+    "freshness_counts": {
+      "account_snapshot:UNAVAILABLE": 36,
+      "bars:POINT_IN_TIME": 4,
+      "bars:UNAVAILABLE": 32,
+      "htf_bars:UNAVAILABLE": 4,
+      "option_chain:UNAVAILABLE": 36
+    },
+    "bar_data_age_seconds": {
+      "count": 36,
+      "min_seconds": 220493.173542,
+      "p50_seconds": 825295.424564,
+      "p95_seconds": 9378895.91489625,
+      "p99_seconds": 9378896.0164763,
+      "max_seconds": 9378896.033284,
+      "mean_seconds": 3444521.4857199723
+    },
+    "bar_data_age_bucket_counts": {
+      "GT_7_DAYS": 24,
+      "LE_7_DAYS": 12
+    },
+    "pipeline_versions": {
+      "core_v1": 36
+    },
+    "stage_latency": {
+      "direction_ms": {
+        "count": 4,
+        "min_ms": 0.13920001219958067,
+        "p50_ms": 0.18634999287314713,
+        "p95_ms": 0.22483500360976905,
+        "p99_ms": 0.2259270049398765,
+        "max_ms": 0.22620000527240336,
+        "mean_ms": 0.18452500080456957,
+        "skipped": 32
+      },
+      "external_io_ms": {
+        "count": 36,
+        "min_ms": 17.153199994936585,
+        "p50_ms": 24.338749994058162,
+        "p95_ms": 761.4107499830425,
+        "p99_ms": 1763.346750001072,
+        "max_ms": 2243.5835000069346,
+        "mean_ms": 165.33453888405347,
+        "skipped": 0
+      },
+      "market_driver_ms": {
+        "count": 4,
+        "min_ms": 0.4120999947190285,
+        "p50_ms": 0.542600013432093,
+        "p95_ms": 0.6770349980797619,
+        "p99_ms": 0.6822069955524057,
+        "max_ms": 0.6834999949205667,
+        "mean_ms": 0.5452000041259453,
+        "skipped": 32
+      },
+      "options_expression_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      },
+      "playbooks_ms": {
+        "count": 4,
+        "min_ms": 3.4712000051513314,
+        "p50_ms": 3.7868499930482358,
+        "p95_ms": 4.131544994015712,
+        "p99_ms": 4.176868993381504,
+        "max_ms": 4.188199993222952,
+        "mean_ms": 3.8082749961176887,
+        "skipped": 32
+      },
+      "portfolio_risk_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      },
+      "regime_ms": {
+        "count": 4,
+        "min_ms": 0.05959998816251755,
+        "p50_ms": 0.07720000576227903,
+        "p95_ms": 0.09506500937277451,
+        "p99_ms": 0.09637300885515288,
+        "max_ms": 0.09670000872574747,
+        "mean_ms": 0.07767500210320577,
+        "skipped": 32
+      },
+      "structure_ms": {
+        "count": 4,
+        "min_ms": 319.68260000576265,
+        "p50_ms": 325.51034999778494,
+        "p95_ms": 344.67968499375274,
+        "p99_ms": 347.27409699204145,
+        "max_ms": 347.9226999916136,
+        "mean_ms": 329.65649999823654,
+        "skipped": 32
+      },
+      "total_ms": {
+        "count": 36,
+        "min_ms": 0.15759997768327594,
+        "p50_ms": 0.24255001335404813,
+        "p95_ms": 344.4399499858264,
+        "p99_ms": 357.5470750016393,
+        "max_ms": 364.3950000114273,
+        "mean_ms": 38.74663889130008,
+        "skipped": 0
+      },
+      "tradeability_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      },
+      "trigger_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      }
+    },
+    "io_counter_totals": {
+      "cache_hits": 36,
+      "cache_misses": 18
+    },
+    "point_in_time_violation_count": 0,
+    "error_observations": 0,
+    "market_driver_status_counts": {
+      "PARTIAL": 4,
+      "UNAVAILABLE": 32
+    },
+    "driver_counts": {
+      "UNAVAILABLE": 36
+    },
+    "driver_strength_counts": {
+      "UNAVAILABLE": 36
+    },
+    "driver_coverage_counts": {
+      "PARTIAL": 4,
+      "UNAVAILABLE": 32
+    },
+    "driver_persistence_state_counts": {
+      "UNAVAILABLE": 36
+    },
+    "driver_transitions": {},
+    "driver_flips_count": 0,
+    "driver_vs_regime_counts": {
+      "UNAVAILABLE:TREND_DOWN": 2,
+      "UNAVAILABLE:TREND_UP": 2,
+      "UNAVAILABLE:UNAVAILABLE": 32
+    },
+    "driver_vs_direction_counts": {
+      "UNAVAILABLE:BEARISH": 1,
+      "UNAVAILABLE:LEAN_BEARISH": 1,
+      "UNAVAILABLE:LEAN_BULLISH": 2,
+      "UNAVAILABLE:UNAVAILABLE": 32
+    },
+    "driver_vs_lifecycle_counts": {
+      "UNAVAILABLE:BLOCKED": 32,
+      "UNAVAILABLE:NO_SETUP": 4
+    },
+    "driver_unavailable_causes": {
+      "UNAVAILABLE:UNAVAILABLE": 32
+    }
+  },
+  "replay_analysis": {
+    "total_observations": 200,
+    "lifecycle_counts": {
+      "ARMED": 57,
+      "NO_SETUP": 119,
+      "WATCH": 24
+    },
+    "transition_counts": {
+      "ARMED->NO_SETUP": 3,
+      "ARMED->WATCH": 3,
+      "NO_SETUP->ARMED": 1,
+      "NO_SETUP->WATCH": 16,
+      "WATCH->ARMED": 5,
+      "WATCH->NO_SETUP": 14
+    },
+    "playbook_counts": {
+      "playbook_a_pullback": 119,
+      "playbook_b_liquidity_sweep": 81
+    },
+    "trend_regime_counts": {
+      "RANGE": 16,
+      "TREND_UP": 184
+    },
+    "direction_counts": {
+      "LEAN_BULLISH": 184,
+      "NEUTRAL": 16
+    },
+    "agreement_counts": {
+      "AGREEMENT": 200
+    },
+    "reason_code_counts": {},
+    "evidence_coverage_counts": {
+      "INSUFFICIENT": 200
+    },
+    "freshness_counts": {},
+    "bar_data_age_seconds": {
+      "count": 0,
+      "min_seconds": null,
+      "p50_seconds": null,
+      "p95_seconds": null,
+      "p99_seconds": null,
+      "max_seconds": null,
+      "mean_seconds": null
+    },
+    "bar_data_age_bucket_counts": {},
+    "pipeline_versions": {
+      "core_v1": 200
+    },
+    "stage_latency": {},
+    "io_counter_totals": {},
+    "point_in_time_violation_count": 0,
+    "error_observations": 0,
+    "market_driver_status_counts": {
+      "PARTIAL": 200
+    },
+    "driver_counts": {
+      "UNAVAILABLE": 200
+    },
+    "driver_strength_counts": {
+      "UNAVAILABLE": 200
+    },
+    "driver_coverage_counts": {
+      "PARTIAL": 200
+    },
+    "driver_persistence_state_counts": {
+      "UNAVAILABLE": 200
+    },
+    "driver_transitions": {},
+    "driver_flips_count": 0,
+    "driver_vs_regime_counts": {
+      "UNAVAILABLE:RANGE": 16,
+      "UNAVAILABLE:TREND_UP": 184
+    },
+    "driver_vs_direction_counts": {
+      "UNAVAILABLE:LEAN_BULLISH": 184,
+      "UNAVAILABLE:NEUTRAL": 16
+    },
+    "driver_vs_lifecycle_counts": {
+      "UNAVAILABLE:ARMED": 57,
+      "UNAVAILABLE:NO_SETUP": 119,
+      "UNAVAILABLE:WATCH": 24
+    },
+    "driver_unavailable_causes": {}
+  },
+  "session_simulation_analysis": {
+    "total_observations": 312,
+    "lifecycle_counts": {
+      "ARMED": 126,
+      "NO_SETUP": 156,
+      "WATCH": 30
+    },
+    "transition_counts": {
+      "ARMED->NO_SETUP": 2,
+      "NO_SETUP->WATCH": 1,
+      "WATCH->ARMED": 2
+    },
+    "playbook_counts": {
+      "UNAVAILABLE": 312
+    },
+    "trend_regime_counts": {
+      "RANGE": 156,
+      "TREND_DOWN": 78,
+      "TREND_UP": 78
+    },
+    "direction_counts": {
+      "BEARISH": 78,
+      "BULLISH": 78,
+      "NEUTRAL": 156
+    },
+    "agreement_counts": {
+      "AGREEMENT": 312
+    },
+    "reason_code_counts": {},
+    "evidence_coverage_counts": {
+      "UNAVAILABLE": 312
+    },
+    "freshness_counts": {},
+    "bar_data_age_seconds": {
+      "count": 0,
+      "min_seconds": null,
+      "p50_seconds": null,
+      "p95_seconds": null,
+      "p99_seconds": null,
+      "max_seconds": null,
+      "mean_seconds": null
+    },
+    "bar_data_age_bucket_counts": {},
+    "pipeline_versions": {
+      "core_v1": 312
+    },
+    "stage_latency": {},
+    "io_counter_totals": {},
+    "point_in_time_violation_count": 0,
+    "error_observations": 0,
+    "market_driver_status_counts": {
+      "AVAILABLE": 312
+    },
+    "driver_counts": {
+      "GAMMA_PINNING": 78,
+      "INDEX_RISK_OFF": 78,
+      "INDEX_RISK_ON": 67,
+      "SECTOR_LEADERSHIP": 11,
+      "UNAVAILABLE": 78
+    },
+    "driver_strength_counts": {
+      "MODERATE": 78,
+      "STRONG": 156,
+      "UNAVAILABLE": 78
+    },
+    "driver_coverage_counts": {
+      "COMPLETE": 312
+    },
+    "driver_persistence_state_counts": {
+      "NEW": 5,
+      "STABLE": 217,
+      "STRENGTHENING": 6,
+      "UNAVAILABLE": 78,
+      "WEAKENING": 6
+    },
+    "driver_transitions": {
+      "INDEX_RISK_OFF->GAMMA_PINNING": 1,
+      "INDEX_RISK_ON->SECTOR_LEADERSHIP": 1,
+      "INDEX_RISK_ON->UNAVAILABLE": 1,
+      "SECTOR_LEADERSHIP->INDEX_RISK_ON": 1,
+      "UNAVAILABLE->INDEX_RISK_OFF": 1
+    },
+    "driver_flips_count": 3,
+    "driver_vs_regime_counts": {
+      "GAMMA_PINNING:RANGE": 78,
+      "INDEX_RISK_OFF:TREND_DOWN": 78,
+      "INDEX_RISK_ON:TREND_UP": 67,
+      "SECTOR_LEADERSHIP:TREND_UP": 11,
+      "UNAVAILABLE:RANGE": 78
+    },
+    "driver_vs_direction_counts": {
+      "GAMMA_PINNING:NEUTRAL": 78,
+      "INDEX_RISK_OFF:BEARISH": 78,
+      "INDEX_RISK_ON:BULLISH": 67,
+      "SECTOR_LEADERSHIP:BULLISH": 11,
+      "UNAVAILABLE:NEUTRAL": 78
+    },
+    "driver_vs_lifecycle_counts": {
+      "GAMMA_PINNING:NO_SETUP": 78,
+      "INDEX_RISK_OFF:ARMED": 68,
+      "INDEX_RISK_OFF:WATCH": 10,
+      "INDEX_RISK_ON:ARMED": 47,
+      "INDEX_RISK_ON:WATCH": 20,
+      "SECTOR_LEADERSHIP:ARMED": 11,
+      "UNAVAILABLE:NO_SETUP": 78
+    },
+    "driver_unavailable_causes": {}
+  },
+  "combined_analysis": {
+    "total_observations": 548,
+    "lifecycle_counts": {
+      "ARMED": 183,
+      "BLOCKED": 32,
+      "NO_SETUP": 279,
+      "WATCH": 54
+    },
+    "transition_counts": {
+      "ARMED->NO_SETUP": 5,
+      "ARMED->WATCH": 3,
+      "NO_SETUP->ARMED": 1,
+      "NO_SETUP->BLOCKED": 4,
+      "NO_SETUP->WATCH": 18,
+      "WATCH->ARMED": 7,
+      "WATCH->NO_SETUP": 14
+    },
+    "playbook_counts": {
+      "UNAVAILABLE": 344,
+      "playbook_a_pullback": 123,
+      "playbook_b_liquidity_sweep": 81
+    },
+    "trend_regime_counts": {
+      "RANGE": 172,
+      "TREND_DOWN": 80,
+      "TREND_UP": 264,
+      "UNAVAILABLE": 32
+    },
+    "direction_counts": {
+      "BEARISH": 79,
+      "BULLISH": 78,
+      "LEAN_BEARISH": 1,
+      "LEAN_BULLISH": 186,
+      "NEUTRAL": 172,
+      "UNAVAILABLE": 32
+    },
+    "agreement_counts": {
+      "AGREEMENT": 512,
+      "INDETERMINATE": 36
+    },
+    "reason_code_counts": {
+      "NO_BARS_AT_OR_BEFORE_EVALUATION_TIMESTAMP": 32
+    },
+    "evidence_coverage_counts": {
+      "INSUFFICIENT": 204,
+      "UNAVAILABLE": 344
+    },
+    "freshness_counts": {
+      "account_snapshot:UNAVAILABLE": 36,
+      "bars:POINT_IN_TIME": 4,
+      "bars:UNAVAILABLE": 32,
+      "htf_bars:UNAVAILABLE": 4,
+      "option_chain:UNAVAILABLE": 36
+    },
+    "bar_data_age_seconds": {
+      "count": 36,
+      "min_seconds": 220493.173542,
+      "p50_seconds": 825295.424564,
+      "p95_seconds": 9378895.91489625,
+      "p99_seconds": 9378896.0164763,
+      "max_seconds": 9378896.033284,
+      "mean_seconds": 3444521.4857199723
+    },
+    "bar_data_age_bucket_counts": {
+      "GT_7_DAYS": 24,
+      "LE_7_DAYS": 12
+    },
+    "pipeline_versions": {
+      "core_v1": 548
+    },
+    "stage_latency": {
+      "direction_ms": {
+        "count": 4,
+        "min_ms": 0.13920001219958067,
+        "p50_ms": 0.18634999287314713,
+        "p95_ms": 0.22483500360976905,
+        "p99_ms": 0.2259270049398765,
+        "max_ms": 0.22620000527240336,
+        "mean_ms": 0.18452500080456957,
+        "skipped": 32
+      },
+      "external_io_ms": {
+        "count": 36,
+        "min_ms": 17.153199994936585,
+        "p50_ms": 24.338749994058162,
+        "p95_ms": 761.4107499830425,
+        "p99_ms": 1763.346750001072,
+        "max_ms": 2243.5835000069346,
+        "mean_ms": 165.33453888405347,
+        "skipped": 0
+      },
+      "market_driver_ms": {
+        "count": 4,
+        "min_ms": 0.4120999947190285,
+        "p50_ms": 0.542600013432093,
+        "p95_ms": 0.6770349980797619,
+        "p99_ms": 0.6822069955524057,
+        "max_ms": 0.6834999949205667,
+        "mean_ms": 0.5452000041259453,
+        "skipped": 32
+      },
+      "options_expression_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      },
+      "playbooks_ms": {
+        "count": 4,
+        "min_ms": 3.4712000051513314,
+        "p50_ms": 3.7868499930482358,
+        "p95_ms": 4.131544994015712,
+        "p99_ms": 4.176868993381504,
+        "max_ms": 4.188199993222952,
+        "mean_ms": 3.8082749961176887,
+        "skipped": 32
+      },
+      "portfolio_risk_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      },
+      "regime_ms": {
+        "count": 4,
+        "min_ms": 0.05959998816251755,
+        "p50_ms": 0.07720000576227903,
+        "p95_ms": 0.09506500937277451,
+        "p99_ms": 0.09637300885515288,
+        "max_ms": 0.09670000872574747,
+        "mean_ms": 0.07767500210320577,
+        "skipped": 32
+      },
+      "structure_ms": {
+        "count": 4,
+        "min_ms": 319.68260000576265,
+        "p50_ms": 325.51034999778494,
+        "p95_ms": 344.67968499375274,
+        "p99_ms": 347.27409699204145,
+        "max_ms": 347.9226999916136,
+        "mean_ms": 329.65649999823654,
+        "skipped": 32
+      },
+      "total_ms": {
+        "count": 36,
+        "min_ms": 0.15759997768327594,
+        "p50_ms": 0.24255001335404813,
+        "p95_ms": 344.4399499858264,
+        "p99_ms": 357.5470750016393,
+        "max_ms": 364.3950000114273,
+        "mean_ms": 38.74663889130008,
+        "skipped": 0
+      },
+      "tradeability_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      },
+      "trigger_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 36
+      }
+    },
+    "io_counter_totals": {
+      "cache_hits": 36,
+      "cache_misses": 18
+    },
+    "point_in_time_violation_count": 0,
+    "error_observations": 0,
+    "market_driver_status_counts": {
+      "AVAILABLE": 312,
+      "PARTIAL": 204,
+      "UNAVAILABLE": 32
+    },
+    "driver_counts": {
+      "GAMMA_PINNING": 78,
+      "INDEX_RISK_OFF": 78,
+      "INDEX_RISK_ON": 67,
+      "SECTOR_LEADERSHIP": 11,
+      "UNAVAILABLE": 314
+    },
+    "driver_strength_counts": {
+      "MODERATE": 78,
+      "STRONG": 156,
+      "UNAVAILABLE": 314
+    },
+    "driver_coverage_counts": {
+      "COMPLETE": 312,
+      "PARTIAL": 204,
+      "UNAVAILABLE": 32
+    },
+    "driver_persistence_state_counts": {
+      "NEW": 5,
+      "STABLE": 217,
+      "STRENGTHENING": 6,
+      "UNAVAILABLE": 314,
+      "WEAKENING": 6
+    },
+    "driver_transitions": {
+      "INDEX_RISK_OFF->GAMMA_PINNING": 1,
+      "INDEX_RISK_ON->SECTOR_LEADERSHIP": 1,
+      "INDEX_RISK_ON->UNAVAILABLE": 1,
+      "SECTOR_LEADERSHIP->INDEX_RISK_ON": 1,
+      "UNAVAILABLE->INDEX_RISK_OFF": 1,
+      "UNAVAILABLE->INDEX_RISK_ON": 1
+    },
+    "driver_flips_count": 3,
+    "driver_vs_regime_counts": {
+      "GAMMA_PINNING:RANGE": 78,
+      "INDEX_RISK_OFF:TREND_DOWN": 78,
+      "INDEX_RISK_ON:TREND_UP": 67,
+      "SECTOR_LEADERSHIP:TREND_UP": 11,
+      "UNAVAILABLE:RANGE": 94,
+      "UNAVAILABLE:TREND_DOWN": 2,
+      "UNAVAILABLE:TREND_UP": 186,
+      "UNAVAILABLE:UNAVAILABLE": 32
+    },
+    "driver_vs_direction_counts": {
+      "GAMMA_PINNING:NEUTRAL": 78,
+      "INDEX_RISK_OFF:BEARISH": 78,
+      "INDEX_RISK_ON:BULLISH": 67,
+      "SECTOR_LEADERSHIP:BULLISH": 11,
+      "UNAVAILABLE:BEARISH": 1,
+      "UNAVAILABLE:LEAN_BEARISH": 1,
+      "UNAVAILABLE:LEAN_BULLISH": 186,
+      "UNAVAILABLE:NEUTRAL": 94,
+      "UNAVAILABLE:UNAVAILABLE": 32
+    },
+    "driver_vs_lifecycle_counts": {
+      "GAMMA_PINNING:NO_SETUP": 78,
+      "INDEX_RISK_OFF:ARMED": 68,
+      "INDEX_RISK_OFF:WATCH": 10,
+      "INDEX_RISK_ON:ARMED": 47,
+      "INDEX_RISK_ON:WATCH": 20,
+      "SECTOR_LEADERSHIP:ARMED": 11,
+      "UNAVAILABLE:ARMED": 57,
+      "UNAVAILABLE:BLOCKED": 32,
+      "UNAVAILABLE:NO_SETUP": 201,
+      "UNAVAILABLE:WATCH": 24
+    },
+    "driver_unavailable_causes": {
+      "UNAVAILABLE:UNAVAILABLE": 32
+    }
+  },
+  "replay_summary": {
+    "run_id": 7,
+    "observations": 200,
+    "transitions": 42,
+    "outcomes": 53,
+    "segments": [
+      {
+        "segment": "playbook",
+        "value": "playbook_b_liquidity_sweep",
+        "setups": 53,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.7169811320754716,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      },
+      {
+        "segment": "market_regime",
+        "value": "RANGE",
+        "setups": 1,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.0,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      },
+      {
+        "segment": "market_regime",
+        "value": "TREND_UP",
+        "setups": 52,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.7307692307692307,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      },
+      {
+        "segment": "direction",
+        "value": "LEAN_BULLISH",
+        "setups": 52,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.7307692307692307,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      },
+      {
+        "segment": "direction",
+        "value": "NEUTRAL",
+        "setups": 1,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.0,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      },
+      {
+        "segment": "evidence_coverage",
+        "value": "INSUFFICIENT",
+        "setups": 53,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.7169811320754716,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      },
+      {
+        "segment": "session_regime",
+        "value": "BALANCED",
+        "setups": 53,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.7169811320754716,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      },
+      {
+        "segment": "volatility_regime",
+        "value": "NORMAL",
+        "setups": 53,
+        "triggered": 0,
+        "false_trigger_rate": null,
+        "invalidation_before_trigger_rate": 0.7169811320754716,
+        "average_signal_mfe_r": null,
+        "average_signal_mae_r": null,
+        "average_signal_endpoint_r": null,
+        "average_tradeability_mfe_r": null,
+        "average_tradeability_mae_r": null,
+        "average_tradeability_endpoint_r": null
+      }
+    ]
+  },
+  "session_metrics": {
+    "trend_up": {
+      "observations": 78,
+      "flips": 2,
+      "transitions": {
+        "INDEX_RISK_ON->SECTOR_LEADERSHIP": 1,
+        "SECTOR_LEADERSHIP->INDEX_RISK_ON": 1
+      },
+      "driver_counts": {
+        "INDEX_RISK_ON": 67,
+        "SECTOR_LEADERSHIP": 11
+      }
+    },
+    "chop_range": {
+      "observations": 78,
+      "flips": 0,
+      "driver_counts": {
+        "UNAVAILABLE": 78
+      }
+    },
+    "fast_downside": {
+      "observations": 78,
+      "flips": 0,
+      "driver_counts": {
+        "INDEX_RISK_OFF": 78
+      }
+    },
+    "gamma_pin": {
+      "observations": 78,
+      "flips": 0,
+      "driver_counts": {
+        "GAMMA_PINNING": 78
+      }
+    }
+  }
+}

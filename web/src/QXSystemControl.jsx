@@ -1,391 +1,188 @@
-import React, { useState, useEffect } from 'react';
-import { Server, Database, Activity, RefreshCw, CheckCircle, ShieldAlert, Cpu, HardDrive, Key, Play, Zap, Check, AlertCircle } from 'lucide-react';
-import { workspaceHref } from './workspace-context';
+import React, {useEffect, useMemo, useState} from 'react';
+import {Activity, BookOpenCheck, CalendarClock, Database, KeyRound, RefreshCw, Server, ShieldCheck} from 'lucide-react';
+import {workspaceHref} from './workspace-context';
+import {isQxSystemFixtureEnabled} from './qx-v2-feature';
+import {buildSystemJobStatus, buildSystemOverview, systemTabForRoute} from './qx-system-model';
+import {fetchSystemJobStatus, fetchSystemOverview} from './qx-system-client';
+import QXDataEvidence, {evidenceAttributes} from './QXDataEvidence';
+import {
+  clearSchwabCredentials,
+  completeSchwabAuthentication,
+  getSchwabCredentialStatus,
+  getSchwabOAuthUrl,
+  saveSchwabCredentials,
+  testSchwabConnection,
+} from './schwab-credentials-client';
 
-export default function QXSystemControl({ currentSubRoute = 'schwab', context }) {
-  const [activeTab, setActiveTab] = useState(currentSubRoute || 'schwab');
-  
-  // Sync activeTab whenever parent currentSubRoute prop changes
-  useEffect(() => {
-    if (currentSubRoute) {
-      setActiveTab(currentSubRoute);
-    }
-  }, [currentSubRoute]);
+const EMPTY_SCHWAB_STATUS = {configured: false, client_id_last4: null, redirect_uri: 'https://127.0.0.1',
+  oauth_status: 'UNAUTHENTICATED', refresh_token_status: 'UNAVAILABLE', provider_health: 'UNAVAILABLE', last_verified_at: null};
+const tabDefinitions = [
+  ['overview', 'Overview', Server, 'system'],
+  ['providers', 'Providers', KeyRound, 'schwab'],
+  ['data', 'Data', Database, 'data_cache'],
+  ['jobs', 'Jobs', CalendarClock, 'jobs'],
+  ['runs', 'Runs', Activity, 'run_history'],
+  ['rules', 'Rules', BookOpenCheck, 'strategy_rules'],
+];
 
-  const [schwabStatus, setSchwabStatus] = useState({
-    connected: true,
-    mode: 'Schwab Production Market API',
-    token_age_mins: 14,
-    status: 'ACTIVE_HEALTHY',
-    requests_24h: 1420,
-    last_verified: null,
-    verifying: false
-  });
+export default function QXSystemControl({currentSubRoute='system_overview', context={}}) {
+  const [activeTab, setActiveTab] = useState(() => systemTabForRoute(currentSubRoute));
+  const [overviewState, setOverviewState] = useState({data: null, loading: true, error: ''});
+  const [jobState, setJobState] = useState({data: null, loading: false, error: ''});
+  const query = new URLSearchParams(location.search);
+  const fixture = isQxSystemFixtureEnabled() && query.get('system_fixture') === '1';
 
-  const [preflightStatus, setPreflightStatus] = useState(null);
-  const [loadingPreflight, setLoadingPreflight] = useState(false);
-  
-  const [cacheStats, setCacheStats] = useState({
-    total_symbols: 29,
-    cache_size_mb: 48.2,
-    last_refresh: new Date().toLocaleTimeString(),
-    refreshing: false
-  });
+  useEffect(() => setActiveTab(systemTabForRoute(currentSubRoute)), [currentSubRoute]);
+  useEffect(() => { loadOverview(); }, []);
+  useEffect(() => { if (activeTab === 'jobs' && !jobState.data && !jobState.loading) loadJobs(); }, [activeTab]);
 
-  const [runningJobId, setRunningJobId] = useState(null);
-  const [jobLogs, setJobLogs] = useState([]);
-
-  // Auto-run preflight when run_history tab is selected
-  useEffect(() => {
-    if (activeTab === 'run_history' && !preflightStatus && !loadingPreflight) {
-      runPreflight();
-    }
-  }, [activeTab]);
-
-  const handleTabClick = (tabId) => {
-    setActiveTab(tabId);
-    if (typeof window !== 'undefined') {
-      const href = workspaceHref(tabId, context);
-      const origin = window.location.origin || 'http://127.0.0.1:5174';
-      const url = new URL(href, origin);
-      window.history.pushState(null, '', url.pathname + url.search + url.hash);
-      window.dispatchEvent(new Event('workspacecontextchange'));
-    }
+  const loadOverview = async () => {
+    const controller = new AbortController();
+    setOverviewState(previous => ({...previous, loading: true, error: ''}));
+    try { setOverviewState({data: buildSystemOverview(await fetchSystemOverview({signal: controller.signal})), loading: false, error: ''}); }
+    catch (error) { setOverviewState(previous => ({...previous, loading: false, error: error.message})); }
+  };
+  const loadJobs = async () => {
+    const controller = new AbortController();
+    setJobState(previous => ({...previous, loading: true, error: ''}));
+    try { setJobState({data: buildSystemJobStatus(await fetchSystemJobStatus({signal: controller.signal})), loading: false, error: ''}); }
+    catch (error) { setJobState(previous => ({...previous, loading: false, error: error.message})); }
+  };
+  const navigate = (tab, route) => {
+    setActiveTab(tab);
+    const url = new URL(workspaceHref(route, context), location.origin);
+    history.pushState(history.state, '', `${url.pathname}${url.search}${url.hash}`);
+    window.dispatchEvent(new Event('workspacecontextchange'));
   };
 
-  const verifySchwabToken = async () => {
-    setSchwabStatus(prev => ({ ...prev, verifying: true }));
-    try {
-      const res = await fetch('/api/terminal/watchlist');
-      if (res.ok) {
-        setSchwabStatus(prev => ({
-          ...prev,
-          connected: true,
-          status: 'ACTIVE_HEALTHY',
-          last_verified: `Verified at ${new Date().toLocaleTimeString()} (Latency: 12ms)`,
-          verifying: false
-        }));
-      } else {
-        throw new Error('Endpoint returned status ' + res.status);
-      }
-    } catch (e) {
-      setSchwabStatus(prev => ({
-        ...prev,
-        last_verified: `Check failed: ${e.message}`,
-        verifying: false
-      }));
-    }
-  };
-
-  const runPreflight = async () => {
-    setLoadingPreflight(true);
-    try {
-      const res = await fetch('/api/ai/status');
-      const data = await res.json();
-      setPreflightStatus({
-        api_ok: true,
-        ai_enabled: data.enabled,
-        version: data.schema_version,
-        timestamp: new Date().toLocaleTimeString(),
-        checks: [
-          { name: 'Schwab Production OAuth Engine', passed: true, detail: '200 OK - Refresh Token Valid' },
-          { name: 'FastAPI Backend Core', passed: true, detail: 'Uvicorn daemon active on port 8510' },
-          { name: 'SQLite Feature Cache WAL', passed: true, detail: 'data/feature_cache.db healthy' },
-          { name: '0DTE GEX Dealer Matrix', passed: true, detail: 'Market structure models loaded' }
-        ]
-      });
-    } catch (err) {
-      setPreflightStatus({
-        api_ok: false,
-        error: err.message,
-        timestamp: new Date().toLocaleTimeString(),
-        checks: [
-          { name: 'FastAPI Backend Core', passed: false, detail: err.message }
-        ]
-      });
-    } finally {
-      setLoadingPreflight(false);
-    }
-  };
-
-  const refreshCacheStats = async () => {
-    setCacheStats(prev => ({ ...prev, refreshing: true }));
-    setTimeout(() => {
-      setCacheStats({
-        total_symbols: 29,
-        cache_size_mb: 48.2,
-        last_refresh: new Date().toLocaleTimeString(),
-        refreshing: false
-      });
-    }, 400);
-  };
-
-  const triggerJob = (jobId, jobName) => {
-    setRunningJobId(jobId);
-    setTimeout(() => {
-      setRunningJobId(null);
-      setJobLogs(prev => [
-        { time: new Date().toLocaleTimeString(), job: jobName, status: 'SUCCESS', message: 'Executed cleanly without errors.' },
-        ...prev
-      ]);
-    }, 1200);
-  };
-
-  return (
-    <div style={{ background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border)', borderRadius: '12px', padding: '24px', color: 'var(--qx-text-primary)', marginTop: '16px' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', borderBottom: '1px solid var(--qx-border-subtle)', paddingBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Server size={22} color="var(--qx-accent)" />
-            <h2 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--qx-text-heading)', margin: 0 }}>
-              QX System Operations & Integration Control
-            </h2>
-            <span style={{ background: 'rgba(124, 169, 130, 0.15)', color: 'var(--qx-positive)', border: '1px solid var(--qx-positive)', padding: '2px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: '600' }}>
-              SYSTEM ONLINE
-            </span>
-          </div>
-          <p style={{ color: 'var(--qx-text-secondary)', fontSize: '13px', margin: '4px 0 0 0' }}>
-            Manage Schwab API tokens, local bar data caches, background scheduled tasks, and automated preflight checks.
-          </p>
-        </div>
-
-        <button 
-          onClick={runPreflight} 
-          disabled={loadingPreflight}
-          style={{ background: 'var(--qx-bg-button)', color: 'var(--qx-text-heading)', border: '1px solid var(--qx-border)', borderRadius: '6px', padding: '8px 16px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
-        >
-          <RefreshCw size={14} className={loadingPreflight ? 'spin' : ''} />
-          {loadingPreflight ? 'Running Audit...' : 'Run Preflight Verification'}
-        </button>
+  const overview = overviewState.data || buildSystemOverview(null);
+  return <article className="qx-system-workspace" aria-label="System workspace"
+    {...evidenceAttributes({source: 'QX system status APIs', dataAsOf: overview.generatedAt, freshness: 'CURRENT_REQUEST'})}>
+    <header className="qx-system-header">
+      <div><span className="eyebrow">SYSTEM / READ-ONLY OPERATIONS</span><h1><Server size={22}/> System</h1>
+        <p>Provider readiness, local data inventory, scheduler state, persisted runs, and configuration metadata.</p></div>
+      <div className="qx-system-header-badges">
+        <StatusBadge value={overview.status}/>
+        {fixture && <strong className="qx-preview-badge">TEST / PREVIEW DATA - NOT LIVE</strong>}
       </div>
+    </header>
 
-      {/* Control Tabs */}
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        {[
-          { id: 'schwab', label: 'Schwab API Credentials', icon: Key },
-          { id: 'data_cache', label: 'Bar Data Cache Manager', icon: Database },
-          { id: 'jobs', label: 'Background Scheduled Jobs', icon: Cpu },
-          { id: 'run_history', label: 'Preflight & Run Audit', icon: Activity },
-        ].map(tab => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => handleTabClick(tab.id)}
-              style={{
-                background: isActive ? 'var(--qx-bg-button)' : 'var(--qx-bg-surface)',
-                color: isActive ? 'var(--qx-accent)' : 'var(--qx-text-secondary)',
-                border: isActive ? '1px solid var(--qx-accent)' : '1px solid var(--qx-border)',
-                borderRadius: '8px',
-                padding: '10px 16px',
-                fontSize: '13px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <Icon size={15} />
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
+    <nav className="qx-system-tabs" aria-label="System views">
+      {tabDefinitions.map(([id,label,Icon,route]) => <button key={id} className={activeTab===id?'active':''} aria-pressed={activeTab===id}
+        onClick={() => navigate(id,route)}><Icon size={15}/><span>{label}</span></button>)}
+    </nav>
+    <QXDataEvidence source="QX system status APIs" dataAsOf={overview.generatedAt} freshness="CURRENT_REQUEST" label="Operational field evidence"/>
 
-      {/* Tab Panel 1: Schwab API Credentials */}
-      {activeTab === 'schwab' && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
-            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--qx-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Provider Connection</div>
-              <div style={{ fontSize: '16px', fontWeight: '700', color: 'var(--qx-positive)', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <CheckCircle size={16} /> {schwabStatus.mode}
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', marginTop: '8px' }}>OAuth Refresh Token: Valid (Expires in 5 days)</div>
-            </div>
-
-            <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '16px' }}>
-              <div style={{ fontSize: '12px', color: 'var(--qx-text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Request Quota</div>
-              <div style={{ fontSize: '20px', fontWeight: '700', color: 'var(--qx-text-heading)', marginTop: '6px' }}>
-                {schwabStatus.requests_24h} / 120,000
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', marginTop: '8px' }}>Rate limit: Healthy (&lt; 1% quota used)</div>
-            </div>
-          </div>
-
-          <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-            <div>
-              <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--qx-text-heading)' }}>Live Schwab OAuth Token Verification</div>
-              <div style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', marginTop: '2px' }}>
-                {schwabStatus.last_verified || 'Click to ping production market stream token.'}
-              </div>
-            </div>
-            <button
-              onClick={verifySchwabToken}
-              disabled={schwabStatus.verifying}
-              style={{
-                background: 'var(--qx-bg-button)',
-                color: 'var(--qx-text-heading)',
-                border: '1px solid var(--qx-border)',
-                borderRadius: '6px',
-                padding: '8px 16px',
-                fontSize: '13px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              <RefreshCw size={14} className={schwabStatus.verifying ? 'spin' : ''} />
-              {schwabStatus.verifying ? 'Testing Credentials...' : 'Verify Token Credentials'}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Tab Panel 2: Bar Data Cache Manager */}
-      {activeTab === 'data_cache' && (
-        <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-            <h3 style={{ fontSize: '15px', color: 'var(--qx-text-heading)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <HardDrive size={16} color="var(--qx-accent)" /> Cache Storage Summary (`data/cache/bars`)
-            </h3>
-            <button
-              onClick={refreshCacheStats}
-              disabled={cacheStats.refreshing}
-              style={{ background: 'var(--qx-bg-canvas)', color: 'var(--qx-text-primary)', border: '1px solid var(--qx-border)', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <RefreshCw size={12} className={cacheStats.refreshing ? 'spin' : ''} /> Refresh Cache Stats
-            </button>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', fontSize: '14px', color: 'var(--qx-text-primary)' }}>
-            <div style={{ background: 'var(--qx-bg-canvas)', padding: '14px', borderRadius: '6px', border: '1px solid var(--qx-border-subtle)' }}>
-              <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', textTransform: 'uppercase' }}>Cached Instruments</div>
-              <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--qx-text-heading)', marginTop: '4px' }}>{cacheStats.total_symbols} Symbols</div>
-            </div>
-            <div style={{ background: 'var(--qx-bg-canvas)', padding: '14px', borderRadius: '6px', border: '1px solid var(--qx-border-subtle)' }}>
-              <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', textTransform: 'uppercase' }}>Disk Storage</div>
-              <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--qx-accent)', marginTop: '4px' }}>{cacheStats.cache_size_mb} MB</div>
-            </div>
-            <div style={{ background: 'var(--qx-bg-canvas)', padding: '14px', borderRadius: '6px', border: '1px solid var(--qx-border-subtle)' }}>
-              <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', textTransform: 'uppercase' }}>Last Sync Timestamp</div>
-              <div style={{ fontSize: '16px', fontWeight: 'bold', color: 'var(--qx-positive)', marginTop: '6px' }}>{cacheStats.last_refresh}</div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Tab Panel 3: Background Scheduled Jobs */}
-      {activeTab === 'jobs' && (
-        <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '20px' }}>
-          <h3 style={{ fontSize: '15px', color: 'var(--qx-text-heading)', margin: '0 0 16px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Cpu size={16} color="var(--qx-accent)" /> Background Task Schedule & On-Demand Execution
-          </h3>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[
-              { id: 'stock_refresh', name: 'Daily Pre-Market Stock & Sector Refresh', schedule: 'Scheduled (08:30 AM EDT)', desc: 'Hydrates sector momentum scores & relative strength rankings' },
-              { id: 'flow_pipeline', name: 'Intraday Options Flow Bar Pipeline', schedule: 'Active Stream (Every 5 mins)', desc: 'Parses institutional sweep prints & GEX dealer gamma' },
-              { id: 'cache_compaction', name: 'SQLite Feature Cache Compaction', schedule: 'Scheduled (Daily 06:00 PM EDT)', desc: 'Optimizes WAL journal and purges stale bar frames' }
-            ].map(job => (
-              <div key={job.id} style={{ background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border-subtle)', borderRadius: '6px', padding: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                <div>
-                  <div style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--qx-text-heading)' }}>{job.name}</div>
-                  <div style={{ fontSize: '12px', color: 'var(--qx-text-secondary)', marginTop: '2px' }}>{job.desc}</div>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '11px', color: 'var(--qx-positive)', background: 'rgba(124, 169, 130, 0.12)', padding: '4px 8px', borderRadius: '4px', fontWeight: '600' }}>
-                    {job.schedule}
-                  </span>
-                  <button
-                    onClick={() => triggerJob(job.id, job.name)}
-                    disabled={runningJobId === job.id}
-                    style={{
-                      background: 'var(--qx-bg-button)',
-                      color: 'var(--qx-text-heading)',
-                      border: '1px solid var(--qx-border)',
-                      borderRadius: '4px',
-                      padding: '6px 12px',
-                      fontSize: '12px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
-                  >
-                    <Play size={12} className={runningJobId === job.id ? 'spin' : ''} />
-                    {runningJobId === job.id ? 'Running...' : 'Run Now'}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {jobLogs.length > 0 && (
-            <div style={{ marginTop: '16px', background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border-subtle)', borderRadius: '6px', padding: '12px' }}>
-              <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--qx-positive)', marginBottom: '8px' }}>Recent Execution Audit Log:</div>
-              {jobLogs.map((log, i) => (
-                <div key={i} style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginBottom: '4px' }}>
-                  [{log.time}] <strong>{log.job}</strong>: <span style={{ color: 'var(--qx-positive)' }}>{log.status}</span> — {log.message}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Tab Panel 4: Preflight & Run Audit */}
-      {activeTab === 'run_history' && (
-        <div style={{ background: 'var(--qx-bg-surface)', border: '1px solid var(--qx-border)', borderRadius: '8px', padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-            <h3 style={{ fontSize: '15px', color: 'var(--qx-text-heading)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Activity size={16} color="var(--qx-accent)" /> System Preflight & Integrity Verification
-            </h3>
-            <button
-              onClick={runPreflight}
-              disabled={loadingPreflight}
-              style={{ background: 'var(--qx-bg-button)', color: 'var(--qx-text-heading)', border: '1px solid var(--qx-border)', borderRadius: '6px', padding: '6px 14px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <RefreshCw size={12} className={loadingPreflight ? 'spin' : ''} />
-              {loadingPreflight ? 'Executing Audit...' : 'Re-Run Verification'}
-            </button>
-          </div>
-
-          {preflightStatus ? (
-            <div>
-              <div style={{ fontSize: '14px', fontWeight: 'bold', color: preflightStatus.api_ok ? 'var(--qx-positive)' : 'var(--qx-negative)', marginBottom: '14px' }}>
-                Audit Status: {preflightStatus.api_ok ? '✅ PASS - All API contracts verified' : `❌ FAIL - ${preflightStatus.error}`} (Timestamp: {preflightStatus.timestamp})
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {preflightStatus.checks?.map((chk, idx) => (
-                  <div key={idx} style={{ background: 'var(--qx-bg-canvas)', border: '1px solid var(--qx-border-subtle)', borderRadius: '6px', padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {chk.passed ? <Check size={16} color="var(--qx-positive)" /> : <AlertCircle size={16} color="var(--qx-negative)" />}
-                      <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--qx-text-heading)' }}>{chk.name}</span>
-                    </div>
-                    <span style={{ fontSize: '12px', color: chk.passed ? 'var(--qx-positive)' : 'var(--qx-negative)' }}>
-                      {chk.detail}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div style={{ fontSize: '13px', color: 'var(--qx-text-muted)', textAlign: 'center', padding: '20px' }}>
-              Click "Re-Run Verification" above to perform a full live system audit.
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+    {overviewState.error && <Notice tone="error">{overviewState.error}. Previously loaded operational data, if any, is unchanged.</Notice>}
+    {overviewState.loading && !overviewState.data && <p role="status">Loading measured system status...</p>}
+    {activeTab === 'overview' && <OverviewPanel overview={overview} loading={overviewState.loading} onRefresh={loadOverview}/>}
+    {activeTab === 'providers' && <ProviderPanel/>}
+    {activeTab === 'data' && <DataPanel cache={overview.cache} loading={overviewState.loading} onRefresh={loadOverview}/>}
+    {activeTab === 'jobs' && <JobsPanel state={jobState} onRefresh={loadJobs}/>}
+    {activeTab === 'runs' && <RunsPanel status={overview.runHistoryStatus} runs={overview.runs} loading={overviewState.loading} onRefresh={loadOverview}/>}
+    {activeTab === 'rules' && <RulesPanel overview={overview}/>}
+  </article>;
 }
+
+function OverviewPanel({overview,loading,onRefresh}) {
+  return <section className="qx-system-stage" aria-label="System overview">
+    <PanelHeader title="Operational readiness" detail="Measured local status; no trading or execution controls" loading={loading} onRefresh={onRefresh}/>
+    <div className="qx-system-metrics">
+      <Metric label="System" value={overview.status}/><Metric label="Pipeline" value={overview.pipelineVersion}/>
+      <Metric label="Rules metadata" value={overview.rulesStatus}/><Metric label="Cache inventory" value={overview.cache.status}/>
+      <Metric label="Cache freshness" value={overview.cache.freshnessStatus}/><Metric label="Run store" value={overview.runHistoryStatus}/>
+    </div>
+    <div className="qx-system-list">
+      {overview.components.length ? overview.components.map(component => <div key={component.name}><div><strong>{readable(component.name)}</strong><span>{display(component.detail)}</span></div><StatusBadge value={component.status}/></div>)
+        : <Notice>Operational components are unavailable.</Notice>}
+    </div>
+    <p className="qx-system-provenance">Generated {timestamp(overview.generatedAt)}. Cache inventory does not claim market-data freshness.</p>
+  </section>;
+}
+
+function DataPanel({cache,loading,onRefresh}) {
+  return <section className="qx-system-stage" aria-label="Data status">
+    <PanelHeader title="Local bar-data inventory" detail="Measured from data/cache/bars; freshness remains separately unverified" loading={loading} onRefresh={onRefresh}/>
+    <div className="qx-system-metrics"><Metric label="Availability" value={cache.status}/><Metric label="Freshness" value={cache.freshnessStatus}/>
+      <Metric label="Files" value={number(cache.totalFiles)}/><Metric label="Symbols" value={number(cache.totalSymbols)}/>
+      <Metric label="Disk MB" value={number(cache.totalSizeMb)}/><Metric label="Latest file update" value={timestamp(cache.latestModifiedAt)}/></div>
+    <div className="qx-system-periods"><h3>Observed cache periods</h3>{Object.keys(cache.periods).length
+      ? Object.entries(cache.periods).map(([period,count]) => <span key={period}>{period}: {count}</span>)
+      : <span>UNAVAILABLE</span>}</div>
+    <Notice>Inventory is source-backed local filesystem evidence. It does not establish completed-session freshness, provider health, or strategy sufficiency.</Notice>
+  </section>;
+}
+
+function JobsPanel({state,onRefresh}) {
+  const job = state.data || buildSystemJobStatus(null);
+  return <section className="qx-system-stage" aria-label="Jobs status">
+    <PanelHeader title="Local scheduler" detail="Read-only Windows task status; no browser-triggered jobs" loading={state.loading} onRefresh={onRefresh}/>
+    {state.error && <Notice tone="error">{state.error}</Notice>}
+    <div className="qx-system-metrics"><Metric label="Availability" value={job.status}/><Metric label="Configured" value={job.configured?'YES':'NO'}/>
+      <Metric label="Scheduler state" value={job.schedulerState}/><Metric label="Last result" value={job.lastResultLabel||job.lastResult}/>
+      <Metric label="Last run" value={timestamp(job.lastRunAt)}/><Metric label="Next run" value={timestamp(job.nextRunAt)}/></div>
+    <Notice>Task execution and schedule mutation are not exposed in this consolidated read-only workspace.</Notice>
+  </section>;
+}
+
+function RunsPanel({status,runs,loading,onRefresh}) {
+  return <section className="qx-system-stage" aria-label="Run history">
+    <PanelHeader title="Persisted run history" detail="Read-only pipeline, workflow, and command-snapshot records" loading={loading} onRefresh={onRefresh}/>
+    <StatusBadge value={status}/>
+    {runs.length ? <div className="qx-system-table-wrap"><table className="qx-system-table"><thead><tr><th>Type</th><th>ID</th><th>Recorded</th><th>Status</th><th>Summary</th></tr></thead>
+      <tbody>{runs.map(run => <tr key={`${run.runType}-${run.runId}`}><td>{run.runType}</td><td>{run.runId}</td><td>{timestamp(run.createdAt)}</td><td><StatusBadge value={run.status}/></td><td>{display(run.summary)}</td></tr>)}</tbody></table></div>
+      : <Notice>{status==='EMPTY'?'No persisted operational runs are available yet.':'Run history is unavailable.'}</Notice>}
+  </section>;
+}
+
+function RulesPanel({overview}) {
+  return <section className="qx-system-stage" aria-label="Rules metadata">
+    <PanelHeader title="Canonical configuration metadata" detail="Read-only versions only; rule values are not editable here"/>
+    <div className="qx-system-metrics"><Metric label="Pipeline version" value={overview.pipelineVersion}/><Metric label="Rules config version" value={overview.rulesConfigVersion}/><Metric label="Metadata status" value={overview.rulesStatus}/></div>
+    <Notice>System does not change Phase 3-10 rules, thresholds, weights, or lifecycle semantics.</Notice>
+  </section>;
+}
+
+function ProviderPanel() {
+  const [status,setStatus]=useState(EMPTY_SCHWAB_STATUS);
+  const [credentials,setCredentials]=useState({client_id:'',client_secret:'',redirect_uri:'https://127.0.0.1'});
+  const [callbackUrl,setCallbackUrl]=useState('');
+  const [authorizationUrl,setAuthorizationUrl]=useState('');
+  const [message,setMessage]=useState('');
+  const [busy,setBusy]=useState(false);
+  const safeStatus = useMemo(() => status || EMPTY_SCHWAB_STATUS, [status]);
+  const load = async () => { try { const next=await getSchwabCredentialStatus();setStatus(next);setCredentials(previous=>({...previous,redirect_uri:next.redirect_uri||'https://127.0.0.1'})); } catch(error){setMessage(error.message);} };
+  useEffect(()=>{load();},[]);
+  const act=async(action,success)=>{setBusy(true);setMessage('');try{const next=await action();setStatus(next);setMessage(success);return next;}catch(error){setMessage(error.message);return null;}finally{setBusy(false);}};
+  const save=async event=>{event.preventDefault();if(await act(()=>saveSchwabCredentials(credentials),'Credentials saved to the approved local store.'))setCredentials(previous=>({...previous,client_secret:''}));};
+  const reauthenticate=async()=>{setBusy(true);setMessage('');try{const result=await getSchwabOAuthUrl();setAuthorizationUrl(result.authorization_url);window.open(result.authorization_url,'_blank','noopener,noreferrer');setMessage('Authorization opened. Paste the complete callback URL below after consent.');}catch(error){setMessage(error.message);}finally{setBusy(false);}};
+  const exchange=async event=>{event.preventDefault();if(await act(()=>completeSchwabAuthentication(callbackUrl),'Authentication completed and provider health refreshed.')){setCallbackUrl('');setAuthorizationUrl('');}};
+  const clear=async()=>{if(await act(clearSchwabCredentials,'Local credentials and token were cleared.')){setCredentials({client_id:'',client_secret:'',redirect_uri:'https://127.0.0.1'});setCallbackUrl('');setAuthorizationUrl('');}};
+  return <section className="qx-system-stage" aria-label="Provider credentials and health">
+    <PanelHeader title="Schwab provider" detail="Existing local credential, OAuth, token, and health workflow" loading={busy} onRefresh={load}/>
+    <div className="qx-system-metrics"><Metric label="Credentials" value={safeStatus.configured?'CONFIGURED':'NOT CONFIGURED'}/><Metric label="OAuth" value={safeStatus.oauth_status}/>
+      <Metric label="Refresh token" value={safeStatus.refresh_token_status}/><Metric label="Market API" value={safeStatus.provider_health}/><Metric label="Last verified" value={timestamp(safeStatus.last_verified_at)}/></div>
+    <form className="qx-system-form" onSubmit={save}><h3>Local Schwab Credentials</h3>
+      <label>Client ID {safeStatus.client_id_last4?`(saved ending ${safeStatus.client_id_last4})`:''}<input aria-label="Client ID" value={credentials.client_id} onChange={event=>setCredentials(previous=>({...previous,client_id:event.target.value}))} required/></label>
+      <label>Client Secret<input aria-label="Client Secret" type="password" autoComplete="new-password" value={credentials.client_secret} onChange={event=>setCredentials(previous=>({...previous,client_secret:event.target.value}))} required/></label>
+      <label>Redirect URI<input aria-label="Redirect URI" value={credentials.redirect_uri} onChange={event=>setCredentials(previous=>({...previous,redirect_uri:event.target.value}))} required/></label>
+      <div className="qx-system-actions"><button type="submit" disabled={busy}>Save Credentials</button><button type="button" onClick={()=>act(testSchwabConnection,'Schwab provider verification completed.')} disabled={busy||!safeStatus.configured}>Test Connection</button><button type="button" className="danger" onClick={clear} disabled={busy}>Clear Credentials</button></div>
+    </form>
+    <div className="qx-system-form"><h3>Manual Local OAuth</h3><button type="button" onClick={reauthenticate} disabled={busy||!safeStatus.configured}>Re-authenticate Schwab</button>
+      {authorizationUrl&&<a href={authorizationUrl} target="_blank" rel="noreferrer">Open Schwab authorization</a>}
+      <p>After authorization, the browser may redirect to https://127.0.0.1 and fail to load. Copy the COMPLETE URL from the address bar and paste it below.</p>
+      <form onSubmit={exchange}><label>Schwab Callback URL<input aria-label="Schwab Callback URL" type="password" autoComplete="off" value={callbackUrl} onChange={event=>setCallbackUrl(event.target.value)} required/></label><button type="submit" disabled={busy||!callbackUrl}>Complete Authentication</button></form>
+      <small>Temporary local-development workflow. Callback URLs, codes, credentials, and tokens are never shown after submission.</small>
+    </div>
+    {message&&<p role="status" className="qx-system-message">{message}</p>}
+  </section>;
+}
+
+function PanelHeader({title,detail,loading=false,onRefresh}) { return <header className="qx-system-panel-header"><div><h2>{title}</h2><p>{detail}</p></div>{onRefresh&&<button type="button" onClick={onRefresh} disabled={loading}><RefreshCw size={14} className={loading?'spin':''}/>{loading?'Refreshing...':'Refresh'}</button>}</header>; }
+function Metric({label,value}) { return <div><span>{label}</span><strong>{display(value)}</strong></div>; }
+function StatusBadge({value}) { const status=display(value);return <span className={`qx-system-status qx-system-status-${status.toLowerCase().replaceAll(/[^a-z0-9]+/g,'-')}`}><ShieldCheck size={11}/>{status}</span>; }
+function Notice({children,tone=''}) { return <p className={`qx-system-notice ${tone}`} role={tone==='error'?'alert':'status'}>{children}</p>; }
+function display(value) { return value==null||value===''?'UNAVAILABLE':String(value); }
+function readable(value) { return display(value).replaceAll('_',' '); }
+function number(value) { return Number.isFinite(value)?value.toLocaleString():'UNAVAILABLE'; }
+function timestamp(value) { if(!value)return 'UNAVAILABLE';const parsed=new Date(value);return Number.isFinite(parsed.getTime())?parsed.toLocaleString():String(value); }

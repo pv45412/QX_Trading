@@ -1,6 +1,7 @@
 """Phase 9 Options Expression Engine."""
 
 import datetime
+import math
 from typing import Any, Dict, List, Optional
 import uuid
 
@@ -14,7 +15,11 @@ from qx.options_expression.models import (
     StrategyType,
     OptionContract,
 )
-from qx.options_expression.math import calculate_payoff, calculate_combined_greeks, calculate_fill_prices
+from qx.options_expression.math import (
+    calculate_combined_greek_evidence,
+    calculate_fill_prices,
+    calculate_payoff,
+)
 
 
 class OptionsExpressionEngine:
@@ -27,9 +32,12 @@ class OptionsExpressionEngine:
         self,
         tradeability: TradeabilityResult,
         context: OptionsContext,
+        evaluation_timestamp: Optional[datetime.datetime | str] = None,
     ) -> OptionsExpressionResult:
-        
-        eval_time = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        if isinstance(evaluation_timestamp, datetime.datetime):
+            eval_time = evaluation_timestamp.isoformat()
+        else:
+            eval_time = evaluation_timestamp or context.data_as_of
         result = OptionsExpressionResult(
             expression_id=f"expr_{uuid.uuid4().hex[:8]}",
             tradeability_id=tradeability.tradeability_id,
@@ -47,11 +55,20 @@ class OptionsExpressionEngine:
             config_version=self.config.version,
             engine_version=self.engine_version,
         )
-        
+
         # 1. Tradeability Gate
         if tradeability.state != TradeabilityState.TRADEABLE:
             result.state = OptionsExpressionState.BLOCKED
             result.reason_codes.append("UNDERLYING_NOT_TRADEABLE")
+            return result
+
+        if getattr(context, "sync_status", "UNAVAILABLE") != "SYNCED":
+            result.state = OptionsExpressionState.BLOCKED
+            result.reason_codes.append("OPTION_CHAIN_SYNC_UNAVAILABLE")
+            return result
+        if getattr(context, "freshness", "UNAVAILABLE") != "FRESH":
+            result.state = OptionsExpressionState.BLOCKED
+            result.reason_codes.append("STALE_OPTION_CHAIN")
             return result
 
         # 2. Expiration Selection
@@ -146,6 +163,11 @@ class OptionsExpressionEngine:
                 # Reason codes are appended in _validate_liquidity
                 cand.reason_codes.append("OPTION_LIQUIDITY_INADEQUATE")
                 continue
+            multipliers = {float(leg.contract_multiplier) for leg in cand.legs}
+            if len(multipliers) != 1:
+                cand.reason_codes.append("CONTRACT_MULTIPLIER_MISMATCH")
+                continue
+            cand.contract_multiplier = multipliers.pop()
                 
             net_debit, net_credit, max_loss, max_profit, breakevens = calculate_payoff(
                 cand.strategy_type, cand.legs, cand.leg_quantities
@@ -161,11 +183,18 @@ class OptionsExpressionEngine:
             cand.max_profit = max_profit
             cand.breakeven_points = breakevens
             
-            c_delta, c_gamma, c_theta, c_vega = calculate_combined_greeks(cand.legs, cand.leg_quantities)
-            cand.combined_delta = c_delta
-            cand.combined_gamma = c_gamma
+            greek_values, availability, coverage, provenance, greek_metadata = (
+                calculate_combined_greek_evidence(cand.legs, cand.leg_quantities)
+            )
+            c_theta = greek_values["theta"]
+            cand.combined_delta = greek_values["delta"]
+            cand.combined_gamma = greek_values["gamma"]
             cand.combined_theta = c_theta
-            cand.combined_vega = c_vega
+            cand.combined_vega = greek_values["vega"]
+            cand.combined_greek_availability = availability
+            cand.combined_greek_coverage = coverage
+            cand.combined_greek_provenance = provenance
+            cand.combined_greek_metadata = greek_metadata
             
             if cand.net_debit and cand.net_debit > 0 and c_theta is not None:
                 cand.theta_pct_of_debit = (c_theta / cand.net_debit)
@@ -189,7 +218,11 @@ class OptionsExpressionEngine:
 
     def _validate_liquidity(self, legs: List[OptionContract], result: OptionsExpressionResult) -> bool:
         for leg in legs:
-            if leg.contract_multiplier is None:
+            if (
+                leg.contract_multiplier is None
+                or not math.isfinite(leg.contract_multiplier)
+                or leg.contract_multiplier <= 0
+            ):
                 # Can't evaluate payoff math without multiplier
                 result.reason_codes.append("CONTRACT_MULTIPLIER_UNAVAILABLE")
                 return False

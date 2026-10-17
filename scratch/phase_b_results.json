@@ -1,0 +1,188 @@
+[
+  {
+    "finding": "F08-7m",
+    "title": "timeframe '7m' is rejected",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F08-weekly",
+    "title": "timeframe 'weekly' is rejected",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F08-1h",
+    "title": "timeframe '1h' is rejected",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F08-banana",
+    "title": "timeframe 'banana' is rejected",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F08-1d",
+    "title": "1d maps to daily bars",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F08-15m",
+    "title": "15m maps to a 15-minute interval",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F06a",
+    "title": "every bar carries a date",
+    "ok": true,
+    "detail": "src=schwab"
+  },
+  {
+    "finding": "F06b",
+    "title": "bars declare completion",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F06c",
+    "title": "bars declare their interval",
+    "ok": true,
+    "detail": "interval=1d"
+  },
+  {
+    "finding": "F06d",
+    "title": "daily bar dates are ascending",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F06e",
+    "title": "quote carries an observation timestamp",
+    "ok": true,
+    "detail": "src=schwab"
+  },
+  {
+    "finding": "F06f",
+    "title": "freshness is classified from the quote's own time",
+    "ok": true,
+    "detail": "{\"symbol\": \"SPY\", \"status\": \"FRESH\", \"is_executable\": true, \"age_seconds\": 0.34, \"max_threshold_seconds\": 60.0, \"reason\""
+  },
+  {
+    "finding": "F06g",
+    "title": "freshness reports a real age in seconds",
+    "ok": true,
+    "detail": "age=0.34"
+  },
+  {
+    "finding": "F06h",
+    "title": "freshness states the threshold it used",
+    "ok": true,
+    "detail": "threshold=60.0"
+  },
+  {
+    "finding": "F14a",
+    "title": "a quote with no timestamp is UNKNOWN, not fresh",
+    "ok": true,
+    "detail": "overall=UNKNOWN"
+  },
+  {
+    "finding": "F14b",
+    "title": "cache-backed bars are marked CACHE_UNDATED",
+    "ok": true,
+    "detail": "CACHE_UNDATED"
+  },
+  {
+    "finding": "F14c",
+    "title": "an UNKNOWN-freshness row is not current",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F14d",
+    "title": "realtime=true alone does not make a quote FRESH",
+    "ok": true,
+    "detail": "overall=UNKNOWN"
+  },
+  {
+    "finding": "F14e",
+    "title": "a 10-minute-old quote is not FRESH",
+    "ok": true,
+    "detail": "overall=STALE quote=STALE_BLOCKED"
+  },
+  {
+    "finding": "F14f",
+    "title": "a stale-data row is not promoted to current readiness",
+    "ok": true,
+    "detail": "state=PULLBACK_CANDIDATE elig=ENTRY_EXPIRED"
+  },
+  {
+    "finding": "F14g",
+    "title": "an undated row is not promoted to current readiness",
+    "ok": true,
+    "detail": "state=BLOCKED_DATA elig=ENTRY_EXPIRED"
+  },
+  {
+    "finding": "F14h",
+    "title": "a demonstrably FRESH row can still become eligible",
+    "ok": true,
+    "detail": "state=BREAKOUT_WATCH elig=ENTRY_ELIGIBLE"
+  },
+  {
+    "finding": "F11a",
+    "title": "denominator is the whole universe (2), not just classified (1)",
+    "ok": true,
+    "detail": "denominator=2"
+  },
+  {
+    "finding": "F11b",
+    "title": "the member without data is counted as missing",
+    "ok": true,
+    "detail": "missing=1 covered=1"
+  },
+  {
+    "finding": "F11c",
+    "title": "weight coverage reflects the unclassified half",
+    "ok": true,
+    "detail": "weight_covered=50.0"
+  },
+  {
+    "finding": "F11d",
+    "title": "the note states missing members are counted, not excluded",
+    "ok": true,
+    "detail": "2 member(s) in the universe; 1 classified, 1 missing data and counted as missing"
+  },
+  {
+    "finding": "F09a",
+    "title": "a stale snapshot does not report IDEAS_AVAILABLE",
+    "ok": true,
+    "detail": "verdict=SNAPSHOT_STALE"
+  },
+  {
+    "finding": "F09b",
+    "title": "ready_now is EMPTIED when the snapshot is stale",
+    "ok": true,
+    "detail": "shown=0"
+  },
+  {
+    "finding": "F09c",
+    "title": "the staleness is stated explicitly",
+    "ok": true,
+    "detail": "Snapshot is 720 min old (TTL 6h). Current-readiness views are emptied: a stale l"
+  },
+  {
+    "finding": "F09d",
+    "title": "stale data stays BROWSABLE as history",
+    "ok": true,
+    "detail": "all-view shown=1"
+  },
+  {
+    "finding": "F09e",
+    "title": "a fresh snapshot still reports ideas normally",
+    "ok": true,
+    "detail": "verdict=IDEAS_AVAILABLE shown=1"
+  }
+]

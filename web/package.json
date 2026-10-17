@@ -1,1 +1,34 @@
-{"name":"qx-dashboard","private":true,"version":"0.1.0","type":"module","scripts":{"dev":"vite --host 127.0.0.1","build":"vite build","test":"node --test src/data-utils.test.js src/holdings-utils.test.js src/movers-utils.test.js src/workspace-context.test.js","test:browser":"node --test tests/workflow.test.cjs","test:regression":"pytest ../tests/regression/","preflight":"python -m qx.tools.run_preflight_checks"},"dependencies":{"lucide-react":"^0.468.0","react":"^19.0.0","react-dom":"^19.0.0","recharts":"^3.10.1"},"devDependencies":{"playwright":"^1.62.1","vite":"^6.0.0"}}
+{
+  "name": "qx-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "test": "node --test src/data-utils.test.js src/holdings-utils.test.js src/movers-utils.test.js src/workspace-context.test.js src/qx-v2-feature.test.js src/qx-v2-adapter.test.js src/qx-v2-client.test.js src/qx-v2-fixtures.test.js src/qx-trade-workspace-model.test.js src/qx-opportunities-client.test.js src/qx-opportunities-model.test.js src/qx-market-quotes-client.test.js src/qx-today-model.test.js src/qx-portfolio-client.test.js src/qx-portfolio-model.test.js src/qx-research-client.test.js src/qx-research-model.test.js src/qx-system-client.test.js src/qx-system-model.test.js src/schwab-credentials-client.test.js",
+    "test:browser": "node --test tests/workflow.test.cjs",
+    "test:schwab": "node --test tests/schwab-credentials.test.cjs",
+    "test:track2c": "node --test tests/track2c-performance.test.cjs",
+    "test:track2f": "node --test tests/track2f-lifecycle.test.cjs",
+    "test:ux1": "node --test tests/ux1-trade-workspace.test.cjs",
+    "test:ux2": "node --test tests/ux2-opportunities.test.cjs",
+    "test:ux3": "node --test tests/ux3-today.test.cjs",
+    "test:ux4": "node --test tests/ux4-portfolio.test.cjs",
+    "test:ux5": "node --test tests/ux5-research.test.cjs",
+    "test:ux6": "node --test tests/ux6-system.test.cjs",
+    "test:live-values": "node tests/live-value-audit.cjs",
+    "test:regression": "pytest ../tests/regression/",
+    "preflight": "python -m qx.tools.run_preflight_checks"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1",
+    "vite": "^6.0.0"
+  }
+}

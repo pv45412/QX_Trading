@@ -1,0 +1,122 @@
+[
+  {
+    "finding": "F02a",
+    "title": "bearish watch proposes a SHORT direction",
+    "ok": true,
+    "detail": "direction=SHORT"
+  },
+  {
+    "finding": "F02b",
+    "title": "bearish watch uses the PUT trigger (95), not the call trigger (105)",
+    "ok": true,
+    "detail": "trigger=95"
+  },
+  {
+    "finding": "F02c",
+    "title": "short plan orders levels correctly (invalidation > trigger > target)",
+    "ok": true,
+    "detail": "inv=97.2 trig=95 tgt=90.6"
+  },
+  {
+    "finding": "F02d",
+    "title": "short chase limit sits BELOW the trigger",
+    "ok": true,
+    "detail": "chase=92.0 trigger=95"
+  },
+  {
+    "finding": "F02e",
+    "title": "mirrored long plan orders levels correctly (target > trigger > invalidation)",
+    "ok": true,
+    "detail": "tgt=109.4 trig=105 inv=102.8"
+  },
+  {
+    "finding": "F01a",
+    "title": "chased latched long is not TRIGGER_CONFIRMED",
+    "ok": true,
+    "detail": "state=BLOCKED_AMBIGUOUS"
+  },
+  {
+    "finding": "F01b",
+    "title": "study state is preserved separately for research",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F01c",
+    "title": "price beyond the stop is not an entry",
+    "ok": true,
+    "detail": "state=BLOCKED_AMBIGUOUS"
+  },
+  {
+    "finding": "F03a",
+    "title": "short chase limit is below its entry",
+    "ok": true,
+    "detail": "chase=92.0"
+  },
+  {
+    "finding": "F03b",
+    "title": "a short that fell too far IS flagged extended",
+    "ok": true,
+    "detail": "price=90 chase=92.0 extended=True"
+  },
+  {
+    "finding": "F03c",
+    "title": "the second value is named as a price distance, not ATR",
+    "ok": true,
+    "detail": "value=2.0"
+  },
+  {
+    "finding": "F04a",
+    "title": "ui.py no longer derives an EXECUTABLE label in executable code",
+    "ok": true,
+    "detail": "offending: []"
+  },
+  {
+    "finding": "F04a2",
+    "title": "carried setups still pin research-only, non-executable state",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F04b",
+    "title": "server exposes an authoritative candidate contract endpoint",
+    "ok": true,
+    "detail": "no candidate endpoint found"
+  },
+  {
+    "finding": "F04c",
+    "title": "the contract reports execution state from the central gate",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F05a",
+    "title": "closing contract B matches contract B (+100), not contract A",
+    "ok": true,
+    "detail": "realized_gross=100.0"
+  },
+  {
+    "finding": "F05b",
+    "title": "the untouched contract A remains an open lot under its CONTRACT key",
+    "ok": true,
+    "detail": "open_lots=['OPTION:XYZ 260116C00100000']"
+  },
+  {
+    "finding": "F05c",
+    "title": "the reporting label stays the underlying (group dimension)",
+    "ok": true,
+    "detail": "labels=['XYZ']"
+  },
+  {
+    "finding": "F15a",
+    "title": "second identical submission is refused",
+    "ok": true,
+    "detail": "ok1=True ok2=False count=1"
+  },
+  {
+    "finding": "F15b",
+    "title": "a deliberate new intent is allowed",
+    "ok": true,
+    "detail": "ok3=True count=2"
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "routes": [
+    "src/qx\\interfaces\\cli.py",
+    "src/qx\\interfaces\\web.py"
+  ],
+  "react_fetches": [
+    "web/src\\AIReview.jsx",
+    "web/src\\Holdings.jsx",
+    "web/src\\LiveRefresh.jsx",
+    "web/src\\main.jsx",
+    "web/src\\MoversWorkspace.jsx",
+    "web/src\\QXBentoDashboardLayout.jsx",
+    "web/src\\QXDailyNewsPrompt.jsx",
+    "web/src\\QXDayTraderTerminal.jsx",
+    "web/src\\QXInstitutionalScanner.jsx",
+    "web/src\\QXOptionsIdeas.jsx",
+    "web/src\\QXOptionsScanner.jsx",
+    "web/src\\QXPositionAdvisor.jsx",
+    "web/src\\QXResearchStudio.jsx",
+    "web/src\\QXStrategyWorkspaces.jsx",
+    "web/src\\QXSystemControl.jsx",
+    "web/src\\QXTradingSuite.jsx",
+    "web/src\\RSLine.jsx",
+    "web/src\\SchwabMovers.jsx",
+    "web/src\\SPXFuturesWorkspace.jsx",
+    "web/src\\useAnalytics.js"
+  ],
+  "computations": {
+    "Direction": [
+      "src/qx\\config\\rules_config.py",
+      "src/qx\\direction\\direction_engine.py",
+      "src/qx\\playbooks\\context.py"
+    ],
+    "OrderBlocks": [
+      "src/qx\\config\\rules_config.py",
+      "src/qx\\structure\\smc_suite.py"
+    ]
+  }
+}

@@ -1,0 +1,176 @@
+[
+  {
+    "finding": "F21a",
+    "title": "a weighted universe reports member_completeness",
+    "ok": true,
+    "detail": "PARTIAL"
+  },
+  {
+    "finding": "F21b",
+    "title": "a weighted universe reports weight_completeness",
+    "ok": true,
+    "detail": "COMPLETE"
+  },
+  {
+    "finding": "F21c",
+    "title": "SMH (99.9% of weight) is NOT partial",
+    "ok": true,
+    "detail": "weight=99.94 partial=False"
+  },
+  {
+    "finding": "F21d",
+    "title": "XLK (84.6% of weight) IS partial",
+    "ok": true,
+    "detail": "weight=84.38 partial=True"
+  },
+  {
+    "finding": "F21e",
+    "title": "the coverage label names the sampling honestly",
+    "ok": true,
+    "detail": "sampled holdings (25 rows, 99.9% of weight)"
+  },
+  {
+    "finding": "F21f",
+    "title": "a partial universe says so in its label",
+    "ok": true,
+    "detail": "SAMPLED holdings \u2014 25 rows covering only 84.4% of weight"
+  },
+  {
+    "finding": "F21g",
+    "title": "the completeness note explains which dimension was used",
+    "ok": true,
+    "detail": "weight coverage 99.9% of the fund (25 of 26 reported members)"
+  },
+  {
+    "finding": "F21h",
+    "title": "a complete classified universe is NOT partial",
+    "ok": true,
+    "detail": "partial=False"
+  },
+  {
+    "finding": "F21i",
+    "title": "its weight dimension is NOT_APPLICABLE, not PARTIAL",
+    "ok": true,
+    "detail": "NOT_APPLICABLE"
+  },
+  {
+    "finding": "F21j",
+    "title": "its member dimension is COMPLETE",
+    "ok": true,
+    "detail": "COMPLETE"
+  },
+  {
+    "finding": "F21k",
+    "title": "the note says weights do not apply",
+    "ok": true,
+    "detail": "2 of 2 reported members (complete); this universe carries no weights, so weight coverage does not apply"
+  },
+  {
+    "finding": "F21l",
+    "title": "a genuinely short classified universe IS partial",
+    "ok": true,
+    "detail": "partial=True"
+  },
+  {
+    "finding": "F21m",
+    "title": "an unknown total reports UNKNOWN rather than pretending",
+    "ok": true,
+    "detail": "member=UNKNOWN partial=True"
+  },
+  {
+    "finding": "F21n",
+    "title": "as_dict exposes both dimensions",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F18a",
+    "title": "every membership is retained",
+    "ok": true,
+    "detail": "memberships=2"
+  },
+  {
+    "finding": "F18b",
+    "title": "sector_symbols lists all parents",
+    "ok": true,
+    "detail": "['SMH', 'XLK']"
+  },
+  {
+    "finding": "F18c",
+    "title": "primary parent is the HIGHEST-WEIGHT membership (SMH 19% > XLK 15%)",
+    "ok": true,
+    "detail": "primary=SMH"
+  },
+  {
+    "finding": "F18d",
+    "title": "exactly one membership is marked primary",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F18e",
+    "title": "the filter matches the NON-primary parent too (XLK)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F18f",
+    "title": "the filter matches the primary parent (SMH)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F18g",
+    "title": "the filter rejects an unrelated sector",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F18h",
+    "title": "also_in lists the other parents",
+    "ok": true,
+    "detail": "['XLK']"
+  },
+  {
+    "finding": "F18i",
+    "title": "the policy is declared on the candidate",
+    "ok": true,
+    "detail": "highest fund weight; ties broken by strongest parent-relativ"
+  },
+  {
+    "finding": "F18j",
+    "title": "primary parent does not depend on scan order",
+    "ok": true,
+    "detail": "SMH vs SMH"
+  },
+  {
+    "finding": "F18k",
+    "title": "a weight tie breaks on stronger parent-relative RS",
+    "ok": true,
+    "detail": "primary=BBB"
+  },
+  {
+    "finding": "F18l",
+    "title": "with no weights the tie-break is alphabetical and stable",
+    "ok": true,
+    "detail": "primary=AAA"
+  },
+  {
+    "finding": "F18m",
+    "title": "a single-membership name is handled",
+    "ok": true,
+    "detail": "[]"
+  },
+  {
+    "finding": "F18n",
+    "title": "the response declares the primary-parent policy",
+    "ok": true,
+    "detail": "highest fund weight; ties broken by strongest parent-relativ"
+  },
+  {
+    "finding": "F18o",
+    "title": "filtering the NON-primary parent (SMH) finds SNPS",
+    "ok": true,
+    "detail": "symbols=['QCOM', 'NVDA', 'TXN', 'AMAT', 'KLAC', 'ASML']"
+  }
+]

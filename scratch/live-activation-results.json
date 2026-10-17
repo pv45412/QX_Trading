@@ -1,0 +1,60 @@
+[
+    {
+        "surface":  "Trade 5m",
+        "status":  "RESEARCH_ONLY",
+        "lifecycle":  "WATCH",
+        "direction":  "BEARISH",
+        "available":  true,
+        "as_of":  "2026-09-17T17:30:00Z",
+        "source":  "schwab",
+        "quality":  "PARTIAL",
+        "reason":  "INCOMPLETE_CURRENT_CANDLE_EXCLUDED"
+    },
+    {
+        "surface":  "Trade 1h",
+        "status":  "RESEARCH_ONLY",
+        "lifecycle":  "NO_SETUP",
+        "direction":  "LEAN_BEARISH",
+        "available":  true,
+        "as_of":  "2026-09-17T16:30:00Z",
+        "source":  "schwab:30m-\u003e1h",
+        "quality":  "PASS",
+        "reason":  ""
+    },
+    {
+        "surface":  "Trade 1d",
+        "status":  "RESEARCH_ONLY",
+        "lifecycle":  "NO_SETUP",
+        "direction":  "BEARISH",
+        "available":  true,
+        "as_of":  "2026-09-16T00:00:00Z",
+        "source":  "schwab",
+        "quality":  "PASS",
+        "reason":  ""
+    },
+    {
+        "surface":  "Research",
+        "status":  "SOURCE_BACKED",
+        "available":  true,
+        "as_of":  "2026-09-16T00:00:00+00:00",
+        "source":  "schwab",
+        "quality":  "FRESH"
+    },
+    {
+        "surface":  "Portfolio",
+        "status":  "PARTIAL",
+        "available":  true,
+        "as_of":  "2026-09-17T17:37:29.309343Z",
+        "source":  "schwab_read_only",
+        "quality":  "FRESH",
+        "reason":  "PARTIAL_ACCOUNT_EVIDENCE,SECTOR_PROVENANCE_INCOMPLETE,GREEKS_UNAVAILABLE,PNL_EVIDENCE_INCOMPLETE"
+    },
+    {
+        "surface":  "System",
+        "status":  "OK",
+        "available":  true,
+        "source":  "process_memory",
+        "quality":  "OK",
+        "reason":  "Process memory RSS: 164.3 MB"
+    }
+]

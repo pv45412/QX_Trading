@@ -1,0 +1,10 @@
+﻿HTTP
+  audit_explorer_http  RESULT: 32 passed, 0 failed
+  audit_ideas_http     RESULT: 33 passed, 0 failed
+BROWSER
+  qx-context-futures         RESULT: 14 passed, 0 failed
+  qx-explorer                RESULT: 25 passed, 0 failed
+  qx-trade-ideas             RESULT: 32 passed, 0 failed
+  qx-workspace-integration     PASS  results table populated 10 rows   PASS  side filter narrows results LONG=4 all=10 RESULT: 60 passed, 1 failed
+  qx-reports-drilldown       RESULT: 19 passed, 0 failed
+  qx-context-settings        RESULT: 17 passed, 3 failed

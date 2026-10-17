@@ -3,7 +3,9 @@
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+from qx.options_expression.greeks import is_greek_available
 
 
 class OptionsExpressionState(str, Enum):
@@ -39,6 +41,26 @@ class OptionGreeks(BaseModel):
     dividend_yield: Optional[float] = None
     volatility_input: Optional[float] = None
     calculation_timestamp: Optional[str] = None
+    # If BROKER_PROVIDED, specify these
+    broker_source: Optional[str] = None
+    quote_timestamp: Optional[str] = None
+
+    @model_validator(mode="after")
+    def normalize_unavailable_values(self):
+        metadata = {
+            "pricing_model": self.pricing_model,
+            "risk_free_rate": self.risk_free_rate,
+            "dividend_yield": self.dividend_yield,
+            "volatility_input": self.volatility_input,
+            "calculation_timestamp": self.calculation_timestamp,
+            "broker_source": self.broker_source,
+            "quote_timestamp": self.quote_timestamp,
+        }
+        for name in ("delta", "gamma", "theta", "vega"):
+            value = getattr(self, name)
+            if not is_greek_available(value, self.provenance, metadata):
+                setattr(self, name, None)
+        return self
 
 
 class OptionContract(BaseModel):
@@ -66,6 +88,12 @@ class OptionsContext(BaseModel):
     underlying_symbol: str
     underlying_price: float
     data_as_of: str
+    source: str = "UNAVAILABLE"
+    freshness: str = "UNAVAILABLE"
+    publication_state: str = "RESEARCH_ONLY"
+    sync_status: str = "UNAVAILABLE"
+    retrieved_at: Optional[str] = None
+    snapshot_id: Optional[int] = None
     
     # Expiration -> Strike -> "CALL" or "PUT" -> OptionContract
     chain: Dict[str, Dict[float, Dict[str, OptionContract]]] = Field(default_factory=dict)
@@ -94,6 +122,7 @@ class StrategyCandidate(BaseModel):
     direction: str
     expiration: str
     dte: int
+    contract_multiplier: Optional[float] = None
     
     legs: List[OptionContract] = Field(default_factory=list)
     leg_quantities: List[int] = Field(default_factory=list) # e.g. [1, -1]
@@ -108,6 +137,10 @@ class StrategyCandidate(BaseModel):
     combined_gamma: Optional[float] = None
     combined_theta: Optional[float] = None
     combined_vega: Optional[float] = None
+    combined_greek_availability: Dict[str, str] = Field(default_factory=dict)
+    combined_greek_coverage: Dict[str, float] = Field(default_factory=dict)
+    combined_greek_provenance: Dict[str, str] = Field(default_factory=dict)
+    combined_greek_metadata: Dict[str, Dict[str, Any]] = Field(default_factory=dict)
     
     theta_per_day: Optional[float] = None
     theta_pct_of_debit: Optional[float] = None

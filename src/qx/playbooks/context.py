@@ -23,6 +23,7 @@ class QXEvaluationContext(BaseModel):
     direction: DirectionEngineResult
     structure_result: Optional[Any] = None
     order_blocks: List[Any] = Field(default_factory=list)
+    liquidity_levels: List[Any] = Field(default_factory=list)
     fvgs: List[Dict[str, Any]] = Field(default_factory=list)
     session_levels: Dict[str, Any] = Field(default_factory=dict)  # PDH, PDL, SWING_HIGH, SWING_LOW, EQH, EQL, etc.
     vwap: Optional[float] = None

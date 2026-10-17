@@ -1,28 +1,42 @@
-// Canonical React destinations; parity tests check the Streamlit page registry.
-export const workspaceRoutes = [
- ['command_center', 'Today', 'Command Center', 'Overview'],
- ['morning_report', 'Today', 'Morning Report', 'Changes'],
- ['daily_workflow', 'Today', 'Daily Workflow', 'Preparation'],
- ['relative_strength', 'Markets', 'Relative Strength', 'Relative Strength'],
- ['spx_nq_futures', 'Markets', 'SPX / NQ Futures', 'ES / NQ Context'],
- ['sector_rotation', 'Markets', 'Sector Rotation', 'Sector Archive'],
- ['scan', 'Scanner', 'Scanner', 'Scanner'],
- ['broad_watchlist', 'Scanner', 'Broad Watchlist', 'Broad Watchlist'],
- ['heatmap', 'Scanner', 'Heatmap', 'Heatmap'],
- ['ticker_history', 'Research', 'Ticker History', 'Instrument'],
- ['options_ideas', 'Research', 'Options Ideas', 'Options Ideas'],
- ['options_flow', 'Research', 'Options Flow', 'Options Flow'],
- ['liquidity_map', 'Research', 'Liquidity Map', 'Liquidity Map'],
- ['backtest', 'Research', 'Backtest', 'Backtest'],
- ['strategy_lab', 'Research', 'Strategy Lab', 'Strategy Lab'],
- ['idea_tracking', 'Journal', 'Idea Tracking', 'Idea Tracking'],
- ['journal', 'Journal', 'Outcome Journal', 'Outcome Journal'],
- ['data_cache', 'System', 'Data Cache', 'Data Cache'],
- ['schwab', 'System', 'Schwab API', 'Schwab API'],
- ['jobs', 'System', 'Jobs', 'Jobs'],
- ['run_history', 'System', 'Run History', 'Run History'],
- ['strategy_rules', 'System', 'Strategy Rules', 'Strategy Rules'],
-].map(([page, workspace, title, label]) => ({page, workspace, title, label}));
+export const primaryWorkspaceRoutes = [
+ ['today', 'Today', 'Today', 'command_center'],
+ ['opportunities', 'Opportunities', 'Opportunities', 'scan'],
+ ['trade', 'Trade', 'Trade Workspace', 'trade'],
+ ['portfolio', 'Portfolio', 'Portfolio', 'portfolio'],
+ ['research', 'Research', 'Research', 'ticker_history'],
+ ['system', 'System', 'System', 'system_overview'],
+].map(([page, workspace, title, surface]) => ({
+ page, workspace, title, label: workspace, surface, target: true, targetPage: page,
+}));
+
+export const legacyWorkspaceRoutes = [
+ ['command_center', 'Today', 'Command Center', 'Overview', 'today'],
+ ['morning_report', 'Today', 'Morning Report', 'Changes', 'today'],
+ ['daily_workflow', 'Today', 'Daily Workflow', 'Preparation', 'today'],
+ ['relative_strength', 'Markets', 'Relative Strength', 'Relative Strength', 'research'],
+ ['spx_nq_futures', 'Markets', 'SPX / NQ Futures', 'ES / NQ Context', 'research'],
+ ['sector_rotation', 'Markets', 'Sector Rotation', 'Sector Archive', 'research'],
+ ['scan', 'Scanner', 'Scanner', 'Scanner', 'opportunities'],
+ ['broad_watchlist', 'Scanner', 'Broad Watchlist', 'Broad Watchlist', 'opportunities'],
+ ['heatmap', 'Scanner', 'Heatmap', 'Heatmap', 'opportunities'],
+ ['ticker_history', 'Research', 'Ticker History', 'Instrument', 'research'],
+ ['options_ideas', 'Research', 'Options Ideas', 'Options Ideas', 'research'],
+ ['options_flow', 'Research', 'Options Flow', 'Options Flow', 'research'],
+ ['liquidity_map', 'Research', 'Liquidity Map', 'Liquidity Map', 'research'],
+ ['backtest', 'Research', 'Backtest', 'Backtest', 'research'],
+ ['strategy_lab', 'Research', 'Strategy Lab', 'Strategy Lab', 'research'],
+ ['idea_tracking', 'Journal', 'Idea Tracking', 'Idea Tracking', 'portfolio'],
+ ['journal', 'Journal', 'Outcome Journal', 'Outcome Journal', null],
+ ['data_cache', 'System', 'Data Cache', 'Data Cache', 'system'],
+ ['schwab', 'System', 'Schwab API', 'Schwab API', 'system'],
+ ['jobs', 'System', 'Jobs', 'Jobs', 'system'],
+ ['run_history', 'System', 'Run History', 'Run History', 'system'],
+ ['strategy_rules', 'System', 'Strategy Rules', 'Strategy Rules', 'system'],
+].map(([page, workspace, title, label, targetPage]) => ({
+ page, workspace, title, label, surface: page, legacy: true, targetPage,
+}));
+
+export const workspaceRoutes = [...primaryWorkspaceRoutes, ...legacyWorkspaceRoutes];
 
 export const routeAliases = {
  qx: ['scan'], scanner: ['scan'], watchlist: ['broad_watchlist'], spx_dashboard: ['spx_nq_futures'],
@@ -33,8 +47,7 @@ export const routeAliases = {
  command_snapshots: ['run_history', 'history_view', 'Snapshots'],
 };
 
-export const workspaceHomes = workspaceRoutes.filter((route, index, routes) =>
- routes.findIndex(other => other.workspace === route.workspace) === index);
+export const workspaceHomes = primaryWorkspaceRoutes;
 
 export function resolveWorkspaceRoute(page = 'relative_strength') {
  const key = page.trim().replace(/^\/+|\/+$/g, '') || 'relative_strength';

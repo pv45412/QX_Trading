@@ -16,7 +16,7 @@ def test_only_known_equity_aliases_change(symbol, expected):
 
 
 @pytest.mark.parametrize("symbol,expected", [("ES=F", "/ES"), ("NQ=F", "/NQ"),
-    ("/ESU26", "/ESU26"), ("BRK-B", "BRK/B")])
+    ("/ESU26", "/ESU26"), ("BRK-B", "BRK/B"), ("SPX", "$SPX")])
 def test_market_data_symbol_preserves_local_identity_and_maps_futures_roots(symbol, expected):
     assert schwab_market_data_symbol(symbol) == expected
 
@@ -46,6 +46,20 @@ def test_intraday_history_uses_schwab_futures_root_without_mutating_request():
     result = SchwabMarketDataProvider(SimpleNamespace(get=get)).get_intraday_bars(request)
     assert requests[0]["symbol"] == "/ES"
     assert request.symbol == "ES=F"
+    assert len(result) == 1
+
+
+def test_spx_history_uses_schwab_index_symbol_without_mutating_request():
+    requests = []
+
+    def get(path, *, params):
+        requests.append(params)
+        return {"candles":[{"datetime":1789016400000,"open":7000,"high":7010,"low":6990,"close":7005,"volume":1000}]}
+
+    request = IntradayBarDataRequest(symbol="SPX", period="5d")
+    result = SchwabMarketDataProvider(SimpleNamespace(get=get)).get_intraday_bars(request)
+    assert requests[0]["symbol"] == "$SPX"
+    assert request.symbol == "SPX"
     assert len(result) == 1
 
 

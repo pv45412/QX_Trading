@@ -66,8 +66,8 @@ class HealthChecker:
         except Exception:
             components.append(ComponentHealth(
                 name="process_memory",
-                status="OK",
-                details="Memory check initialized.",
+                status="DEGRADED",
+                details="Process-memory verification is unavailable.",
             ))
 
         # Overall Status Determination

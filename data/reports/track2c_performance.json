@@ -1,0 +1,5948 @@
+{
+  "track": "2C",
+  "measurement_only": true,
+  "pipeline_version": "core_v1",
+  "started_at": "2026-09-16T15:24:19.260567+00:00",
+  "completed_at": "2026-09-16T15:25:01.290600+00:00",
+  "cached_api": {
+    "sample_count": 120,
+    "successful_responses": 120,
+    "available_input_samples": 27,
+    "api_latency_all": {
+      "count": 120,
+      "min_ms": 8.866799995303154,
+      "p50_ms": 274.21584999683546,
+      "p95_ms": 586.3209700015432,
+      "p99_ms": 725.0704699996277,
+      "max_ms": 943.4460000047693,
+      "mean_ms": 312.5853691663603
+    },
+    "api_latency_available_inputs": {
+      "count": 27,
+      "min_ms": 212.57829999376554,
+      "p50_ms": 287.25999999733176,
+      "p95_ms": 723.7397999997484,
+      "p99_ms": 887.2659540033779,
+      "max_ms": 943.4460000047693,
+      "mean_ms": 370.66378518432396
+    },
+    "pipeline_stages_available_inputs": {
+      "direction_ms": {
+        "count": 27,
+        "min_ms": 0.1281000004382804,
+        "p50_ms": 0.16179999511223286,
+        "p95_ms": 0.2754600005573593,
+        "p99_ms": 0.3961220016935838,
+        "max_ms": 0.4378000012366101,
+        "mean_ms": 0.20319629671845446,
+        "skipped": 0
+      },
+      "external_io_ms": {
+        "count": 27,
+        "min_ms": 6.969499998376705,
+        "p50_ms": 10.209600004600361,
+        "p95_ms": 61.28096999600527,
+        "p99_ms": 78.38122600369387,
+        "max_ms": 80.91230000718497,
+        "mean_ms": 16.638148148087094,
+        "skipped": 0
+      },
+      "options_expression_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 27
+      },
+      "playbooks_ms": {
+        "count": 27,
+        "min_ms": 1.8202000064775348,
+        "p50_ms": 2.2743000008631498,
+        "p95_ms": 6.46730999724241,
+        "p99_ms": 7.038877998420502,
+        "max_ms": 7.1857000002637506,
+        "mean_ms": 2.9872148146818356,
+        "skipped": 0
+      },
+      "portfolio_risk_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 27
+      },
+      "regime_ms": {
+        "count": 27,
+        "min_ms": 0.04879999323748052,
+        "p50_ms": 0.06859999848529696,
+        "p95_ms": 0.10183000413235277,
+        "p99_ms": 0.11231200856855136,
+        "max_ms": 0.11590000940486789,
+        "mean_ms": 0.07542222307098133,
+        "skipped": 0
+      },
+      "structure_ms": {
+        "count": 27,
+        "min_ms": 196.06740000017453,
+        "p50_ms": 264.69369999540504,
+        "p95_ms": 644.3327400033013,
+        "p99_ms": 789.6698360008302,
+        "max_ms": 834.3147999985376,
+        "mean_ms": 338.834803705039,
+        "skipped": 0
+      },
+      "total_ms": {
+        "count": 27,
+        "min_ms": 199.7471999929985,
+        "p50_ms": 268.12490000156686,
+        "p95_ms": 653.8869299984071,
+        "p99_ms": 799.7997220011891,
+        "max_ms": 844.2299000016646,
+        "mean_ms": 343.9618370385789,
+        "skipped": 0
+      },
+      "tradeability_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 27
+      },
+      "trigger_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 27
+      }
+    },
+    "pipeline_counters_available_inputs": {
+      "cache_hits": {
+        "samples": 27,
+        "total": 27.0,
+        "mean_per_evaluation": 1.0
+      },
+      "cache_misses": {
+        "samples": 27,
+        "total": 0.0,
+        "mean_per_evaluation": 0.0
+      }
+    },
+    "io_available_inputs": {
+      "operations": {
+        "local_bar_cache:load_bars": {
+          "count": 27,
+          "min_ms": 6.969499998376705,
+          "p50_ms": 10.209600004600361,
+          "p95_ms": 61.28096999600527,
+          "p99_ms": 78.38122600369387,
+          "max_ms": 80.91230000718497,
+          "mean_ms": 16.638148148087094,
+          "calls": 27
+        }
+      },
+      "status_counts": {
+        "local_bar_cache:load_bars:OK": 27
+      }
+    },
+    "io_all_responses": {
+      "operations": {
+        "local_bar_cache:load_bars": {
+          "count": 120,
+          "min_ms": 0.5241000035312027,
+          "p50_ms": 10.072050004964694,
+          "p95_ms": 24.596899996686254,
+          "p99_ms": 64.90966099518126,
+          "max_ms": 80.91230000718497,
+          "mean_ms": 12.290294166450622,
+          "calls": 120
+        }
+      },
+      "status_counts": {
+        "local_bar_cache:load_bars:OK": 108,
+        "local_bar_cache:load_bars:UNAVAILABLE": 12
+      }
+    },
+    "successful_external_provider_samples": 0,
+    "lifecycle_counts": {
+      "BLOCKED": 12,
+      "NO_SETUP": 108
+    },
+    "workload_status": {
+      "AAPL:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "AAPL:1d": "AVAILABLE",
+      "AAPL:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "AAPL:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "AMD:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "AMD:1d": "AVAILABLE",
+      "AMD:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "AMD:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "JPM:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "JPM:1d": "AVAILABLE",
+      "JPM:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "JPM:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "MSFT:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "MSFT:1d": "AVAILABLE",
+      "MSFT:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "MSFT:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "NVDA:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "NVDA:1d": "AVAILABLE",
+      "NVDA:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "NVDA:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "QQQ:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "QQQ:1d": "AVAILABLE",
+      "QQQ:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "QQQ:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "SPX:15m": "UNAVAILABLE",
+      "SPX:1d": "UNAVAILABLE",
+      "SPX:1m": "UNAVAILABLE",
+      "SPX:5m": "UNAVAILABLE",
+      "SPY:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "SPY:1d": "AVAILABLE",
+      "SPY:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "SPY:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "TSLA:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "TSLA:1d": "AVAILABLE",
+      "TSLA:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "TSLA:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "XOM:15m": "TIMEFRAME_SOURCE_MISMATCH",
+      "XOM:1d": "AVAILABLE",
+      "XOM:1m": "TIMEFRAME_SOURCE_MISMATCH",
+      "XOM:5m": "TIMEFRAME_SOURCE_MISMATCH"
+    },
+    "data_quality_findings": [
+      "SOURCE_UNAVAILABLE",
+      "TIMEFRAME_SOURCE_MISMATCH"
+    ],
+    "samples": [
+      {
+        "symbol": "SPY",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 269.57319999928586,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 237.9468999861274,
+          "regime_ms": 0.10139998630620539,
+          "direction_ms": 0.33510000503156334,
+          "playbooks_ms": 3.3198000019183382,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 13.12329999927897,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 243.90950000088196
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 13.12329999927897,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 347.7035999967484,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 324.90199999301694,
+          "regime_ms": 0.06750000466126949,
+          "direction_ms": 0.21100000594742596,
+          "playbooks_ms": 2.297799990628846,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 12.33130000764504,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 329.989799996838
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 12.33130000764504,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 250.0690000015311,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 231.65249999146909,
+          "regime_ms": 0.05509999755304307,
+          "direction_ms": 0.14289999671746045,
+          "playbooks_ms": 2.022799992118962,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.897500010789372,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 235.15860000043176
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.897500010789372,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 239.21620000328403,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 222.00829999928828,
+          "regime_ms": 0.05250000685919076,
+          "direction_ms": 0.13630000466946512,
+          "playbooks_ms": 1.9749000057345256,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.475299997371621,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 225.42360000079498
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.475299997371621,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 249.08619999769144,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 232.620599999791,
+          "regime_ms": 0.05040000542066991,
+          "direction_ms": 0.13190000026952475,
+          "playbooks_ms": 1.9603000109782442,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.948200000100769,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 236.0807999939425
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.948200000100769,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 239.24750000878703,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 221.9813000119757,
+          "regime_ms": 0.0577000027988106,
+          "direction_ms": 0.18699999782256782,
+          "playbooks_ms": 2.6456000050529838,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.268100001965649,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 226.0459999961313
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.268100001965649,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 401.602300000377,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 380.5259999935515,
+          "regime_ms": 0.11889998859260231,
+          "direction_ms": 0.24759999359957874,
+          "playbooks_ms": 3.203100000973791,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.646499995142221,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 385.88780000281986
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.646499995142221,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 632.3913000087487,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 590.4123999935109,
+          "regime_ms": 0.10170000314246863,
+          "direction_ms": 0.27290001162327826,
+          "playbooks_ms": 7.117899993318133,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 20.678599990787916,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 600.4004999995232
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 20.678599990787916,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 586.037100001704,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 552.3591999954078,
+          "regime_ms": 0.0973999995039776,
+          "direction_ms": 0.27099999715574086,
+          "playbooks_ms": 6.110100002842955,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 14.785500010475516,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 561.730900008115
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 14.785500010475516,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 943.4460000047693,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 834.3147999985376,
+          "regime_ms": 0.10119999933522195,
+          "direction_ms": 0.2775000029942021,
+          "playbooks_ms": 6.10870000673458,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 80.91230000718497,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 844.2299000016646
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 80.91230000718497,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 715.2719000005163,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 662.603400007356,
+          "regime_ms": 0.09869999485090375,
+          "direction_ms": 0.26780000189319253,
+          "playbooks_ms": 7.1857000002637506,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 24.501499996404164,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 673.3445999998366
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 24.501499996404164,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 727.3688999994192,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 601.7011999938404,
+          "regime_ms": 0.09899999713525176,
+          "direction_ms": 0.26620000426191837,
+          "playbooks_ms": 3.6041999992448837,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 38.18930000124965,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 608.4856999950716
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 38.18930000124965,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 517.072200003895,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 474.6273999917321,
+          "regime_ms": 0.10189999011345208,
+          "direction_ms": 0.27770000451710075,
+          "playbooks_ms": 3.996800005552359,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.605900000082329,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 481.984600002761
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.605900000082329,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 487.38130000128876,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 446.9136000116123,
+          "regime_ms": 0.09869999485090375,
+          "direction_ms": 0.2668999950401485,
+          "playbooks_ms": 3.7775999953737482,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 21.084799998789094,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 456.552699994063
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 21.084799998789094,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 593.3732999983476,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 553.4670000051847,
+          "regime_ms": 0.10239999392069876,
+          "direction_ms": 0.28190000739414245,
+          "playbooks_ms": 6.015699997078627,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.849799994612113,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 562.4829000007594
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.849799994612113,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 566.2646999990102,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 518.1233000039356,
+          "regime_ms": 0.09370000043418258,
+          "direction_ms": 0.3166999958921224,
+          "playbooks_ms": 4.256000000168569,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 26.409500002046116,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 526.8714999983786
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 26.409500002046116,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 466.012499993667,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 429.0106999978889,
+          "regime_ms": 0.09020000288728625,
+          "direction_ms": 0.25960001221392304,
+          "playbooks_ms": 3.6912999930791557,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 19.64139999472536,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 436.0422000027029
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 19.64139999472536,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 440.03760001214687,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 407.4445000005653,
+          "regime_ms": 0.09080000745598227,
+          "direction_ms": 0.22119999630376697,
+          "playbooks_ms": 3.4952999994857237,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 16.707700007827953,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 414.1042999981437
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 16.707700007827953,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 408.73509999073576,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 375.92679999943357,
+          "regime_ms": 0.06260001100599766,
+          "direction_ms": 0.19360000442247838,
+          "playbooks_ms": 2.41430000460241,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 17.41240000410471,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 381.5307000040775
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 17.41240000410471,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 424.7901000053389,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 397.1166999981506,
+          "regime_ms": 0.06429999484680593,
+          "direction_ms": 0.20789999689441174,
+          "playbooks_ms": 2.321400010259822,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 14.90340000600554,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 402.1513000043342
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 14.90340000600554,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 467.9550000000745,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 434.8433999984991,
+          "regime_ms": 0.0973999995039776,
+          "direction_ms": 0.30610000248998404,
+          "playbooks_ms": 4.629300005035475,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 14.15659999474883,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 443.1838000018615
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 14.15659999474883,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 519.9206999968737,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 486.3704000017606,
+          "regime_ms": 0.10039999324362725,
+          "direction_ms": 0.2685000072233379,
+          "playbooks_ms": 4.0891999960877,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.229900003760122,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 493.6186999984784
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.229900003760122,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 488.0721999943489,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 453.75879999483004,
+          "regime_ms": 0.0940000027185306,
+          "direction_ms": 0.2595999976620078,
+          "playbooks_ms": 3.9509000052930787,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.878100006375462,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 460.8678000076907
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.878100006375462,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 487.36870000720955,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 455.0842000026023,
+          "regime_ms": 0.11590000940486789,
+          "direction_ms": 0.4378000012366101,
+          "playbooks_ms": 6.620999993174337,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 13.528800001950003,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 464.8100000049453
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 13.528800001950003,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 11.283999992883764,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 2.3787999962223694,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.4825000069104135
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 2.3787999962223694,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 9.228599999914877,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 1.1270999966654927,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.34649998997338116
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 1.1270999966654927,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 10.382599997683428,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 1.756300000124611,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.41619999683462083
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 1.756300000124611,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 10.43349999235943,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 1.8389000033494085,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.41459999920334667
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 1.8389000033494085,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 12.513100009527989,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 2.0626000041374937,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.6203000084497035
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 2.0626000041374937,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 10.037100000772625,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 1.1815000034403056,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.4022000066470355
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 1.1815000034403056,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 9.399099988513626,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 1.5487000055145472,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.36959999124519527
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 1.5487000055145472,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 9.782799999811687,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 1.3427999947452918,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.37379999412223697
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 1.3427999947452918,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 9.65270001324825,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 1.2775999930454418,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.38660000427626073
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 1.2775999930454418,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 9.163499998976476,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 0.5356999899959192,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.6850000063423067
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 0.5356999899959192,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 9.447000004001893,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 0.5241000035312027,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.4172000044491142
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 0.5241000035312027,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 8.866799995303154,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 0.7003999926382676,
+          "cache_hits": 0,
+          "cache_misses": 1,
+          "total_ms": 0.3772000054595992
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 0.7003999926382676,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 523.0433999968227,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 485.17689999425784,
+          "regime_ms": 0.10209999163635075,
+          "direction_ms": 0.2778000052785501,
+          "playbooks_ms": 4.665300002670847,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 20.00170000246726,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 493.06959999375977
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 20.00170000246726,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 511.39620000321884,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 464.26389999396633,
+          "regime_ms": 0.08879999222699553,
+          "direction_ms": 0.2457999944454059,
+          "playbooks_ms": 3.630499995779246,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 29.99009999621194,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 471.58650000346825
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 29.99009999621194,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 427.7184000093257,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 397.85949999350123,
+          "regime_ms": 0.112900001113303,
+          "direction_ms": 0.2935999946203083,
+          "playbooks_ms": 4.02849999954924,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.107900006114505,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 404.10159999737516
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.107900006114505,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 442.1668999857502,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 396.88030000252184,
+          "regime_ms": 0.13139999646227807,
+          "direction_ms": 0.635899996268563,
+          "playbooks_ms": 20.596200003637932,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 13.110200001392514,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 420.06730000139214
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 13.110200001392514,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 591.7144999984885,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 504.151399989496,
+          "regime_ms": 0.09250000584870577,
+          "direction_ms": 0.26030000299215317,
+          "playbooks_ms": 5.379399997764267,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 37.19799999089446,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 512.8486000030534
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 37.19799999089446,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 491.71400000341237,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 453.5591000021668,
+          "regime_ms": 0.10239999392069876,
+          "direction_ms": 0.28249999741092324,
+          "playbooks_ms": 4.362699997727759,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 18.764000007649884,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 459.9805000034394
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 18.764000007649884,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 514.7100999893155,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 482.03860000649,
+          "regime_ms": 0.10000000474974513,
+          "direction_ms": 0.2891000040108338,
+          "playbooks_ms": 3.968500008340925,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.527100011240691,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 489.69380000198726
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.527100011240691,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 557.0715999929234,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 521.7069999926025,
+          "regime_ms": 0.09819999104365706,
+          "direction_ms": 0.304899993352592,
+          "playbooks_ms": 5.532899987883866,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.454799999133684,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 530.0161000050139
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.454799999133684,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 473.81849998782855,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 436.1767999944277,
+          "regime_ms": 0.11100000119768083,
+          "direction_ms": 0.2705999941099435,
+          "playbooks_ms": 4.624499997589737,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 19.791399987298064,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 443.88330000219867
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 19.791399987298064,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 359.2302000033669,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 334.11619999969844,
+          "regime_ms": 0.09970000246539712,
+          "direction_ms": 0.27069999487139285,
+          "playbooks_ms": 2.8395999979693443,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 11.651599998003803,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 339.65389999502804
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 11.651599998003803,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 460.8702999976231,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 430.55530000128783,
+          "regime_ms": 0.08849998994264752,
+          "direction_ms": 0.2491999912308529,
+          "playbooks_ms": 3.1239000090863556,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.219299995806068,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 436.5735000028508
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.219299995806068,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 468.20560000196565,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 438.1361999985529,
+          "regime_ms": 0.09100000897888094,
+          "direction_ms": 0.25549999554641545,
+          "playbooks_ms": 3.9286000101128593,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.321400001994334,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 444.84080000256654
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.321400001994334,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 474.7805000079097,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 440.9448000078555,
+          "regime_ms": 0.10150000161956996,
+          "direction_ms": 0.24530000519007444,
+          "playbooks_ms": 4.766699988977052,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 17.95249999850057,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 448.63769999938086
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 17.95249999850057,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 415.7905000029132,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 389.74290000624023,
+          "regime_ms": 0.10609999299049377,
+          "direction_ms": 0.2666000073077157,
+          "playbooks_ms": 4.020200009108521,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 13.346799998544157,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 395.60630000778474
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 13.346799998544157,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 438.76319999981206,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 409.83659999619704,
+          "regime_ms": 0.10379999002907425,
+          "direction_ms": 0.2021000109380111,
+          "playbooks_ms": 2.3819000052753836,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.202399998088367,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 414.93629998876713
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.202399998088367,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 338.441599989892,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 311.25600000086706,
+          "regime_ms": 0.05520001286640763,
+          "direction_ms": 0.14139999984763563,
+          "playbooks_ms": 2.194400003645569,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 15.211299993097782,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 316.3724000041839
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 15.211299993097782,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 301.58830000436865,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 278.3549000014318,
+          "regime_ms": 0.06349998875521123,
+          "direction_ms": 0.15560000611003488,
+          "playbooks_ms": 2.704099999391474,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 11.96630000777077,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 283.37119999923743
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 11.96630000777077,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 338.17509999789763,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 312.7966999891214,
+          "regime_ms": 0.06019999273121357,
+          "direction_ms": 0.1542999962111935,
+          "playbooks_ms": 3.0402999982470647,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 13.495599996531382,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 318.147099998896
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 13.495599996531382,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 287.3767000128282,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 260.92030000290833,
+          "regime_ms": 0.09470000804867595,
+          "direction_ms": 0.24459999985992908,
+          "playbooks_ms": 3.17810001433827,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 14.171600007102825,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 265.9120000025723
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 14.171600007102825,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 256.7440999991959,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 235.78319999796804,
+          "regime_ms": 0.05489999603014439,
+          "direction_ms": 0.14019999071024358,
+          "playbooks_ms": 2.1751000022049993,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 11.095399997429922,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 239.67850000190083
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 11.095399997429922,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 255.0084000104107,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 237.18210001243278,
+          "regime_ms": 0.055899989092722535,
+          "direction_ms": 0.15749999147374183,
+          "playbooks_ms": 2.1695999894291162,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.9468000078341,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 241.00419999740552
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.9468000078341,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 364.1201999998884,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 347.0930000039516,
+          "regime_ms": 0.05849999433849007,
+          "direction_ms": 0.1571000029798597,
+          "playbooks_ms": 2.2545000101672485,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.02589999511838,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 350.876700002118
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.02589999511838,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 329.75820000865497,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 308.9833000121871,
+          "regime_ms": 0.06859999848529696,
+          "direction_ms": 0.1520000078016892,
+          "playbooks_ms": 2.111900001182221,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.209600004600361,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 312.80610000249
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.209600004600361,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 287.25999999733176,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 266.4291000110097,
+          "regime_ms": 0.08150000940077007,
+          "direction_ms": 0.21149999520275742,
+          "playbooks_ms": 2.3721000034129247,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.256199995637871,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 270.4478000086965
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.256199995637871,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 281.47380000154953,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 260.41560000157915,
+          "regime_ms": 0.0577000027988106,
+          "direction_ms": 0.14230000670067966,
+          "playbooks_ms": 2.329199996893294,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.662600005161949,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 264.49989998945966
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.662600005161949,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 269.4098999927519,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 245.48319999303203,
+          "regime_ms": 0.055900003644637764,
+          "direction_ms": 0.1554000045871362,
+          "playbooks_ms": 1.9832999969366938,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 13.005799992242828,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 249.7231000015745
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 13.005799992242828,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 263.96319999184925,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 237.14140000811312,
+          "regime_ms": 0.08359999628737569,
+          "direction_ms": 0.22909999825060368,
+          "playbooks_ms": 3.3026000019162893,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 14.403699999093078,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 242.21710000711028
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 14.403699999093078,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 274.76479999313597,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 246.35940000007395,
+          "regime_ms": 0.07989999721758068,
+          "direction_ms": 0.21549999655690044,
+          "playbooks_ms": 12.53290000022389,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.523399999830872,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 260.5991000018548
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.523399999830872,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 320.1490999927046,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 294.50180000276305,
+          "regime_ms": 0.06079999729990959,
+          "direction_ms": 0.16319999122060835,
+          "playbooks_ms": 4.664699998102151,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 12.91660001152195,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 301.29930000111926
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 12.91660001152195,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 361.45890000625513,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 337.2853000037139,
+          "regime_ms": 0.0881999876582995,
+          "direction_ms": 0.22050000552553684,
+          "playbooks_ms": 2.864499998395331,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.983499989379197,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 342.58389999740757
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.983499989379197,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 354.9026000109734,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 331.3730000081705,
+          "regime_ms": 0.09130001126322895,
+          "direction_ms": 0.24670000129844993,
+          "playbooks_ms": 2.576800005044788,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 11.478899992653169,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 335.77240000886377
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 11.478899992653169,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 294.93859999638516,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 275.2764000033494,
+          "regime_ms": 0.060699996538460255,
+          "direction_ms": 0.15269999857991934,
+          "playbooks_ms": 2.290000003995374,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.93860000744462,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 279.24809999240097
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.93860000744462,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 271.7971999954898,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 250.13559999933932,
+          "regime_ms": 0.0847999908728525,
+          "direction_ms": 0.2049999893642962,
+          "playbooks_ms": 2.631299998029135,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.603200003970414,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 254.55090000468772
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.603200003970414,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 275.25259999674745,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 256.007200005115,
+          "regime_ms": 0.05740000051446259,
+          "direction_ms": 0.14770000416319817,
+          "playbooks_ms": 1.938799992785789,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.205500002484769,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 259.55339999927673
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.205500002484769,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 270.35999999498017,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 249.3386999994982,
+          "regime_ms": 0.056599994422867894,
+          "direction_ms": 0.1446999958716333,
+          "playbooks_ms": 2.262699999846518,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.555900007602759,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 253.93450001138262
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.555900007602759,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 269.77159999660216,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 251.55240000458434,
+          "regime_ms": 0.09390000195708126,
+          "direction_ms": 0.219000008655712,
+          "playbooks_ms": 2.1607999951811507,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.392000003368594,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 255.5038999998942
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.392000003368594,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 251.08009998803027,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 232.52999999385793,
+          "regime_ms": 0.05639999289996922,
+          "direction_ms": 0.1419000036548823,
+          "playbooks_ms": 2.3649999930057675,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.930899988627061,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 236.3407999946503
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.930899988627061,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 254.3422000017017,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 236.57430001185276,
+          "regime_ms": 0.06350000330712646,
+          "direction_ms": 0.15910000365693122,
+          "playbooks_ms": 2.0847999985562637,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.88009999471251,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 240.35619999631308
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.88009999471251,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 280.2448000002187,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 258.04169999901205,
+          "regime_ms": 0.056199991377070546,
+          "direction_ms": 0.1416000013705343,
+          "playbooks_ms": 1.9648000015877187,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.700500002712943,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 261.5241000021342
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.700500002712943,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 258.53320000169333,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 239.48200000450015,
+          "regime_ms": 0.05420000525191426,
+          "direction_ms": 0.14969999028835446,
+          "playbooks_ms": 2.744400000665337,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.939600011217408,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 243.77969998749904
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.939600011217408,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 305.60500000137836,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 284.7083000087878,
+          "regime_ms": 0.0585000088904053,
+          "direction_ms": 0.14689999807160348,
+          "playbooks_ms": 2.4606000079074875,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.384900000644848,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 289.53709999041166
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.384900000644848,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 256.4897000120254,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 238.44719999760855,
+          "regime_ms": 0.05679999594576657,
+          "direction_ms": 0.14400000509340316,
+          "playbooks_ms": 1.926700002513826,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.685699998750351,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 241.82109998946544
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.685699998750351,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 269.29360000940505,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 251.5916999982437,
+          "regime_ms": 0.07239999831654131,
+          "direction_ms": 0.1421999913873151,
+          "playbooks_ms": 2.303300003404729,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.365300003788434,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 255.5687999993097
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.365300003788434,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 273.66690000053495,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 255.39690000005066,
+          "regime_ms": 0.0847000046633184,
+          "direction_ms": 0.18699999782256782,
+          "playbooks_ms": 2.1754999906988814,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.266899996669963,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 259.60449999547563
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.266899996669963,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 231.21909999463242,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 212.94589999888558,
+          "regime_ms": 0.05289999535307288,
+          "direction_ms": 0.1343000039923936,
+          "playbooks_ms": 2.2499000042444095,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.354299996630289,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 216.74470001016743
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.354299996630289,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 212.57829999376554,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 196.06740000017453,
+          "regime_ms": 0.05189998773857951,
+          "direction_ms": 0.1281000004382804,
+          "playbooks_ms": 2.2086999961175025,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.055899990722537,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 199.7471999929985
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.055899990722537,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 239.9336999951629,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 224.39679999661166,
+          "regime_ms": 0.05110001075081527,
+          "direction_ms": 0.13190000026952475,
+          "playbooks_ms": 1.8202000064775348,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.5637999980244786,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 227.54700000223238
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.5637999980244786,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 262.89250000263564,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 246.81140000757296,
+          "regime_ms": 0.060399994254112244,
+          "direction_ms": 0.16179999511223286,
+          "playbooks_ms": 2.325099994777702,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.418900000629947,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 250.4977000062354
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.418900000629947,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 264.21860000118613,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 245.34629999834578,
+          "regime_ms": 0.05599998985417187,
+          "direction_ms": 0.14600000577047467,
+          "playbooks_ms": 2.93880001117941,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.332400004495867,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 249.7499000019161
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.332400004495867,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 262.264499993762,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 241.98609999439213,
+          "regime_ms": 0.0619000056758523,
+          "direction_ms": 0.19489999976940453,
+          "playbooks_ms": 2.0517999946605414,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.471599991433322,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 245.630200006417
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.471599991433322,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 271.4815999934217,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 249.5920999936061,
+          "regime_ms": 0.0847999908728525,
+          "direction_ms": 0.23820000933483243,
+          "playbooks_ms": 3.5093999904347584,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.751600005780347,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 255.96779999614228
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.751600005780347,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 277.56840000802185,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 252.31450000137556,
+          "regime_ms": 0.09180000051856041,
+          "direction_ms": 0.258700005360879,
+          "playbooks_ms": 3.675699990708381,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.76089999312535,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 257.8866000112612
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.76089999312535,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 319.0712999930838,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 294.0810000000056,
+          "regime_ms": 0.06580000626854599,
+          "direction_ms": 0.16429999959655106,
+          "playbooks_ms": 3.401299996767193,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 12.295799999265,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 299.18829999223817
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 12.295799999265,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 364.46779999823775,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 339.17570000630803,
+          "regime_ms": 0.09059999138116837,
+          "direction_ms": 0.2398999931756407,
+          "playbooks_ms": 3.719900007126853,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 12.21869999426417,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 344.71610000764485
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 12.21869999426417,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 386.1432999983663,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 359.4710000033956,
+          "regime_ms": 0.11360000644344836,
+          "direction_ms": 0.2660000027390197,
+          "playbooks_ms": 3.77289998868946,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 12.780499993823469,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 365.93980000179727
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 12.780499993823469,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 363.03849999967497,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 334.2569999949774,
+          "regime_ms": 0.09099999442696571,
+          "direction_ms": 0.2989999920828268,
+          "playbooks_ms": 3.7606000114465132,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 13.767399999778718,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 340.62850000918843
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 13.767399999778718,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 340.03110000048764,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 316.26809999579564,
+          "regime_ms": 0.08200001320801675,
+          "direction_ms": 0.22539999918080866,
+          "playbooks_ms": 4.445800004759803,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 11.373599991202354,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 322.51179999730084
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 11.373599991202354,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 263.25159998668823,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 243.66849999933038,
+          "regime_ms": 0.05740000051446259,
+          "direction_ms": 0.1596000074641779,
+          "playbooks_ms": 2.7965999906882644,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.930700001656078,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 248.13150000409223
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.930700001656078,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 235.3601999930106,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 217.2621999925468,
+          "regime_ms": 0.05190000229049474,
+          "direction_ms": 0.13220000255387276,
+          "playbooks_ms": 1.8691999866859987,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.786899998085573,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 220.63559999514837
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.786899998085573,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 293.0858000036096,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 270.7844999968074,
+          "regime_ms": 0.10210000618826598,
+          "direction_ms": 0.24249999842140824,
+          "playbooks_ms": 3.223499996238388,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 10.76679999823682,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 276.17909999389667
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.76679999823682,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 321.9660000031581,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 302.16099999961443,
+          "regime_ms": 0.056599994422867894,
+          "direction_ms": 0.145800004247576,
+          "playbooks_ms": 2.7934999961871654,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.224599998560734,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 306.95709999417886
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.224599998560734,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 242.96859999594744,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 224.59209999942686,
+          "regime_ms": 0.05029999010730535,
+          "direction_ms": 0.13210000179242343,
+          "playbooks_ms": 2.1702999947592616,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.521300002234057,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 228.3134000026621
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.521300002234057,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 223.7640000093961,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 207.67000000341795,
+          "regime_ms": 0.06269999721553177,
+          "direction_ms": 0.14769998961128294,
+          "playbooks_ms": 2.4121000024024397,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.508299997425638,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 211.47790001123212
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.508299997425638,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 225.7580000004964,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 207.8075000026729,
+          "regime_ms": 0.06120000034570694,
+          "direction_ms": 0.14689999807160348,
+          "playbooks_ms": 2.137100003892556,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.60580000153277,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 211.56559999508318
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.60580000153277,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 229.88850000547245,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 213.05770000617485,
+          "regime_ms": 0.05319999763742089,
+          "direction_ms": 0.1353999978164211,
+          "playbooks_ms": 2.274400001624599,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.879999990109354,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 217.08719999878667
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.879999990109354,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 234.33719998865854,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 215.18749999813735,
+          "regime_ms": 0.05230000533629209,
+          "direction_ms": 0.15539999003522098,
+          "playbooks_ms": 1.858100004028529,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.781400003703311,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 218.69059999880847
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.781400003703311,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 246.45730000338517,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 229.08049999387003,
+          "regime_ms": 0.079699995694682,
+          "direction_ms": 0.19720000273082405,
+          "playbooks_ms": 2.2514000011142343,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.25109999277629,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 232.8797000081977
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.25109999277629,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 236.82539998844732,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 218.74579999712296,
+          "regime_ms": 0.050300004659220576,
+          "direction_ms": 0.13259999104775488,
+          "playbooks_ms": 1.9361000013304874,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.797300004516728,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 222.48100000433624
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.797300004516728,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 240.7548999908613,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 223.4425999922678,
+          "regime_ms": 0.051099996198900044,
+          "direction_ms": 0.1320000010309741,
+          "playbooks_ms": 3.2089000014821067,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.636900001671165,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 228.06939999281894
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.636900001671165,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 330.4929000005359,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 250.25579999783076,
+          "regime_ms": 0.05420000525191426,
+          "direction_ms": 0.13519999629352242,
+          "playbooks_ms": 1.8519000004744157,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 71.17739999375772,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 254.36720000288915
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 71.17739999375772,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 281.9469999958528,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 264.69369999540504,
+          "regime_ms": 0.05330001295078546,
+          "direction_ms": 0.13760000001639128,
+          "playbooks_ms": 1.9295999954920262,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.983199993963353,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 268.12490000156686
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.983199993963353,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 253.51929999305867,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 237.44910000823438,
+          "regime_ms": 0.09420000424142927,
+          "direction_ms": 0.24709998979233205,
+          "playbooks_ms": 2.0930000027874485,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.454899998265319,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 241.1534999992
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.454899998265319,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "1m",
+        "repetition": 1,
+        "api_latency_ms": 243.20949999673758,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 226.31250000267755,
+          "regime_ms": 0.05230000533629209,
+          "direction_ms": 0.13309999485500157,
+          "playbooks_ms": 1.8885000026784837,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.51120000879746,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 229.59670001000632
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.51120000879746,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "1m",
+        "repetition": 2,
+        "api_latency_ms": 235.26860000856686,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 216.8076999951154,
+          "regime_ms": 0.06350000330712646,
+          "direction_ms": 0.13890000991523266,
+          "playbooks_ms": 2.051099989330396,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.462700007134117,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 220.35190000315197
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.462700007134117,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "1m",
+        "repetition": 3,
+        "api_latency_ms": 226.02670000924263,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 209.615700005088,
+          "regime_ms": 0.053499999921768904,
+          "direction_ms": 0.13449999096337706,
+          "playbooks_ms": 1.7909000016516075,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.460799988824874,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 212.87350000056904
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.460799988824874,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 221.81130001263227,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 205.14030000776984,
+          "regime_ms": 0.0518000015290454,
+          "direction_ms": 0.13220000255387276,
+          "playbooks_ms": 1.9249999895691872,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.947199992486276,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 208.72019999660552
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.947199992486276,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "5m",
+        "repetition": 2,
+        "api_latency_ms": 229.68000000400934,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 212.21359999617562,
+          "regime_ms": 0.05950000195298344,
+          "direction_ms": 0.14570000348612666,
+          "playbooks_ms": 1.9368000066606328,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.481600001687184,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 215.91639998950996
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.481600001687184,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "5m",
+        "repetition": 3,
+        "api_latency_ms": 227.94769999745768,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 210.83569999609608,
+          "regime_ms": 0.09299999510403723,
+          "direction_ms": 0.18740000086836517,
+          "playbooks_ms": 2.0432999881450087,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.480999997118488,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 214.35270000074524
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.480999997118488,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "15m",
+        "repetition": 1,
+        "api_latency_ms": 217.8033999953186,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 201.05360000161454,
+          "regime_ms": 0.05080000846646726,
+          "direction_ms": 0.14099999680183828,
+          "playbooks_ms": 1.810700006899424,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.959299997310154,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 204.2383000080008
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.959299997310154,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "15m",
+        "repetition": 2,
+        "api_latency_ms": 207.38799999526236,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 191.7807999998331,
+          "regime_ms": 0.04469999112188816,
+          "direction_ms": 0.11410001025069505,
+          "playbooks_ms": 1.86159998702351,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.483500012313016,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 194.98900001053698
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.483500012313016,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "15m",
+        "repetition": 3,
+        "api_latency_ms": 222.08819999650586,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 205.44259999587666,
+          "regime_ms": 0.053099996875971556,
+          "direction_ms": 0.13380000018514693,
+          "playbooks_ms": 1.821199999540113,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.300100002088584,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 208.66519999981392
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.300100002088584,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 221.95030000875704,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 206.16139999765437,
+          "regime_ms": 0.04879999323748052,
+          "direction_ms": 0.14730000111740083,
+          "playbooks_ms": 1.8740000086836517,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.503300003008917,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 209.40550000523217
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.503300003008917,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "1d",
+        "repetition": 2,
+        "api_latency_ms": 225.12519999872893,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 209.34719999786466,
+          "regime_ms": 0.05120001151226461,
+          "direction_ms": 0.13880000915378332,
+          "playbooks_ms": 1.8360999965807423,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 7.54140000208281,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 212.4552000022959
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 7.54140000208281,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "1d",
+        "repetition": 3,
+        "api_latency_ms": 221.5083000046434,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 205.59750001120847,
+          "regime_ms": 0.05499999679159373,
+          "direction_ms": 0.13939999917056412,
+          "playbooks_ms": 2.2743000008631498,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 6.969499998376705,
+          "cache_hits": 1,
+          "cache_misses": 0,
+          "total_ms": 209.1779000038514
+        },
+        "io_metrics": [
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 6.969499998376705,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      }
+    ]
+  },
+  "live_provider_api": {
+    "sample_count": 11,
+    "successful_responses": 11,
+    "available_input_samples": 9,
+    "api_latency_all": {
+      "count": 11,
+      "min_ms": 5.385399999795482,
+      "p50_ms": 280.3369999892311,
+      "p95_ms": 399.92780000466155,
+      "p99_ms": 426.78300000407035,
+      "max_ms": 433.49680000392254,
+      "mean_ms": 266.0011727288789
+    },
+    "api_latency_available_inputs": {
+      "count": 9,
+      "min_ms": 219.00949999690056,
+      "p50_ms": 280.3369999892311,
+      "p95_ms": 406.64160000451375,
+      "p99_ms": 428.1257600040408,
+      "max_ms": 433.49680000392254,
+      "mean_ms": 293.25857777924585
+    },
+    "pipeline_stages_available_inputs": {
+      "direction_ms": {
+        "count": 9,
+        "min_ms": 0.12909999350085855,
+        "p50_ms": 0.14540000120177865,
+        "p95_ms": 0.25450000539422035,
+        "p99_ms": 0.27770000509917736,
+        "max_ms": 0.2835000050254166,
+        "mean_ms": 0.16688888879596359,
+        "skipped": 0
+      },
+      "external_io_ms": {
+        "count": 9,
+        "min_ms": 8.233700005803257,
+        "p50_ms": 9.606199993868358,
+        "p95_ms": 15.653000006568616,
+        "p99_ms": 17.48052001290489,
+        "max_ms": 17.937400014488958,
+        "mean_ms": 10.55741111405142,
+        "skipped": 0
+      },
+      "options_expression_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 9
+      },
+      "playbooks_ms": {
+        "count": 9,
+        "min_ms": 1.8183999927714467,
+        "p50_ms": 2.5157999916700646,
+        "p95_ms": 3.4991799970157444,
+        "p99_ms": 3.6690360005013645,
+        "max_ms": 3.7115000013727695,
+        "mean_ms": 2.610544441267848,
+        "skipped": 0
+      },
+      "portfolio_risk_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 9
+      },
+      "regime_ms": {
+        "count": 9,
+        "min_ms": 0.05110001075081527,
+        "p50_ms": 0.05539999983739108,
+        "p95_ms": 0.07807999500073493,
+        "p99_ms": 0.07833598763681948,
+        "max_ms": 0.07839998579584062,
+        "mean_ms": 0.06036666875135981,
+        "skipped": 0
+      },
+      "structure_ms": {
+        "count": 9,
+        "min_ms": 200.97659999737516,
+        "p50_ms": 253.4421000018483,
+        "p95_ms": 381.3843999960227,
+        "p99_ms": 403.0914399976609,
+        "max_ms": 408.5181999980705,
+        "mean_ms": 270.67139999902184,
+        "skipped": 0
+      },
+      "total_ms": {
+        "count": 9,
+        "min_ms": 204.50899998832028,
+        "p50_ms": 258.21040000300854,
+        "p95_ms": 386.6998200042872,
+        "p99_ms": 407.88228400226217,
+        "max_ms": 413.1779000017559,
+        "mean_ms": 275.03904444327213,
+        "skipped": 0
+      },
+      "tradeability_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 9
+      },
+      "trigger_ms": {
+        "count": 0,
+        "min_ms": null,
+        "p50_ms": null,
+        "p95_ms": null,
+        "p99_ms": null,
+        "max_ms": null,
+        "mean_ms": null,
+        "skipped": 9
+      }
+    },
+    "pipeline_counters_available_inputs": {
+      "cache_hits": {
+        "samples": 9,
+        "total": 9.0,
+        "mean_per_evaluation": 1.0
+      },
+      "cache_misses": {
+        "samples": 9,
+        "total": 18.0,
+        "mean_per_evaluation": 2.0
+      }
+    },
+    "io_available_inputs": {
+      "operations": {
+        "local_bar_cache:load_bars": {
+          "count": 9,
+          "min_ms": 8.044800008065067,
+          "p50_ms": 9.27640000008978,
+          "p95_ms": 15.359760003047993,
+          "p99_ms": 17.19147200405132,
+          "max_ms": 17.64940000430215,
+          "mean_ms": 10.30453333482405,
+          "calls": 9
+        },
+        "schwab:acquire_option_chain": {
+          "count": 9,
+          "min_ms": 0.13010000111535192,
+          "p50_ms": 0.15440001152455807,
+          "p95_ms": 0.19844000053126365,
+          "p99_ms": 0.20320799958426505,
+          "max_ms": 0.2043999993475154,
+          "mean_ms": 0.16278888991413018,
+          "calls": 9
+        },
+        "schwab_read_only:acquire_account_snapshot": {
+          "count": 9,
+          "min_ms": 0.04630000330507755,
+          "p50_ms": 0.07819999882485718,
+          "p95_ms": 0.13873999705538154,
+          "p99_ms": 0.13998799258843064,
+          "max_ms": 0.14029999147169292,
+          "mean_ms": 0.09008888931324084,
+          "calls": 9
+        }
+      },
+      "status_counts": {
+        "local_bar_cache:load_bars:OK": 9,
+        "schwab:acquire_option_chain:ERROR": 9,
+        "schwab_read_only:acquire_account_snapshot:ERROR": 9
+      }
+    },
+    "io_all_responses": {
+      "operations": {
+        "local_bar_cache:load_bars": {
+          "count": 11,
+          "min_ms": 0.3102999908151105,
+          "p50_ms": 8.950799994636327,
+          "p95_ms": 14.787350002734456,
+          "p99_ms": 17.076990003988612,
+          "max_ms": 17.64940000430215,
+          "mean_ms": 9.27289999989708,
+          "calls": 11
+        },
+        "schwab:acquire_option_chain": {
+          "count": 11,
+          "min_ms": 0.13010000111535192,
+          "p50_ms": 0.15020000864751637,
+          "p95_ms": 0.1969500008272007,
+          "p99_ms": 0.20290999964345247,
+          "max_ms": 0.2043999993475154,
+          "mean_ms": 0.15881818332921036,
+          "calls": 11
+        },
+        "schwab_read_only:acquire_account_snapshot": {
+          "count": 11,
+          "min_ms": 0.04630000330507755,
+          "p50_ms": 0.06930000381544232,
+          "p95_ms": 0.1383499984513037,
+          "p99_ms": 0.13990999286761507,
+          "max_ms": 0.14029999147169292,
+          "mean_ms": 0.0855909086319364,
+          "calls": 11
+        }
+      },
+      "status_counts": {
+        "local_bar_cache:load_bars:OK": 10,
+        "local_bar_cache:load_bars:UNAVAILABLE": 1,
+        "schwab:acquire_option_chain:ERROR": 11,
+        "schwab_read_only:acquire_account_snapshot:ERROR": 11
+      }
+    },
+    "successful_external_provider_samples": 0,
+    "lifecycle_counts": {
+      "BLOCKED": 1,
+      "NO_SETUP": 10
+    },
+    "workload_status": {
+      "AAPL:1d": "AVAILABLE",
+      "AMD:1d": "AVAILABLE",
+      "JPM:1d": "AVAILABLE",
+      "MSFT:1d": "AVAILABLE",
+      "NVDA:1d": "AVAILABLE",
+      "QQQ:1d": "AVAILABLE",
+      "SPX:1d": "UNAVAILABLE",
+      "SPY:1d": "AVAILABLE",
+      "SPY:5m": "TIMEFRAME_SOURCE_MISMATCH",
+      "TSLA:1d": "AVAILABLE",
+      "XOM:1d": "AVAILABLE"
+    },
+    "data_quality_findings": [
+      "SOURCE_UNAVAILABLE",
+      "TIMEFRAME_SOURCE_MISMATCH"
+    ],
+    "samples": [
+      {
+        "symbol": "SPY",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 250.32869999995455,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 226.1553999996977,
+          "regime_ms": 0.05539999983739108,
+          "direction_ms": 0.13179999950807542,
+          "playbooks_ms": 1.8183999927714467,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.233700005803257,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 229.8078999883728
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.14259999443311244,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.04630000330507755,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.044800008065067,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "QQQ",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 219.00949999690056,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\QQQ_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 200.97659999737516,
+          "regime_ms": 0.05110001075081527,
+          "direction_ms": 0.12909999350085855,
+          "playbooks_ms": 2.1946000051684678,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.37979998323135,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 204.50899998832028
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.13989998842589557,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.06679999933112413,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.173099995474331,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPX",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 5.385399999795482,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "SOURCE_UNAVAILABLE",
+          "source": null
+        },
+        "lifecycle_state": "BLOCKED",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": "SKIPPED",
+          "regime_ms": "SKIPPED",
+          "direction_ms": "SKIPPED",
+          "playbooks_ms": "SKIPPED",
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 0.5043999844929203,
+          "cache_hits": 0,
+          "cache_misses": 3,
+          "total_ms": 0.19360000442247838
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.13169999874662608,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.062399994931183755,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 0.3102999908151105,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "UNAVAILABLE"
+          }
+        ]
+      },
+      {
+        "symbol": "NVDA",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 243.11510000552516,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\NVDA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 224.8008999886224,
+          "regime_ms": 0.051700000767596066,
+          "direction_ms": 0.1429999974789098,
+          "playbooks_ms": 2.6021999947261065,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 8.85180001205299,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 228.7683000031393
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.13010000111535192,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.06930000381544232,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.652400007122196,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AAPL",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 433.49680000392254,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AAPL_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 408.5181999980705,
+          "regime_ms": 0.07839998579584062,
+          "direction_ms": 0.21100000594742596,
+          "playbooks_ms": 3.180699990480207,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 11.140600006910972,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 413.1779000017559
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.1816000003600493,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.13640000543091446,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 10.822600001120009,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "MSFT",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 280.3369999892311,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\MSFT_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 250.56270000641234,
+          "regime_ms": 0.05889999738428742,
+          "direction_ms": 0.14540000120177865,
+          "playbooks_ms": 2.3908000002847984,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 17.937400014488958,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 254.60479999310337
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.1782000035746023,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.10980000661220402,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 17.64940000430215,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "TSLA",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 366.35880000540055,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\TSLA_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 340.683699992951,
+          "regime_ms": 0.06220000796020031,
+          "direction_ms": 0.16360000881832093,
+          "playbooks_ms": 3.7115000013727695,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 12.226399994688109,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 346.98270000808407
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.2043999993475154,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.09669999417383224,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 11.925300001166761,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "AMD",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 291.0706999973627,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\AMD_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 270.9149000002071,
+          "regime_ms": 0.054500007536262274,
+          "direction_ms": 0.14089999604038894,
+          "playbooks_ms": 2.5157999916700646,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.610500012058765,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 275.3260000026785
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.15440001152455807,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.07819999882485718,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.37790000170935,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "JPM",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 274.02060000167694,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\JPM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 253.4421000018483,
+          "regime_ms": 0.07760000880807638,
+          "direction_ms": 0.2835000050254166,
+          "playbooks_ms": 3.0448000034084544,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.030300003360026,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 258.21040000300854
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.1444000081392005,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.0670000008540228,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.818899994366802,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "XOM",
+        "timeframe": "1d",
+        "repetition": 1,
+        "api_latency_ms": 281.59000001323875,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "MATCHED",
+          "source": "data\\cache\\bars\\XOM_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 259.98810000601225,
+          "regime_ms": 0.053499999921768904,
+          "direction_ms": 0.15369999164249748,
+          "playbooks_ms": 2.0360999915283173,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.606199993868358,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 263.96440000098664
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.18950000230688602,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.14029999147169292,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 9.27640000008978,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      },
+      {
+        "symbol": "SPY",
+        "timeframe": "5m",
+        "repetition": 1,
+        "api_latency_ms": 281.3003000046592,
+        "status_code": 200,
+        "source_semantics": {
+          "status": "TIMEFRAME_SOURCE_MISMATCH",
+          "source": "data\\cache\\dashboard_refresh\\01acaab16d424d70a896b690a1a22be3\\SPY_1y.csv"
+        },
+        "lifecycle_state": "NO_SETUP",
+        "pipeline_version": "core_v1",
+        "stage_latencies": {
+          "structure_ms": 260.57340000988916,
+          "regime_ms": 0.08490000618621707,
+          "direction_ms": 0.218700006371364,
+          "playbooks_ms": 3.379999994649552,
+          "trigger_ms": "SKIPPED",
+          "tradeability_ms": "SKIPPED",
+          "options_expression_ms": "SKIPPED",
+          "portfolio_risk_ms": "SKIPPED",
+          "external_io_ms": 9.169299999484792,
+          "cache_hits": 1,
+          "cache_misses": 2,
+          "total_ms": 265.62799999373965
+        },
+        "io_metrics": [
+          {
+            "operation": "acquire_option_chain",
+            "source": "schwab",
+            "elapsed_ms": 0.15020000864751637,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "acquire_account_snapshot",
+            "source": "schwab_read_only",
+            "elapsed_ms": 0.06829999620094895,
+            "calls": 1,
+            "cache_hits": 0,
+            "cache_misses": 1,
+            "status": "ERROR"
+          },
+          {
+            "operation": "load_bars",
+            "source": "local_bar_cache",
+            "elapsed_ms": 8.950799994636327,
+            "calls": 1,
+            "cache_hits": 1,
+            "cache_misses": 0,
+            "status": "OK"
+          }
+        ]
+      }
+    ]
+  },
+  "replay": {
+    "status": "MEASURED",
+    "source": "data\\cache\\bars\\intraday\\SPY_10d_5m.csv",
+    "input_bars": 60,
+    "transitions": 0,
+    "outcomes": 0,
+    "observations": 10,
+    "elapsed_seconds": 0.8706546000030357,
+    "observations_per_second": 11.48561094142859
+  },
+  "snapshot_store": {
+    "operations": [
+      {
+        "operation": "initialize_snapshot_store",
+        "elapsed_ms": 3.2472000020788983,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:SPY",
+        "elapsed_ms": 2.031399999395944,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:QQQ",
+        "elapsed_ms": 1.9126999977743253,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:SPX",
+        "elapsed_ms": 1.9108999986201525,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:NVDA",
+        "elapsed_ms": 1.8734999903244898,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:AAPL",
+        "elapsed_ms": 1.8401000124868006,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:MSFT",
+        "elapsed_ms": 1.939399997354485,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:TSLA",
+        "elapsed_ms": 1.7545999871799722,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:AMD",
+        "elapsed_ms": 1.9222999981138855,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:JPM",
+        "elapsed_ms": 2.0400999928824604,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_option_chains:XOM",
+        "elapsed_ms": 1.9013000128325075,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "list_accounts",
+        "elapsed_ms": 2.391000001807697,
+        "status": "OK",
+        "sqlite_busy": false
+      },
+      {
+        "operation": "inspect_sqlite_settings",
+        "elapsed_ms": 0.7868000102462247,
+        "status": "OK",
+        "sqlite_busy": false
+      }
+    ],
+    "latency": {
+      "count": 13,
+      "min_ms": 0.7868000102462247,
+      "p50_ms": 1.9126999977743253,
+      "p95_ms": 2.7334800019161762,
+      "p99_ms": 3.1444560020463532,
+      "max_ms": 3.2472000020788983,
+      "mean_ms": 1.9654846154690648
+    },
+    "sqlite_busy_observations": 0,
+    "sqlite_error_observations": 0,
+    "option_snapshot_counts": {
+      "SPY": 0,
+      "QQQ": 0,
+      "SPX": 0,
+      "NVDA": 0,
+      "AAPL": 0,
+      "MSFT": 0,
+      "TSLA": 0,
+      "AMD": 0,
+      "JPM": 0,
+      "XOM": 0
+    },
+    "account_snapshot_count": 0,
+    "sqlite_settings": {
+      "journal_mode": "wal",
+      "busy_timeout_ms": 10000,
+      "synchronous": 1
+    }
+  },
+  "frontend": {
+    "status": "MEASURED_FIXTURE_AND_LIVE_V2",
+    "measured_at": "2026-09-16T15:21:13.154Z",
+    "initial_load_wall_ms": 290,
+    "interactions": [
+      {
+        "interaction": "state:WATCH",
+        "elapsed_ms": 44.8999999910593
+      },
+      {
+        "interaction": "state:ARMED",
+        "elapsed_ms": 35.099999994039536
+      },
+      {
+        "interaction": "state:TRIGGERED",
+        "elapsed_ms": 29.900000005960464
+      },
+      {
+        "interaction": "state:TRADEABLE",
+        "elapsed_ms": 25.299999997019768
+      },
+      {
+        "interaction": "state:BLOCKED",
+        "elapsed_ms": 24.899999991059303
+      },
+      {
+        "interaction": "state:PORTFOLIO_VETOED",
+        "elapsed_ms": 24.599999994039536
+      },
+      {
+        "interaction": "state:PORTFOLIO_APPROVED",
+        "elapsed_ms": 23.799999997019768
+      },
+      {
+        "interaction": "symbol:SPY->QQQ",
+        "elapsed_ms": 53.5
+      }
+    ],
+    "canonical_api_request_count": 0,
+    "frontend_evaluation_latency_status": "MEASURED_BROWSER_TO_LOCAL_V2",
+    "scanner_refresh": {
+      "status": "UNAVAILABLE_NOT_PRESENT_IN_V2_LIFECYCLE_HARNESS"
+    },
+    "chart_redraw_count": {
+      "status": "UNAVAILABLE_NO_CHART_IN_V2_LIFECYCLE_HARNESS"
+    },
+    "polling": {
+      "status": "OBSERVED_NO_POLLING",
+      "observation_window_ms": 1000,
+      "observed_request_count_after_settle": 0
+    },
+    "navigation": [
+      {
+        "duration_ms": 189.29999999701977,
+        "dom_content_loaded_ms": 187.29999999701977,
+        "load_event_ms": 189.29999999701977
+      }
+    ],
+    "lifecycle_renders": [
+      {
+        "phase": "mount",
+        "actualDuration": 12.400000005960464
+      },
+      {
+        "phase": "update",
+        "actualDuration": 10.400000020861626
+      },
+      {
+        "phase": "update",
+        "actualDuration": 9.599999994039536
+      },
+      {
+        "phase": "update",
+        "actualDuration": 8.100000023841858
+      },
+      {
+        "phase": "update",
+        "actualDuration": 8.400000005960464
+      },
+      {
+        "phase": "update",
+        "actualDuration": 5.5
+      },
+      {
+        "phase": "update",
+        "actualDuration": 8.900000005960464
+      },
+      {
+        "phase": "update",
+        "actualDuration": 7
+      },
+      {
+        "phase": "update",
+        "actualDuration": 8.599999994039536
+      }
+    ],
+    "v2_api_ms": [
+      548.3999999910593,
+      333.40000000596046
+    ],
+    "memory": {
+      "used_js_heap_size": 13400000,
+      "total_js_heap_size": 20500000
+    },
+    "live_lifecycle_renders": [
+      {
+        "phase": "mount",
+        "actualDuration": 1.5999999940395355
+      },
+      {
+        "phase": "update",
+        "actualDuration": 1.300000011920929
+      },
+      {
+        "phase": "update",
+        "actualDuration": 29.50000001490116
+      },
+      {
+        "phase": "update",
+        "actualDuration": 0.7000000029802322
+      },
+      {
+        "phase": "update",
+        "actualDuration": 15.000000014901161
+      }
+    ],
+    "live_canonical_api_request_count": 2,
+    "duplicate_api_calls_by_symbol": {
+      "SPY": 1,
+      "QQQ": 1
+    },
+    "v2_api_latency": {
+      "count": 2,
+      "min_ms": 333.40000000596046,
+      "p50_ms": 440.8999999985099,
+      "p95_ms": 537.6499999918044,
+      "p99_ms": 546.2499999912084,
+      "max_ms": 548.3999999910593,
+      "mean_ms": 440.8999999985099
+    },
+    "interaction_latency": {
+      "count": 8,
+      "min_ms": 23.799999997019768,
+      "p50_ms": 27.600000001490116,
+      "p95_ms": 50.48999999687075,
+      "p99_ms": 52.89799999937415,
+      "max_ms": 53.5,
+      "mean_ms": 32.74999999627471
+    },
+    "fixture_render_latency": {
+      "count": 9,
+      "min_ms": 5.5,
+      "p50_ms": 8.599999994039536,
+      "p95_ms": 11.600000011920928,
+      "p99_ms": 12.240000007152558,
+      "max_ms": 12.400000005960464,
+      "mean_ms": 8.766666672295994
+    },
+    "live_render_latency": {
+      "count": 5,
+      "min_ms": 0.7000000029802322,
+      "p50_ms": 1.5999999940395355,
+      "p95_ms": 26.60000001490116,
+      "p99_ms": 28.920000014901163,
+      "max_ms": 29.50000001490116,
+      "mean_ms": 9.620000007748605
+    }
+  },
+  "provisional_budgets_ms": {
+    "cached_api_p95": 300.0,
+    "live_api_p95": 1000.0,
+    "frontend_interaction": 100.0,
+    "gating": false
+  },
+  "measurement_limitations": [
+    "Python API latency uses in-process FastAPI TestClient and excludes network/server transport overhead.",
+    "Successful external-provider latency is unavailable when configured read-only providers fail authentication.",
+    "Intraday API samples backed by daily cache files are excluded as TIMEFRAME_SOURCE_MISMATCH."
+  ]
+}

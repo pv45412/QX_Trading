@@ -1,0 +1,34 @@
+{
+  "long_p3": {
+    "n": 968,
+    "mean_r": 0.4418,
+    "median_r": -0.5538,
+    "win_rate": 0.4153,
+    "profit_factor": 1.401,
+    "final_r": 427.6
+  },
+  "short_p3": {
+    "n": 12,
+    "mean_r": -0.9358,
+    "median_r": -0.6403,
+    "win_rate": 0.0833,
+    "profit_factor": 0.018,
+    "final_r": -11.2
+  },
+  "long_p1": {
+    "n": 16,
+    "mean_r": 0.2168,
+    "median_r": -0.3026,
+    "win_rate": 0.3125,
+    "profit_factor": 1.414,
+    "final_r": 3.5
+  },
+  "short_p1": {
+    "n": 746,
+    "mean_r": -0.4936,
+    "median_r": -0.918,
+    "win_rate": 0.3217,
+    "profit_factor": 0.598,
+    "final_r": -368.2
+  }
+}

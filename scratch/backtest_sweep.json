@@ -1,0 +1,161 @@
+[
+  {
+    "label": "BASE (as shipped)",
+    "n": 6044,
+    "errors": 0,
+    "mean_r": -0.1385,
+    "median_r": -0.907,
+    "win_rate": 0.346,
+    "profit_factor": 0.884,
+    "final_r": -837.0,
+    "seconds": 38.5
+  },
+  {
+    "label": "RVOL gate 0.90 -> 1.20",
+    "n": 4706,
+    "errors": 0,
+    "mean_r": -0.0995,
+    "median_r": -0.8853,
+    "win_rate": 0.3532,
+    "profit_factor": 0.916,
+    "final_r": -468.4,
+    "seconds": 40.7
+  },
+  {
+    "label": "RVOL gate 0.90 -> 1.50",
+    "n": 3454,
+    "errors": 0,
+    "mean_r": -0.1005,
+    "median_r": -0.907,
+    "win_rate": 0.3567,
+    "profit_factor": 0.917,
+    "final_r": -347.0,
+    "seconds": 37.7
+  },
+  {
+    "label": "RVOL gate 0.90 -> 2.00",
+    "n": 2071,
+    "errors": 0,
+    "mean_r": -0.0999,
+    "median_r": -0.867,
+    "win_rate": 0.353,
+    "profit_factor": 0.916,
+    "final_r": -206.8,
+    "seconds": 42.0
+  },
+  {
+    "label": "volume filter OFF",
+    "n": 6969,
+    "errors": 0,
+    "mean_r": -0.1484,
+    "median_r": -0.8821,
+    "win_rate": 0.3404,
+    "profit_factor": 0.872,
+    "final_r": -1034.4,
+    "seconds": 37.6
+  },
+  {
+    "label": "supertrend bias OFF",
+    "n": 6044,
+    "errors": 0,
+    "mean_r": -0.1385,
+    "median_r": -0.907,
+    "win_rate": 0.346,
+    "profit_factor": 0.884,
+    "final_r": -837.0,
+    "seconds": 40.0
+  },
+  {
+    "label": "bias confirm 2 -> 3",
+    "n": 6044,
+    "errors": 0,
+    "mean_r": -0.1385,
+    "median_r": -0.907,
+    "win_rate": 0.346,
+    "profit_factor": 0.884,
+    "final_r": -837.0,
+    "seconds": 37.6
+  },
+  {
+    "label": "bias confirm 2 -> 4",
+    "n": 6044,
+    "errors": 0,
+    "mean_r": -0.1385,
+    "median_r": -0.907,
+    "win_rate": 0.346,
+    "profit_factor": 0.884,
+    "final_r": -837.0,
+    "seconds": 37.0
+  },
+  {
+    "label": "RSI band 70/30 -> 80/20",
+    "n": 6044,
+    "errors": 0,
+    "mean_r": -0.1385,
+    "median_r": -0.907,
+    "win_rate": 0.346,
+    "profit_factor": 0.884,
+    "final_r": -837.0,
+    "seconds": 33.7
+  },
+  {
+    "label": "trigger length 5 -> 10",
+    "n": 5861,
+    "errors": 0,
+    "mean_r": -0.1364,
+    "median_r": -0.9021,
+    "win_rate": 0.3474,
+    "profit_factor": 0.886,
+    "final_r": -799.6,
+    "seconds": 33.4
+  },
+  {
+    "label": "trigger length 5 -> 20",
+    "n": 5770,
+    "errors": 0,
+    "mean_r": -0.1418,
+    "median_r": -0.909,
+    "win_rate": 0.3473,
+    "profit_factor": 0.882,
+    "final_r": -818.2,
+    "seconds": 31.8
+  },
+  {
+    "label": "wave length 34 -> 55",
+    "n": 5060,
+    "errors": 0,
+    "mean_r": -0.0385,
+    "median_r": -0.7712,
+    "win_rate": 0.3644,
+    "profit_factor": 0.967,
+    "final_r": -194.6,
+    "seconds": 33.6
+  },
+  {
+    "label": "waves 8/21 -> 13/34",
+    "n": 0,
+    "seconds": 35.3
+  },
+  {
+    "label": "ATR stop x1.10 -> x2.00",
+    "n": 6044,
+    "errors": 0,
+    "mean_r": -0.1385,
+    "median_r": -0.907,
+    "win_rate": 0.346,
+    "profit_factor": 0.884,
+    "final_r": -837.0,
+    "seconds": 32.3
+  },
+  {
+    "label": "ATR stop x1.10 -> x3.00",
+    "n": 6044,
+    "errors": 0,
+    "mean_r": -0.1385,
+    "median_r": -0.907,
+    "win_rate": 0.346,
+    "profit_factor": 0.884,
+    "final_r": -837.0,
+    "seconds": 34.5
+  }
+]

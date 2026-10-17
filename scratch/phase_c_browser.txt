@@ -1,0 +1,9 @@
+﻿HTTP
+  audit_explorer_http  RESULT: 32 passed, 0 failed
+  audit_ideas_http       FAIL  filtered rows are that sector 25 | RESULT: 32 passed, 1 failed
+BROWSER
+  qx-explorer                RESULT: 25 passed, 0 failed
+  qx-trade-ideas             RESULT: 32 passed, 0 failed
+  qx-workspace-integration     PASS  results table populated 10 rows |   PASS  side filter narrows results LONG=2 all=10 | RESULT: 61 passed, 0 failed
+  qx-reports-drilldown       RESULT: 19 passed, 0 failed
+  qx-context-settings        RESULT: 21 passed, 0 failed

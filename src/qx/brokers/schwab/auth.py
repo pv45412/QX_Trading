@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import base64
 import json
+import time
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Callable, Protocol
 from urllib.parse import parse_qs, unquote, urlencode, urlparse
 
 import requests
@@ -18,6 +19,42 @@ TOKEN_REFRESH_BUFFER = timedelta(minutes=5)
 
 class SchwabAuthError(RuntimeError):
     """Raised when Schwab credentials or token refresh are not usable."""
+
+
+# Schwab's own rejection text from the most recent refresh-grant attempt, keyed by
+# the token file path. This lives at module scope on purpose: the settings page,
+# the health probes and the API client each build their own short-lived
+# SchwabTokenManager, so an instance attribute would be set by one object and read
+# by another and the dead grant would never surface. Entries are removed the
+# instant any token request succeeds, so a fresh browser authorization clears it.
+_PROVIDER_REJECTIONS: dict[str, tuple[str, float]] = {}
+
+# Token paths that have completed a token request successfully during this process.
+# This is positive evidence the grant works, as opposed to "no failure seen yet".
+_PROVIDER_CONFIRMED: set[str] = set()
+
+
+def _rejection_key(settings: Settings) -> str:
+    return str(settings.schwab_token_path)
+
+
+def _record_provider_rejection(settings: Settings, message: str) -> None:
+    _PROVIDER_REJECTIONS[_rejection_key(settings)] = (message, time.time())
+    _PROVIDER_CONFIRMED.discard(_rejection_key(settings))
+
+
+def _clear_provider_rejection(settings: Settings) -> None:
+    _PROVIDER_REJECTIONS.pop(_rejection_key(settings), None)
+    _PROVIDER_CONFIRMED.add(_rejection_key(settings))
+
+
+def _provider_rejection(settings: Settings) -> str | None:
+    entry = _PROVIDER_REJECTIONS.get(_rejection_key(settings))
+    return entry[0] if entry else None
+
+
+def _provider_confirmed(settings: Settings) -> bool:
+    return _rejection_key(settings) in _PROVIDER_CONFIRMED
 
 
 class HttpClient(Protocol):
@@ -46,7 +83,18 @@ class SchwabToken:
         return datetime.now(UTC) + TOKEN_REFRESH_BUFFER >= self.access_token_expires_at
 
     @property
+    def refresh_expiry_known(self) -> bool:
+        """True when Schwab told us when the refresh token dies.
+
+        Schwab's refresh_token grant omits ``refresh_token_expires_in``, so a
+        token produced by a refresh has no known refresh expiry. That is an
+        UNKNOWN, not a pass — callers must not render it as "valid".
+        """
+        return self.refresh_token_expires_at is not None
+
+    @property
     def refresh_expired(self) -> bool:
+        """True only when we KNOW the refresh token is past its expiry."""
         return (
             self.refresh_token_expires_at is not None
             and datetime.now(UTC) >= self.refresh_token_expires_at
@@ -100,19 +148,39 @@ class SchwabAuthStatus:
     restart_required: bool
     message: str
     authorization_url: str
+    # Tri-state honesty fields. ``refresh_token_valid`` is a bool and therefore
+    # cannot express "Schwab never told us when this refresh token dies", which
+    # is the normal state after a refresh grant. These carry the real answer.
+    refresh_expiry_known: bool = True
+    refresh_token_state: str = "unknown"  # valid | expired | unknown | absent
+    provider_verified: bool = False
+    provider_error: str | None = None
 
 
 class SchwabTokenManager:
     def __init__(
         self,
-        settings: Settings,
+        settings: Settings | Callable[[], Settings],
         *,
         store: SchwabTokenStore | None = None,
         http_client: HttpClient | None = None,
     ) -> None:
-        self.settings = settings
-        self.store = store or SchwabTokenStore(settings.schwab_token_path)
+        self._settings = settings
+        self._store = store
         self.http_client = http_client or requests.Session()
+        # Schwab's own rejection text from the most recent refresh attempt. Kept on
+        # the module registry as well as the instance because the settings page and
+        # the health probes each build their own short-lived manager; the instance
+        # value only survives for objects that live long enough to be asked.
+        self._last_provider_error: str | None = None
+
+    @property
+    def settings(self) -> Settings:
+        return self._settings() if callable(self._settings) else self._settings
+
+    @property
+    def store(self) -> SchwabTokenStore:
+        return self._store or SchwabTokenStore(self.settings.schwab_token_path)
 
     def authorization_url(self) -> str:
         query = urlencode(
@@ -136,6 +204,8 @@ class SchwabTokenManager:
                 restart_required=False,
                 message="Schwab client id/secret are not configured.",
                 authorization_url="",
+                refresh_expiry_known=False,
+                refresh_token_state="absent",
             )
         if token is None:
             return SchwabAuthStatus(
@@ -146,6 +216,8 @@ class SchwabTokenManager:
                 restart_required=True,
                 message="No Schwab token file found. Complete browser authorization.",
                 authorization_url=self.authorization_url(),
+                refresh_expiry_known=False,
+                refresh_token_state="absent",
             )
         if token.refresh_expired:
             return SchwabAuthStatus(
@@ -156,6 +228,41 @@ class SchwabTokenManager:
                 restart_required=True,
                 message="Schwab refresh token is expired. Restart OAuth authorization.",
                 authorization_url=self.authorization_url(),
+                refresh_expiry_known=True,
+                refresh_token_state="expired",
+            )
+        expiry_known = token.refresh_expiry_known
+        state = "valid" if expiry_known else "unknown"
+        rejected = _provider_rejection(self.settings)
+        if rejected:
+            # Schwab itself refused the refresh grant. The stored file may still
+            # look healthy on paper, but the grant is dead, so report that instead
+            # of "ready" and letting the next real request fail.
+            return SchwabAuthStatus(
+                configured=True,
+                has_token=True,
+                access_token_valid=not token.needs_refresh,
+                refresh_token_valid=False,
+                restart_required=True,
+                message=(
+                    "Schwab rejected the stored refresh token. The saved grant is dead; "
+                    "complete browser authorization again to replace it."
+                ),
+                authorization_url=self.authorization_url(),
+                refresh_expiry_known=expiry_known,
+                refresh_token_state="rejected",
+                provider_verified=False,
+                provider_error=rejected,
+            )
+        if not token.needs_refresh:
+            message = "Schwab access token is ready."
+        elif expiry_known:
+            message = "Schwab access token needs refresh; the refresh token is still valid."
+        else:
+            message = (
+                "Schwab access token needs refresh. Schwab did not report a refresh "
+                "token expiry, so its remaining life is unknown until a refresh is "
+                "attempted."
             )
         return SchwabAuthStatus(
             configured=True,
@@ -163,12 +270,12 @@ class SchwabTokenManager:
             access_token_valid=not token.needs_refresh,
             refresh_token_valid=not token.refresh_expired,
             restart_required=False,
-            message=(
-                "Schwab token is ready."
-                if not token.needs_refresh
-                else "Schwab access token needs refresh."
-            ),
+            message=message,
             authorization_url=self.authorization_url(),
+            refresh_expiry_known=expiry_known,
+            refresh_token_state=state,
+            provider_verified=_provider_confirmed(self.settings),
+            provider_error=self._last_provider_error,
         )
 
     def get_access_token(self) -> str:
@@ -216,8 +323,15 @@ class SchwabTokenManager:
             timeout=30,
         )
         if getattr(response, "status_code", 500) >= 400:
-            raise SchwabAuthError(_token_error_message(data, getattr(response, "text", "")))
+            message = _token_error_message(data, getattr(response, "text", ""))
+            # Remember the provider's rejection so status() can report it and the
+            # settings page stops claiming a dead grant merely "needs refresh".
+            self._last_provider_error = message
+            _record_provider_rejection(self.settings, message)
+            raise SchwabAuthError(message)
         payload = dict(response.json())
+        self._last_provider_error = None
+        _clear_provider_rejection(self.settings)
         return _token_from_payload(payload, fallback_refresh_token=data.get("refresh_token"))
 
     def _basic_auth(self) -> str:

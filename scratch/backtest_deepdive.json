@@ -1,0 +1,68 @@
+{
+  "base_longs": {
+    "n": 1070,
+    "mean_r": 0.4136,
+    "median_r": -0.59,
+    "win_rate": 0.4056,
+    "profit_factor": 1.371,
+    "final_r": 442.6,
+    "max_dd": -1191.4
+  },
+  "regime_filtered": {
+    "n": 707,
+    "mean_r": 0.6252,
+    "median_r": -0.4751,
+    "win_rate": 0.4286,
+    "profit_factor": 1.604,
+    "final_r": 442.0,
+    "max_dd": -731.6
+  },
+  "ranking_variants": [
+    {
+      "variant": "LONG all signals",
+      "n": 1070,
+      "mean_r": 0.4136,
+      "median_r": -0.59,
+      "win_rate": 0.4056,
+      "profit_factor": 1.371,
+      "final_r": 442.6,
+      "max_dd": -1191.4
+    },
+    {
+      "variant": "LONG top 5 per day",
+      "n": 823,
+      "mean_r": 0.446,
+      "median_r": -0.4914,
+      "win_rate": 0.4228,
+      "profit_factor": 1.412,
+      "final_r": 367.0,
+      "max_dd": -889.9
+    },
+    {
+      "variant": "LONG top 3 per day",
+      "n": 643,
+      "mean_r": 0.4831,
+      "median_r": -0.4082,
+      "win_rate": 0.4308,
+      "profit_factor": 1.461,
+      "final_r": 310.6,
+      "max_dd": -674.5
+    },
+    {
+      "variant": "LONG top 1 per day",
+      "n": 300,
+      "mean_r": 0.71,
+      "median_r": -0.2288,
+      "win_rate": 0.48,
+      "profit_factor": 1.713,
+      "final_r": 213.0,
+      "max_dd": -298.8
+    }
+  ],
+  "distribution": {
+    "p05": -3.543147650989277,
+    "median": -0.5899925551308587,
+    "p95": 8.358003770654848,
+    "max": 31.671082925114234
+  }
+}

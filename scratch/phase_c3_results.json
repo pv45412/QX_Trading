@@ -1,0 +1,140 @@
+[
+  {
+    "finding": "C3a",
+    "title": "expired series are excluded",
+    "ok": true,
+    "detail": "['2026-10-13:1', '2026-10-16:4']"
+  },
+  {
+    "finding": "C3b",
+    "title": "series with open interest are preferred",
+    "ok": true,
+    "detail": "['2026-10-13:1', '2026-10-16:4']"
+  },
+  {
+    "finding": "C3c",
+    "title": "the expired series are reported",
+    "ok": true,
+    "detail": "['2026-10-09:-2', '2026-10-08:-1']"
+  },
+  {
+    "finding": "C3d",
+    "title": "the OI-empty series is reported",
+    "ok": true,
+    "detail": "['2026-10-12:0']"
+  },
+  {
+    "finding": "C3e",
+    "title": "the DTEs used are reported",
+    "ok": true,
+    "detail": "[1, 4]"
+  },
+  {
+    "finding": "C3f",
+    "title": "it records that OI drove the choice",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "C3g",
+    "title": "nearest DTE first, across months",
+    "ok": true,
+    "detail": "[0, 18]"
+  },
+  {
+    "finding": "C3h",
+    "title": "live series are still returned when none have OI",
+    "ok": true,
+    "detail": "['2026-10-12:0', '2026-10-13:1']"
+  },
+  {
+    "finding": "C3i",
+    "title": "and it does NOT claim OI drove the choice",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "C3j",
+    "title": "DTE is parsed from the ':N' suffix",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "C3k",
+    "title": "a negative DTE is parsed (expired)",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "C3j2",
+    "title": "a malformed key yields None rather than raising",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "C3l",
+    "title": "select_expiries never invents an expiry",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "C3live-SPY",
+    "title": "SPY gamma profile is non-degenerate",
+    "ok": true,
+    "detail": "strikes=80 nonzero=72"
+  },
+  {
+    "finding": "C3live-$SPX",
+    "title": "$SPX gamma profile is non-degenerate",
+    "ok": true,
+    "detail": "strikes=40 nonzero=40"
+  },
+  {
+    "finding": "C3live-/ES",
+    "title": "/ES gamma profile is non-degenerate",
+    "ok": true,
+    "detail": "strikes=40 nonzero=40"
+  },
+  {
+    "finding": "C3live-$NDX",
+    "title": "$NDX gamma profile is non-degenerate",
+    "ok": true,
+    "detail": "strikes=80 nonzero=76"
+  },
+  {
+    "finding": "C3live-/NQ",
+    "title": "/NQ gamma profile is non-degenerate",
+    "ok": true,
+    "detail": "strikes=80 nonzero=76"
+  },
+  {
+    "finding": "C3live-$VIX",
+    "title": "$VIX gamma profile is non-degenerate",
+    "ok": true,
+    "detail": "strikes=70 nonzero=65"
+  },
+  {
+    "finding": "C3m",
+    "title": "every live symbol was either computed or explicitly refused",
+    "ok": true,
+    "detail": "worked=6 refused=0"
+  },
+  {
+    "finding": "C3m2",
+    "title": "SPY (equity/ETF) produces real gamma regardless of session",
+    "ok": true,
+    "detail": "informational"
+  },
+  {
+    "finding": "C3n",
+    "title": "chain metadata carries expiry_selection",
+    "ok": true,
+    "detail": "['contracts', 'expiries', 'expiry_selection', 'interest_rate', 'is_delayed', 'is_truncated', 'status']"
+  },
+  {
+    "finding": "C3o",
+    "title": "the selection reports which DTEs were used",
+    "ok": true,
+    "detail": "[0, 1]"
+  }
+]

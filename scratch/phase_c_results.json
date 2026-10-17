@@ -1,0 +1,200 @@
+[
+  {
+    "finding": "F17a1",
+    "title": "short unrealized is +100 (not -1900)",
+    "ok": true,
+    "detail": "unrealized=100.0"
+  },
+  {
+    "finding": "F17a2",
+    "title": "short total_unrealized is +100",
+    "ok": true,
+    "detail": "total=100.0"
+  },
+  {
+    "finding": "F17a3",
+    "title": "cost basis is reported as a positive magnitude",
+    "ok": true,
+    "detail": "cost_basis=1000.0"
+  },
+  {
+    "finding": "F17a4",
+    "title": "quantity is signed negative for a short",
+    "ok": true,
+    "detail": "quantity=-10.0"
+  },
+  {
+    "finding": "F17a5",
+    "title": "a losing short reports -100",
+    "ok": true,
+    "detail": "unrealized=-100.0"
+  },
+  {
+    "finding": "F17a6",
+    "title": "long unrealized still +100 (no regression)",
+    "ok": true,
+    "detail": "unrealized=100.0"
+  },
+  {
+    "finding": "F17a7",
+    "title": "supplied shortOpenProfitLoss takes precedence",
+    "ok": true,
+    "detail": "unrealized=42.0"
+  },
+  {
+    "finding": "F17a8",
+    "title": "option long uses the x100 multiplier",
+    "ok": true,
+    "detail": "unrealized=200.0 cost=1000.0"
+  },
+  {
+    "finding": "F17a9",
+    "title": "short option unrealized is +200",
+    "ok": true,
+    "detail": "unrealized=200.0"
+  },
+  {
+    "finding": "F17a10",
+    "title": "missing market value yields None, not a guessed figure",
+    "ok": true,
+    "detail": "unrealized=None"
+  },
+  {
+    "finding": "F17b1",
+    "title": "the matched portion is still reported",
+    "ok": true,
+    "detail": "trades=1"
+  },
+  {
+    "finding": "F17b2",
+    "title": "the excess quantity is recorded in unmatched_closes",
+    "ok": true,
+    "detail": "unmatched=[{'symbol': 'XYZ', 'asset_type': 'OPTION', 'qty': 1.0, 'time': '2026-01-02T00:00:00+00:00', 'note': 'unmatched residual: the close exceeded the opening lots available in this window (partial match only)'}]"
+  },
+  {
+    "finding": "F17b3",
+    "title": "the residual quantity is the unmatched excess (1)",
+    "ok": true,
+    "detail": "qty=1.0"
+  },
+  {
+    "finding": "F17b4",
+    "title": "the residual explains itself",
+    "ok": true,
+    "detail": "unmatched residual: the close exceeded the opening lots available in t"
+  },
+  {
+    "finding": "F17b5",
+    "title": "a fully matched close produces no residual",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F17b6",
+    "title": "a close with no opening lot is still recorded",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F16a1",
+    "title": "a negative limit fails the limit_price check",
+    "ok": true,
+    "detail": "passed=False"
+  },
+  {
+    "finding": "F16a2",
+    "title": "a negative limit is not READY_FOR_CONFIRMATION",
+    "ok": true,
+    "detail": "BLOCKED"
+  },
+  {
+    "finding": "F16a3",
+    "title": "no negative estimated cost is produced",
+    "ok": true,
+    "detail": "estimated_cost=0.0"
+  },
+  {
+    "finding": "F16a4",
+    "title": "a zero limit is rejected",
+    "ok": true,
+    "detail": "passed=False"
+  },
+  {
+    "finding": "F16a5-NaN",
+    "title": "a NaN limit is rejected",
+    "ok": true,
+    "detail": "verdict=BLOCKED"
+  },
+  {
+    "finding": "F16a5-inf",
+    "title": "a inf limit is rejected",
+    "ok": true,
+    "detail": "verdict=BLOCKED"
+  },
+  {
+    "finding": "F16a5--inf",
+    "title": "a -inf limit is rejected",
+    "ok": true,
+    "detail": "verdict=BLOCKED"
+  },
+  {
+    "finding": "F16a6-NaN",
+    "title": "a NaN quantity is rejected",
+    "ok": true,
+    "detail": "verdict=BLOCKED"
+  },
+  {
+    "finding": "F16a6-inf",
+    "title": "a inf quantity is rejected",
+    "ok": true,
+    "detail": "verdict=BLOCKED"
+  },
+  {
+    "finding": "F16a7",
+    "title": "a negative quantity is rejected",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F16a8",
+    "title": "a fractional equity quantity is rejected",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "F16b1",
+    "title": "missing equity does NOT pass concentration",
+    "ok": true,
+    "detail": "passed=False"
+  },
+  {
+    "finding": "F16b2",
+    "title": "missing equity blocks confirmation",
+    "ok": true,
+    "detail": "BLOCKED"
+  },
+  {
+    "finding": "F16b3",
+    "title": "zero buying power blocks a buy",
+    "ok": true,
+    "detail": "BLOCKED"
+  },
+  {
+    "finding": "F16b4",
+    "title": "an order far exceeding equity is blocked",
+    "ok": true,
+    "detail": "BLOCKED"
+  },
+  {
+    "finding": "F16c1",
+    "title": "a valid limit ticket is READY_FOR_CONFIRMATION",
+    "ok": true,
+    "detail": "verdict=READY_FOR_CONFIRMATION failed=[]"
+  },
+  {
+    "finding": "F16c2",
+    "title": "its estimated cost is sane",
+    "ok": true,
+    "detail": "estimated_cost=995.0"
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "payload": {
+    "as_of": "2026-10-14T04:20:18.886641+00:00",
+    "env_path": "C:\\Project\\2026\\.env",
+    "env_exists": true,
+    "client": {
+      "client_id_present": true,
+      "client_id_masked": "********************************************u64J",
+      "client_secret_present": true,
+      "redirect_uri": "https://127.0.0.1",
+      "auth_base_url": "https://api.schwabapi.com/v1/oauth",
+      "api_base_url": "https://api.schwabapi.com",
+      "token_path": "data\\secrets\\schwab_token.json"
+    },
+    "token": {
+      "configured": true,
+      "has_token": true,
+      "access_token_valid": false,
+      "refresh_token_valid": true,
+      "restart_required": false,
+      "message": "Schwab access token needs refresh."
+    },
+    "token_file_exists": true,
+    "authorization_url": "https://api.schwabapi.com/v1/oauth/authorize?response_type=code&client_id=DDklE9OTHNj5rt1sb0Mc3J0ERkcF2qAeGemtCtC7Hq02u64J&redirect_uri=https%3A%2F%2F127.0.0.1",
+    "health": {
+      "ok": false,
+      "error": "SchwabAuthError: Schwab refresh token was rejected. Restart OAuth authorization.",
+      "probe": "GET /marketdata/v1/quotes?symbols=SPY"
+    },
+    "notes": [
+      "The client secret is never exposed to the browser, prompts or logs.",
+      "Access and refresh tokens stay server-side; only their state is reported.",
+      "Writing credentials rewrites the local .env and is a separate explicit action."
+    ]
+  },
+  "checks": [
+    {
+      "label": "health failure must NOT be reported as 'Restart required: yes'",
+      "ok": true,
+      "detail": "probe_ok=False restart_required=False err=SchwabAuthError: Schwab refresh token was rejected. Restart "
+    },
+    {
+      "label": "authorization_url must be absent when credentials are genuinely absent",
+      "ok": true,
+      "detail": "configured=True url=present"
+    },
+    {
+      "label": "'token file on disk' row must agree with .env/credential reality",
+      "ok": true,
+      "detail": "row is rendered from token_file_exists \u2014 inspect separately"
+    }
+  ]
+}

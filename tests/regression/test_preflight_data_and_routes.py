@@ -18,14 +18,15 @@ def client():
 
 class TestAPIRegression:
     def test_market_snapshot_live_contract(self, client):
-        """Verify market snapshot returns 200 OK, LIVE status, price > 0, and non-empty structure."""
+        """Verify cached market snapshots remain explicitly source-backed."""
         symbols = ["XLK", "VST", "SPY"]
         for sym in symbols:
             response = client.get(f"/api/market/{sym}/snapshot")
             assert response.status_code == 200, f"Snapshot for {sym} failed with status {response.status_code}"
             data = response.json()
             assert data["symbol"] == sym
-            assert data["status"] == "LIVE"
+            assert data["status"] == "SOURCE_BACKED"
+            assert data["source_class"] == "SOURCE_BACKED"
             assert data["last_price"] > 0
             assert "structure" in data
             struct = data["structure"]

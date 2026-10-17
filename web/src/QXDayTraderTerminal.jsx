@@ -2,7 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Zap, Shield, Activity, TrendingUp, TrendingDown, Crosshair, DollarSign, Clock, RefreshCw, AlertCircle, Play } from 'lucide-react';
 import './QXDayTraderTerminal.css';
 
-export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
+const emptyDetail = symbol => ({
+  symbol,
+  price: null,
+  change_dollar: 0.0,
+  change_pct: 0.0,
+  gex_regime: 'Fetching Live Session...',
+  as_of: `${new Date().toISOString().split('T')[0]} Live Session`,
+  ai_signals: [],
+  level2_asks: [],
+  level2_bids: [],
+  tape_prints: [],
+});
+
+export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol, onDetailData, onDetailLoading }) {
   const [selectedTicker, setSelectedTicker] = useState(activeSymbol || 'SPX');
 
   useEffect(() => {
@@ -39,18 +52,7 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
     { symbol: 'AAPL', price: null, change: '--', gexRegime: 'Fetching Live Session...' },
   ]);
 
-  const [detailData, setDetailData] = useState({
-    symbol: 'SPX',
-    price: null,
-    change_dollar: 0.0,
-    change_pct: 0.0,
-    gex_regime: 'Fetching Live Session...',
-    as_of: `${new Date().toISOString().split('T')[0]} Live Session`,
-    ai_signals: [],
-    level2_asks: [],
-    level2_bids: [],
-    tape_prints: [],
-  });
+  const [detailData, setDetailData] = useState(() => emptyDetail(activeSymbol || 'SPX'));
 
   // Fetch Watchlist Ticker Quotes from API
   const fetchWatchlist = async () => {
@@ -68,18 +70,25 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
   };
 
   // Fetch Terminal Detail for Selected Ticker from API
-  const fetchDetail = async (symbol) => {
+  const fetchDetail = async (symbol, signal) => {
     setLoading(true);
+    onDetailLoading?.(true);
     try {
-      const res = await fetch(`/api/terminal/detail/${symbol}`);
+      const res = await fetch(`/api/terminal/detail/${symbol}`, {signal});
       if (res.ok) {
         const data = await res.json();
-        setDetailData(data);
+        if (!signal.aborted) {
+          setDetailData(data);
+          onDetailData?.(data);
+        }
       }
     } catch (e) {
       // Fallback
     } finally {
-      setLoading(false);
+      if (!signal.aborted) {
+        setLoading(false);
+        onDetailLoading?.(false);
+      }
     }
   };
 
@@ -88,7 +97,10 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
   }, []);
 
   useEffect(() => {
-    fetchDetail(selectedTicker);
+    const controller = new AbortController();
+    setDetailData(emptyDetail(selectedTicker));
+    fetchDetail(selectedTicker, controller.signal);
+    return () => controller.abort();
   }, [selectedTicker]);
 
   const currentTickerObj = tickers.find(t => t.symbol === selectedTicker) || {
@@ -103,9 +115,9 @@ export default function QXDayTraderTerminal({ activeSymbol, onSelectSymbol }) {
   const aiSignals = (detailData.symbol === selectedTicker && Array.isArray(detailData.ai_signals)) ? detailData.ai_signals : [];
 
   // Level 2 & Tape Prints strictly from API
-  const level2Asks = detailData.level2_asks || [];
-  const level2Bids = detailData.level2_bids || [];
-  const tapePrints = detailData.tape_prints || [];
+  const level2Asks = detailData.symbol === selectedTicker ? detailData.level2_asks || [] : [];
+  const level2Bids = detailData.symbol === selectedTicker ? detailData.level2_bids || [] : [];
+  const tapePrints = detailData.symbol === selectedTicker ? detailData.tape_prints || [] : [];
 
   // Risk Calculator
   const maxDollarRiskVal = accountSize * (riskPct / 100);

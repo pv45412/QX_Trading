@@ -1,0 +1,25 @@
+{
+  "schema_version": "qx.be1-performance.v1",
+  "records": 500,
+  "streams": 50,
+  "iterations": 300,
+  "list_latest_25": {
+    "p50_ms": 43.9612,
+    "p95_ms": 99.1366,
+    "p99_ms": 154.2738,
+    "max_ms": 286.6491
+  },
+  "detail_by_id": {
+    "p50_ms": 19.5777,
+    "p95_ms": 72.1329,
+    "p99_ms": 147.0595,
+    "max_ms": 312.1898
+  },
+  "list_response_serialization_etag": {
+    "p50_ms": 2.448,
+    "p95_ms": 5.752,
+    "p99_ms": 12.806,
+    "max_ms": 31.2856
+  },
+  "result": "OBSERVATIONAL_ONLY"
+}

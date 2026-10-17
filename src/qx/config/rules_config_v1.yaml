@@ -1,55 +1,143 @@
-# QX Rules Engine Research Configuration Schema
 version: research_v1
-
+shadow_mode:
+  enabled: true
+  mode: EXPLICIT_SYMBOLS
+  symbols:
+  - SPY
+  - QQQ
+  - SPX
+  - NVDA
+  - AAPL
+  - MSFT
+  - TSLA
+  - AMD
+  - JPM
+  - XOM
 direction_engine:
   weights:
-    structure: 0.30
+    structure: 0.3
     vwap: 0.15
-    ema: 0.10
+    ema: 0.1
     delta: 0.15
-    sector_rs: 0.10
-    market_alignment: 0.10
-    higher_timeframe: 0.10
-
+    sector_rs: 0.1
+    market_alignment: 0.1
+    higher_timeframe: 0.1
 playbooks:
   playbook_a_pullback:
-    version: "1.0"
+    version: '1.0'
     min_direction_score: 50.0
-    rvol_normalized_min: 1.30
-    max_extension_atr: 1.50
-    min_risk_reward: 1.50
-
+    rvol_normalized_min: 1.3
+    max_extension_atr: 1.5
+    min_risk_reward: 1.5
   playbook_b_liquidity_sweep:
-    version: "1.0"
+    version: '1.0'
     directional_rules:
       bullish_sweep:
-        max_prior_direction_score: 20.0  # Bearish or neutral prior trend allowed
+        max_prior_direction_score: 20.0
         require_low_sweep: true
         require_reclaim: true
       bearish_sweep:
-        min_prior_direction_score: -20.0 # Bullish or neutral prior trend allowed
+        min_prior_direction_score: -20.0
         require_high_sweep: true
         require_reclaim: true
-    rvol_normalized_min: 1.50
+    rvol_normalized_min: 1.5
     vscore_extreme_threshold: -2.0
-    min_risk_reward: 2.00
-
+    min_risk_reward: 2.0
   playbook_c_orb_breakout:
-    version: "1.0"
+    version: '1.0'
     orb_minutes: 15
     min_direction_score: 60.0
-    rvol_normalized_min: 1.80
+    rvol_normalized_min: 1.8
     require_candle_body_close: true
-    min_risk_reward: 1.50
-
+    min_risk_reward: 1.5
 order_block_validation:
-  min_displacement_atr: 1.00
-  min_body_multiplier: 1.50
-  require_structural_consequence: true  # Must produce BOS or CHoCH
-
+  min_displacement_atr: 1.0
+  min_body_multiplier: 1.5
+  require_structural_consequence: true
 risk_limits:
   max_dollar_risk_pct: 1.0
   point_bounds:
-    NQ: { min: 12.0, max: 40.0 }
-    ES: { min: 1.75, max: 5.50 }
-    CL: { min: 0.15, max: 0.45 }
+    NQ:
+      min: 12.0
+      max: 40.0
+    ES:
+      min: 1.75
+      max: 5.5
+    CL:
+      min: 0.15
+      max: 0.45
+options_expression:
+  quote_freshness:
+    max_age_seconds: 60.0
+  liquidity:
+    max_spread_pct: 0.15
+    min_open_interest: 50
+    min_volume: 10
+  dte:
+    playbook_windows:
+      playbook_a_pullback:
+        min: 7
+        max: 45
+      playbook_b_liquidity_sweep:
+        min: 3
+        max: 21
+      playbook_c_orb_breakout:
+        min: 0
+        max: 5
+  volatility:
+    low_iv_rank_max: 35.0
+    high_iv_rank_min: 60.0
+  long_option:
+    delta_min: 0.4
+    delta_max: 0.7
+  debit_spread:
+    long_delta_min: 0.4
+    long_delta_max: 0.7
+    short_strike_target_policy: STRUCTURAL_TARGET
+  credit_spread:
+    short_delta_min: 0.15
+    short_delta_max: 0.35
+    width: 5.0
+  strategy_fit_weights:
+    iv_fit: 0.2
+    liquidity: 0.2
+    structural_target_fit: 0.2
+    dte_fit: 0.15
+    greek_profile: 0.15
+    event_risk: 0.1
+  iv_regime_bonus: 20.0
+  structural_target_penalty: 20.0
+  event_risk_penalty: 30.0
+  event_risk_policy: SCORE_PENALTY
+portfolio_risk:
+  per_trade:
+    max_risk_pct_equity: 1.0
+  daily:
+    max_loss_pct_equity: 2.0
+    max_loss_dollars: 2000.0
+  buying_power:
+    min_remaining_pct: 10.0
+  concentration:
+    max_symbol_pct: 15.0
+    max_sector_pct: 30.0
+  greek_limits:
+    max_abs_delta: 2000.0
+    max_abs_gamma: 500.0
+    max_abs_vega: 1000.0
+    max_negative_theta: -500.0
+  correlation_groups:
+    semiconductor:
+    - NVDA
+    - AMD
+    - SMH
+    - SOXL
+    broad_index:
+    - SPY
+    - QQQ
+    - TQQQ
+    - SPX
+    - ES
+  hedge_policy:
+    allowance_enabled: false
+  correlation:
+    policy: FLAG_ONLY

@@ -45,7 +45,7 @@ cd web && npm test
 ### 3. Launching Local Development Servers
 ```bash
 # Backend FastAPI Server (Port 8510)
-.venv\Scripts\python.exe -m uvicorn qx.interfaces.web:create_app --factory --host 127.0.0.1 --port 8510
+.venv\Scripts\python.exe -m uvicorn qx.interfaces.web:app --host 127.0.0.1 --port 8510
 
 # Frontend React Dashboard (Port 5174)
 cd web && npm run dev

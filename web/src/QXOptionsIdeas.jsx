@@ -34,6 +34,7 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
   }, []);
 
   const getScoreColor = (score) => {
+    if (!Number.isFinite(score)) return 'var(--qx-text-muted)';
     if (score >= 90) return 'var(--qx-positive)';
     if (score >= 75) return 'var(--qx-accent)';
     if (score >= 60) return 'var(--qx-warning)';
@@ -97,7 +98,7 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
               </span>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '6px' }}>
                 <span style={{ fontSize: '11px', background: 'var(--qx-bg-button)', color: 'var(--qx-positive)', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid var(--qx-border)' }}>
-                  📊 EQUITY PRICE PROVENANCE: Verified Schwab Bar Engine (Live Session)
+                  EQUITY PRICE PROVENANCE: Source-backed API response when provided
                 </span>
                 <span style={{ fontSize: '11px', background: 'var(--qx-bg-button)', color: 'var(--qx-warning)', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid var(--qx-border)' }}>
                   🧪 OPTION CONTRACT & GREEKS PROVENANCE: Modeled / Simulated (Non-Executable)
@@ -131,9 +132,9 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
 
       {/* Top Banner Metric Highlights */}
       {(() => {
-        const topValuePick = ideas.find(i => i.symbol === 'NVDA') || ideas[0];
-        const cheapestIvPick = ideas.find(i => i.symbol === 'AAPL') || ideas[1];
-        const topCreditPick = ideas.find(i => i.symbol === 'TSLA') || ideas[3];
+        const topValuePick = ideas.find(i => i.symbol === 'NVDA') || ideas[0] || null;
+        const cheapestIvPick = ideas.find(i => i.symbol === 'AAPL') || ideas[1] || null;
+        const topCreditPick = ideas.find(i => i.symbol === 'TSLA') || ideas[3] || null;
 
         return (
           <div style={{
@@ -145,30 +146,30 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
             <div style={{ background: 'var(--qx-bg-button)', border: '1px solid var(--qx-border)', borderRadius: '10px', padding: '14px' }}>
               <div style={{ fontSize: '11px', color: 'var(--qx-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🏆 Top Value LEAP Call Pick</div>
               <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--qx-positive)', marginTop: '2px' }}>
-                {topValuePick?.contract || 'NVDA 2027-09-17 Call'}
+                {display(topValuePick?.contract)}
               </div>
               <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '2px' }}>
-                Value Score: <strong style={{ color: 'var(--qx-positive)' }}>{topValuePick?.value_for_money_score || 96}/100</strong> · Saved <strong style={{ color: 'var(--qx-accent)' }}>{topValuePick?.capital_saved_pct || 72.6}% Capital</strong> vs Stock
+                Value Score: <strong style={{ color: 'var(--qx-positive)' }}>{score(topValuePick?.value_for_money_score)}</strong> · Saved <strong style={{ color: 'var(--qx-accent)' }}>{percentage(topValuePick?.capital_saved_pct)} Capital</strong> vs Stock
               </div>
             </div>
 
             <div style={{ background: 'var(--qx-bg-button)', border: '1px solid var(--qx-border)', borderRadius: '10px', padding: '14px' }}>
               <div style={{ fontSize: '11px', color: 'var(--qx-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>⚡ Cheapest Implied Volatility (IV)</div>
               <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--qx-accent)', marginTop: '2px' }}>
-                {cheapestIvPick ? `${cheapestIvPick.symbol} (IV ${Math.round(cheapestIvPick.iv * 100)}% vs RV ${Math.round(cheapestIvPick.rv * 100)}%)` : 'AAPL (IV 21% vs RV 18%)'}
+                {cheapestIvPick ? `${display(cheapestIvPick.symbol)} (IV ${percentage(fractionToPercent(cheapestIvPick.iv))} vs RV ${percentage(fractionToPercent(cheapestIvPick.rv))})` : 'UNAVAILABLE'}
               </div>
               <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '2px' }}>
-                Classification: <strong style={{ color: 'var(--qx-positive)' }}>{cheapestIvPick?.vol_classification || 'CHEAP'} IV</strong> · Ideal for PMCC LEAP Calls
+                Classification: <strong style={{ color: 'var(--qx-positive)' }}>{display(cheapestIvPick?.vol_classification)}</strong>
               </div>
             </div>
 
             <div style={{ background: 'var(--qx-bg-button)', border: '1px solid var(--qx-border)', borderRadius: '10px', padding: '14px' }}>
               <div style={{ fontSize: '11px', color: 'var(--qx-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>💳 Top High-IV Income Credit Spread</div>
               <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--qx-warning)', marginTop: '2px' }}>
-                {topCreditPick?.contract || 'TSLA Put Spread'}
+                {display(topCreditPick?.contract)}
               </div>
               <div style={{ fontSize: '12px', color: 'var(--qx-text-primary)', marginTop: '2px' }}>
-                Net Credit: <strong style={{ color: 'var(--qx-positive)' }}>${Math.abs(topCreditPick?.option_price ? topCreditPick.option_price * 100 : 320).toFixed(2)}</strong> · Win Prob: <strong style={{ color: 'var(--qx-accent)' }}>78%</strong>
+                Net Credit: <strong style={{ color: 'var(--qx-positive)' }}>{contractValue(topCreditPick?.option_price)}</strong> · Win Prob: <strong style={{ color: 'var(--qx-accent)' }}>{percentage(topCreditPick?.win_probability)}</strong>
               </div>
             </div>
           </div>
@@ -234,7 +235,7 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
                       <span style={{ fontSize: '18px', fontWeight: '800', color: 'var(--qx-text-heading)' }}>{item.symbol}</span>
                       <span style={{ fontSize: '12px', color: 'var(--qx-text-secondary)' }}>{item.name}</span>
                       <span style={{ fontSize: '11px', background: 'var(--qx-bg-surface)', color: 'var(--qx-positive)', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid var(--qx-border)' }}>
-                        ${(Number(item.price) || 0).toFixed(2)}
+                        {money(item.price)}
                       </span>
                     </div>
                     <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--qx-accent)', marginTop: '6px' }}>
@@ -331,7 +332,7 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
                       <span style={{ fontSize: '18px', fontWeight: '800', color: 'var(--qx-text-heading)' }}>{item.symbol}</span>
                       <span style={{ fontSize: '12px', color: 'var(--qx-text-secondary)' }}>{item.name}</span>
                       <span style={{ fontSize: '11px', background: 'var(--qx-bg-surface)', color: 'var(--qx-negative)', padding: '2px 8px', borderRadius: '4px', fontWeight: '700', border: '1px solid var(--qx-border)' }}>
-                        ${(Number(item.price) || 0).toFixed(2)}
+                        {money(item.price)}
                       </span>
                     </div>
                     <div style={{ fontSize: '13px', fontWeight: '700', color: 'var(--qx-warning)', marginTop: '6px' }}>
@@ -479,4 +480,28 @@ export default function QXOptionsIdeas({ onSelectSymbol }) {
       )}
     </div>
   );
+}
+
+function display(value) {
+  return value == null || value === '' ? 'UNAVAILABLE' : String(value);
+}
+
+function score(value) {
+  return Number.isFinite(value) ? `${value}/100` : 'UNAVAILABLE';
+}
+
+function percentage(value) {
+  return Number.isFinite(value) ? `${value}%` : 'UNAVAILABLE';
+}
+
+function fractionToPercent(value) {
+  return Number.isFinite(value) ? Math.round(value * 100) : null;
+}
+
+function money(value) {
+  return Number.isFinite(value) ? `$${value.toFixed(2)}` : 'UNAVAILABLE';
+}
+
+function contractValue(value) {
+  return Number.isFinite(value) ? `$${Math.abs(value * 100).toFixed(2)}` : 'UNAVAILABLE';
 }

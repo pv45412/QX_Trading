@@ -1,0 +1,44 @@
+[
+    {
+        "timeframe":  "5m",
+        "lifecycle":  "WATCH",
+        "horizon":  "DAY",
+        "htf":  "1h",
+        "htfAvailable":  true,
+        "htfSource":  "schwab:30m-\u003e1h",
+        "htfReason":  null,
+        "macro":  "1d",
+        "macroAvailable":  true,
+        "macroSource":  "schwab",
+        "macroReason":  null,
+        "bars":  true
+    },
+    {
+        "timeframe":  "1h",
+        "lifecycle":  "NO_SETUP",
+        "horizon":  "SWING",
+        "htf":  "1d",
+        "htfAvailable":  true,
+        "htfSource":  "schwab",
+        "htfReason":  null,
+        "macro":  "1w",
+        "macroAvailable":  true,
+        "macroSource":  "schwab:1d-\u003e1w",
+        "macroReason":  null,
+        "bars":  true
+    },
+    {
+        "timeframe":  "1d",
+        "lifecycle":  "NO_SETUP",
+        "horizon":  "INVEST",
+        "htf":  "1w",
+        "htfAvailable":  true,
+        "htfSource":  "schwab:1d-\u003e1w",
+        "htfReason":  null,
+        "macro":  "1w",
+        "macroAvailable":  true,
+        "macroSource":  "schwab:1d-\u003e1w",
+        "macroReason":  null,
+        "bars":  true
+    }
+]

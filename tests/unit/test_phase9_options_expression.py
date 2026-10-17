@@ -133,6 +133,9 @@ def make_options_context(
         underlying_symbol="NVDA",
         underlying_price=100.0,
         data_as_of="2026-09-15T10:00:00Z",
+        source="TEST",
+        freshness="FRESH",
+        sync_status="SYNCED",
         chain=chain,
         iv_rank=iv_rank,
     )

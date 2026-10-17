@@ -1,0 +1,116 @@
+{
+  "midpoint": "2025-10-28",
+  "trades": 6044,
+  "summary": {
+    "ALL (base)|H1 (in-sample)": {
+      "n": 3202,
+      "mean_r": -0.1916,
+      "median_r": -0.9759,
+      "sd": 3.5659,
+      "t_stat": -3.041,
+      "win_rate": 0.3314,
+      "profit_factor": 0.846,
+      "final_r": -613.5,
+      "p05_mae": -4.056
+    },
+    "ALL (base)|H2 (out-of-sample)": {
+      "n": 2842,
+      "mean_r": -0.0786,
+      "median_r": -0.8326,
+      "sd": 3.2989,
+      "t_stat": -1.27,
+      "win_rate": 0.3624,
+      "profit_factor": 0.931,
+      "final_r": -223.4,
+      "p05_mae": -3.84
+    },
+    "Momo+Trend aligned|H1 (in-sample)": {
+      "n": 1476,
+      "mean_r": -0.0602,
+      "median_r": -0.8144,
+      "sd": 3.174,
+      "t_stat": -0.729,
+      "win_rate": 0.3665,
+      "profit_factor": 0.948,
+      "final_r": -88.8,
+      "p05_mae": -3.977
+    },
+    "Momo+Trend aligned|H2 (out-of-sample)": {
+      "n": 1778,
+      "mean_r": -0.0806,
+      "median_r": -0.8778,
+      "sd": 3.5008,
+      "t_stat": -0.971,
+      "win_rate": 0.3571,
+      "profit_factor": 0.932,
+      "final_r": -143.3,
+      "p05_mae": -4.068
+    },
+    "Boyd phase 3|H1 (in-sample)": {
+      "n": 1350,
+      "mean_r": 0.2444,
+      "median_r": -0.8144,
+      "sd": 3.8758,
+      "t_stat": 2.317,
+      "win_rate": 0.3674,
+      "profit_factor": 1.212,
+      "final_r": 329.9,
+      "p05_mae": -3.79
+    },
+    "Boyd phase 3|H2 (out-of-sample)": {
+      "n": 1528,
+      "mean_r": 0.3552,
+      "median_r": -0.6036,
+      "sd": 3.7109,
+      "t_stat": 3.742,
+      "win_rate": 0.4195,
+      "profit_factor": 1.33,
+      "final_r": 542.7,
+      "p05_mae": -3.939
+    },
+    "Boyd phase 4 (pullback)|H1 (in-sample)": {
+      "n": 57,
+      "mean_r": -0.069,
+      "median_r": -0.5779,
+      "sd": 1.9255,
+      "t_stat": -0.27,
+      "win_rate": 0.4035,
+      "profit_factor": 0.906,
+      "final_r": -3.9,
+      "p05_mae": -3.681
+    },
+    "Boyd phase 4 (pullback)|H2 (out-of-sample)": {
+      "n": 75,
+      "mean_r": 0.7683,
+      "median_r": -0.3963,
+      "sd": 3.7067,
+      "t_stat": 1.795,
+      "win_rate": 0.4,
+      "profit_factor": 2.2,
+      "final_r": 57.6,
+      "p05_mae": -3.009
+    },
+    "phase 3 OR 4|H1 (in-sample)": {
+      "n": 1407,
+      "mean_r": 0.2317,
+      "median_r": -0.7946,
+      "sd": 3.8163,
+      "t_stat": 2.277,
+      "win_rate": 0.3689,
+      "profit_factor": 1.204,
+      "final_r": 326.0,
+      "p05_mae": -3.765
+    },
+    "phase 3 OR 4|H2 (out-of-sample)": {
+      "n": 1603,
+      "mean_r": 0.3745,
+      "median_r": -0.59,
+      "sd": 3.7105,
+      "t_stat": 4.041,
+      "win_rate": 0.4186,
+      "profit_factor": 1.355,
+      "final_r": 600.4,
+      "p05_mae": -3.862
+    }
+  }
+}

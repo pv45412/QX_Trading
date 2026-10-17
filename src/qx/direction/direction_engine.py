@@ -81,16 +81,25 @@ def compute_structure_factor(
 
     state_str = None
     if structure_result is not None:
-        if hasattr(structure_result, "state"):
+        if hasattr(structure_result, "regime"):
+            s_val = getattr(structure_result, "regime")
+            state_str = s_val.value if hasattr(s_val, "value") else str(s_val)
+        elif hasattr(structure_result, "state"):
             s_val = getattr(structure_result, "state")
             state_str = s_val.value if hasattr(s_val, "value") else str(s_val)
         elif isinstance(structure_result, dict):
-            state_str = str(structure_result.get("state", "NEUTRAL"))
+            state_val = structure_result.get("regime", structure_result.get("state"))
+            if state_val is not None:
+                state_str = state_val.value if hasattr(state_val, "value") else str(state_val)
         if hasattr(structure_result, "last_event_type"):
             last_event_type = getattr(structure_result, "last_event_type")
+        elif hasattr(structure_result, "latest_event"):
+            latest_event = getattr(structure_result, "latest_event")
+            if latest_event is not None:
+                last_event_type = getattr(latest_event, "event_type", last_event_type)
         if hasattr(structure_result, "age_bars"):
             age_bars = getattr(structure_result, "age_bars")
-    elif structure_state is not None:
+    if state_str is None and structure_state is not None:
         state_str = str(structure_state)
 
     state_str = (state_str or "NEUTRAL").upper()
@@ -510,8 +519,8 @@ def compute_higher_timeframe_factor(
     configured_weight: float = 0.10,
     config: Optional[DirectionEngineConfig] = None,
 ) -> DirectionFactor:
-    """Computes Higher Timeframe Factor from confirmed HTF market structure only."""
-    if htf_structure_state is None:
+    state_str = str(htf_structure_state).upper() if htf_structure_state is not None else None
+    if state_str is None or state_str in ("UNKNOWN", "UNAVAILABLE", "NONE", ""):
         return DirectionFactor(
             factor_id="higher_timeframe",
             factor_name="Higher Timeframe Structure",
@@ -527,8 +536,6 @@ def compute_higher_timeframe_factor(
             freshness_status=FreshnessStatus.UNAVAILABLE.value,
             detail="Higher timeframe structure unavailable",
         )
-
-    state_str = str(htf_structure_state).upper()
 
     if state_str == "BULLISH":
         raw_score = 100.0

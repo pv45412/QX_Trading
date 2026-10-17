@@ -3,6 +3,7 @@
 from typing import List, Optional, Tuple
 
 from qx.options_expression.models import OptionContract, StrategyType
+from qx.options_expression.greeks import is_greek_available
 
 
 def calculate_fill_prices(
@@ -114,20 +115,72 @@ def calculate_combined_greeks(
     Returns: (delta, gamma, theta, vega)
     Values are multiplied by contract_multiplier.
     """
-    c_delta, c_gamma, c_theta, c_vega = 0.0, 0.0, 0.0, 0.0
-    
-    for leg, qty in zip(legs, leg_quantities):
-        if leg.greeks.delta is None:
-            return None, None, None, None
-            
-        mult = leg.contract_multiplier * qty
-        c_delta += leg.greeks.delta * mult
-        
-        if leg.greeks.gamma is not None:
-            c_gamma += leg.greeks.gamma * mult
-        if leg.greeks.theta is not None:
-            c_theta += leg.greeks.theta * mult
-        if leg.greeks.vega is not None:
-            c_vega += leg.greeks.vega * mult
-            
-    return c_delta, c_gamma, c_theta, c_vega
+    values, _, _, _, _ = calculate_combined_greek_evidence(legs, leg_quantities)
+    return tuple(values[name] for name in ("delta", "gamma", "theta", "vega"))
+
+
+def calculate_combined_greek_evidence(
+    legs: List[OptionContract], leg_quantities: List[int]
+) -> tuple[
+    dict[str, Optional[float]],
+    dict[str, str],
+    dict[str, float],
+    dict[str, str],
+    dict[str, dict[str, object]],
+]:
+    names = ("delta", "gamma", "theta", "vega")
+    totals = {name: 0.0 for name in names}
+    available_counts = {name: 0 for name in names}
+    provenances: dict[str, set[str]] = {name: set() for name in names}
+    leg_metadata: dict[str, list[dict[str, object]]] = {name: [] for name in names}
+    leg_count = len(legs)
+
+    for leg, quantity in zip(legs, leg_quantities):
+        multiplier = leg.contract_multiplier * quantity
+        for name in names:
+            value = getattr(leg.greeks, name)
+            metadata = {
+                "pricing_model": leg.greeks.pricing_model,
+                "risk_free_rate": leg.greeks.risk_free_rate,
+                "dividend_yield": leg.greeks.dividend_yield,
+                "volatility_input": leg.greeks.volatility_input,
+                "calculation_timestamp": leg.greeks.calculation_timestamp,
+                "broker_source": leg.greeks.broker_source,
+                "quote_timestamp": leg.greeks.quote_timestamp,
+            }
+            if not is_greek_available(
+                value,
+                leg.greeks.provenance,
+                metadata,
+            ):
+                continue
+            totals[name] += value * multiplier
+            available_counts[name] += 1
+            provenances[name].add(str(leg.greeks.provenance.value))
+            leg_metadata[name].append(metadata)
+
+    values: dict[str, Optional[float]] = {}
+    availability: dict[str, str] = {}
+    coverage: dict[str, float] = {}
+    provenance: dict[str, str] = {}
+    combined_metadata: dict[str, dict[str, object]] = {}
+    for name in names:
+        complete = leg_count > 0 and available_counts[name] == leg_count
+        values[name] = totals[name] if complete else None
+        availability[name] = "AVAILABLE" if complete else "UNAVAILABLE"
+        coverage[name] = available_counts[name] / leg_count if leg_count else 0.0
+        sources = provenances[name]
+        provenance[name] = (
+            next(iter(sources))
+            if complete and len(sources) == 1
+            else "MIXED"
+            if complete and sources
+            else "UNAVAILABLE"
+        )
+        combined_metadata[name] = {
+            "combined": True,
+            "all_legs_available": complete,
+            "source_metadata_valid": complete,
+            "leg_metadata": leg_metadata[name],
+        }
+    return values, availability, coverage, provenance, combined_metadata

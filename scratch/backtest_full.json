@@ -1,0 +1,412 @@
+{
+  "universe": {
+    "scanned": 1544,
+    "loaded": 1196,
+    "excluded_total": 348,
+    "excluded_by_reason": {
+      "insufficient history (<176 bars)": 41,
+      "missing dates (point-in-time unprovable)": 243,
+      "no cached file": 3,
+      "suspected unadjusted split (102% single-bar move on 2024-12-05)": 1,
+      "suspected unadjusted split (139% single-bar move on 2025-05-29)": 1,
+      "suspected unadjusted split (150% single-bar move on 2025-03-24)": 1,
+      "suspected unadjusted split (154% single-bar move on 2025-10-15)": 1,
+      "suspected unadjusted split (156% single-bar move on 2025-06-24)": 1,
+      "suspected unadjusted split (177% single-bar move on 2026-08-19)": 1,
+      "suspected unadjusted split (1775% single-bar move on 2025-02-12)": 1,
+      "suspected unadjusted split (238% single-bar move on 2026-02-11)": 1,
+      "suspected unadjusted split (24900% single-bar move on 2025-08-29)": 1,
+      "suspected unadjusted split (305% single-bar move on 2024-06-25)": 1,
+      "suspected unadjusted split (3733% single-bar move on 2025-12-24)": 1,
+      "suspected unadjusted split (45% single-bar move on 2025-05-09)": 1,
+      "suspected unadjusted split (45% single-bar move on 2025-12-10)": 1,
+      "suspected unadjusted split (45% single-bar move on 2026-03-10)": 1,
+      "suspected unadjusted split (46% single-bar move on 2024-11-07)": 1,
+      "suspected unadjusted split (46% single-bar move on 2025-08-05)": 1,
+      "suspected unadjusted split (46% single-bar move on 2025-08-06)": 1,
+      "suspected unadjusted split (46% single-bar move on 2025-09-29)": 1,
+      "suspected unadjusted split (47% single-bar move on 2024-08-08)": 1,
+      "suspected unadjusted split (47% single-bar move on 2025-08-06)": 1,
+      "suspected unadjusted split (47% single-bar move on 2026-02-04)": 1,
+      "suspected unadjusted split (47% single-bar move on 2026-03-12)": 1,
+      "suspected unadjusted split (48% single-bar move on 2024-08-09)": 1,
+      "suspected unadjusted split (48% single-bar move on 2026-05-13)": 1,
+      "suspected unadjusted split (49% single-bar move on 2024-08-13)": 1,
+      "suspected unadjusted split (49% single-bar move on 2025-10-29)": 1,
+      "suspected unadjusted split (49% single-bar move on 2026-02-04)": 1,
+      "suspected unadjusted split (50% single-bar move on 2024-12-23)": 1,
+      "suspected unadjusted split (50% single-bar move on 2025-09-09)": 1,
+      "suspected unadjusted split (50% single-bar move on 2026-05-06)": 1,
+      "suspected unadjusted split (53% single-bar move on 2025-04-02)": 1,
+      "suspected unadjusted split (54% single-bar move on 2025-10-29)": 1,
+      "suspected unadjusted split (54% single-bar move on 2025-11-25)": 1,
+      "suspected unadjusted split (55% single-bar move on 2025-04-07)": 1,
+      "suspected unadjusted split (55% single-bar move on 2025-04-09)": 1,
+      "suspected unadjusted split (55% single-bar move on 2026-05-01)": 1,
+      "suspected unadjusted split (56% single-bar move on 2024-12-31)": 1,
+      "suspected unadjusted split (56% single-bar move on 2026-02-10)": 1,
+      "suspected unadjusted split (56% single-bar move on 2026-03-26)": 1,
+      "suspected unadjusted split (60% single-bar move on 2025-06-23)": 1,
+      "suspected unadjusted split (63% single-bar move on 2025-03-28)": 1,
+      "suspected unadjusted split (63% single-bar move on 2025-05-30)": 1,
+      "suspected unadjusted split (63% single-bar move on 2025-06-13)": 1,
+      "suspected unadjusted split (63% single-bar move on 2026-05-05)": 1,
+      "suspected unadjusted split (67% single-bar move on 2024-12-30)": 1,
+      "suspected unadjusted split (68% single-bar move on 2025-12-11)": 1,
+      "suspected unadjusted split (70% single-bar move on 2025-08-26)": 1,
+      "suspected unadjusted split (74% single-bar move on 2024-12-18)": 2,
+      "suspected unadjusted split (74% single-bar move on 2025-12-02)": 1,
+      "suspected unadjusted split (76% single-bar move on 2026-04-24)": 1,
+      "suspected unadjusted split (83% single-bar move on 2025-01-02)": 1,
+      "suspected unadjusted split (86% single-bar move on 2024-09-11)": 1,
+      "suspected unadjusted split (89% single-bar move on 2025-09-11)": 1,
+      "suspected unadjusted split (89% single-bar move on 2026-05-04)": 1,
+      "suspected unadjusted split (900% single-bar move on 2024-07-02)": 1,
+      "suspected unadjusted split (900% single-bar move on 2026-03-17)": 1,
+      "suspected unadjusted split (92% single-bar move on 2025-09-29)": 1,
+      "suspected unadjusted split (93% single-bar move on 2026-05-06)": 1,
+      "suspected unadjusted split (98% single-bar move on 2025-04-02)": 1,
+      "suspected unadjusted split (9900% single-bar move on 2024-12-27)": 1
+    },
+    "excluded_examples": {
+      "insufficient history (<176 bars)": [
+        "AAC",
+        "ARIA",
+        "BEBE",
+        "BID",
+        "BREW",
+        "BRKL",
+        "CBK",
+        "CCXI"
+      ],
+      "missing dates (point-in-time unprovable)": [
+        "AAOI",
+        "AAON",
+        "AAT",
+        "ABCB",
+        "ABEO",
+        "ABG",
+        "ABM",
+        "ACAD"
+      ],
+      "no cached file": [
+        "AFMD",
+        "BFIN",
+        "LANC"
+      ],
+      "suspected unadjusted split (102% single-bar move on 2024-12-05)": [
+        "RKDA"
+      ],
+      "suspected unadjusted split (139% single-bar move on 2025-05-29)": [
+        "HBIO"
+      ],
+      "suspected unadjusted split (150% single-bar move on 2025-03-24)": [
+        "VIVO"
+      ],
+      "suspected unadjusted split (154% single-bar move on 2025-10-15)": [
+        "OMER"
+      ],
+      "suspected unadjusted split (156% single-bar move on 2025-06-24)": [
+        "NKTR"
+      ],
+      "suspected unadjusted split (177% single-bar move on 2026-08-19)": [
+        "MRNA"
+      ],
+      "suspected unadjusted split (1775% single-bar move on 2025-02-12)": [
+        "SRNE"
+      ],
+      "suspected unadjusted split (238% single-bar move on 2026-02-11)": [
+        "NCI"
+      ],
+      "suspected unadjusted split (24900% single-bar move on 2025-08-29)": [
+        "TRVN"
+      ],
+      "suspected unadjusted split (305% single-bar move on 2024-06-25)": [
+        "RGS"
+      ],
+      "suspected unadjusted split (3733% single-bar move on 2025-12-24)": [
+        "TTOO"
+      ],
+      "suspected unadjusted split (45% single-bar move on 2025-05-09)": [
+        "GOGO"
+      ],
+      "suspected unadjusted split (45% single-bar move on 2025-12-10)": [
+        "PLAB"
+      ],
+      "suspected unadjusted split (45% single-bar move on 2026-03-10)": [
+        "MGNX"
+      ],
+      "suspected unadjusted split (46% single-bar move on 2024-11-07)": [
+        "APP"
+      ],
+      "suspected unadjusted split (46% single-bar move on 2025-08-05)": [
+        "STAA"
+      ],
+      "suspected unadjusted split (46% single-bar move on 2025-08-06)": [
+        "EHTH"
+      ],
+      "suspected unadjusted split (46% single-bar move on 2025-09-29)": [
+        "SCOR"
+      ],
+      "suspected unadjusted split (47% single-bar move on 2024-08-08)": [
+        "EBS"
+      ],
+      "suspected unadjusted split (47% single-bar move on 2025-08-06)": [
+        "MYGN"
+      ],
+      "suspected unadjusted split (47% single-bar move on 2026-02-04)": [
+        "EGHT"
+      ],
+      "suspected unadjusted split (47% single-bar move on 2026-03-12)": [
+        "TLYS"
+      ],
+      "suspected unadjusted split (48% single-bar move on 2024-08-09)": [
+        "PCRX"
+      ],
+      "suspected unadjusted split (48% single-bar move on 2026-05-13)": [
+        "MEI"
+      ],
+      "suspected unadjusted split (49% single-bar move on 2024-08-13)": [
+        "LWAY"
+      ],
+      "suspected unadjusted split (49% single-bar move on 2025-10-29)": [
+        "VRNS"
+      ],
+      "suspected unadjusted split (49% single-bar move on 2026-02-04)": [
+        "SLAB"
+      ],
+      "suspected unadjusted split (50% single-bar move on 2024-12-23)": [
+        "SIR"
+      ],
+      "suspected unadjusted split (50% single-bar move on 2025-09-09)": [
+        "NBIS"
+      ],
+      "suspected unadjusted split (50% single-bar move on 2026-05-06)": [
+        "PRIM"
+      ],
+      "suspected unadjusted split (53% single-bar move on 2025-04-02)": [
+        "TTEC"
+      ],
+      "suspected unadjusted split (54% single-bar move on 2025-10-29)": [
+        "LRN"
+      ],
+      "suspected unadjusted split (54% single-bar move on 2025-11-25)": [
+        "RUBI"
+      ],
+      "suspected unadjusted split (55% single-bar move on 2025-04-07)": [
+        "RJET"
+      ],
+      "suspected unadjusted split (55% single-bar move on 2025-04-09)": [
+        "SOXL"
+      ],
+      "suspected unadjusted split (55% single-bar move on 2026-05-01)": [
+        "ESPR"
+      ],
+      "suspected unadjusted split (56% single-bar move on 2024-12-31)": [
+        "SGMO"
+      ],
+      "suspected unadjusted split (56% single-bar move on 2026-02-10)": [
+        "FGL"
+      ],
+      "suspected unadjusted split (56% single-bar move on 2026-03-26)": [
+        "NDLS"
+      ],
+      "suspected unadjusted split (60% single-bar move on 2025-06-23)": [
+        "GEOS"
+      ],
+      "suspected unadjusted split (63% single-bar move on 2025-03-28)": [
+        "LXRX"
+      ],
+      "suspected unadjusted split (63% single-bar move on 2025-05-30)": [
+        "RRGB"
+      ],
+      "suspected unadjusted split (63% single-bar move on 2025-06-13)": [
+        "ICON"
+      ],
+      "suspected unadjusted split (63% single-bar move on 2026-05-05)": [
+        "EVER"
+      ],
+      "suspected unadjusted split (67% single-bar move on 2024-12-30)": [
+        "VHC"
+      ],
+      "suspected unadjusted split (68% single-bar move on 2025-12-11)": [
+        "PETS"
+      ],
+      "suspected unadjusted split (70% single-bar move on 2025-08-26)": [
+        "ECHO"
+      ],
+      "suspected unadjusted split (74% single-bar move on 2024-12-18)": [
+        "^VIX",
+        "_VIX"
+      ],
+      "suspected unadjusted split (74% single-bar move on 2025-12-02)": [
+        "SEAC"
+      ],
+      "suspected unadjusted split (76% single-bar move on 2026-04-24)": [
+        "MXL"
+      ],
+      "suspected unadjusted split (83% single-bar move on 2025-01-02)": [
+        "TXMD"
+      ],
+      "suspected unadjusted split (86% single-bar move on 2024-09-11)": [
+        "PLCE"
+      ],
+      "suspected unadjusted split (89% single-bar move on 2025-09-11)": [
+        "VNCE"
+      ],
+      "suspected unadjusted split (89% single-bar move on 2026-05-04)": [
+        "PN"
+      ],
+      "suspected unadjusted split (900% single-bar move on 2024-07-02)": [
+        "KS"
+      ],
+      "suspected unadjusted split (900% single-bar move on 2026-03-17)": [
+        "EGRX"
+      ],
+      "suspected unadjusted split (92% single-bar move on 2025-09-29)": [
+        "ENTA"
+      ],
+      "suspected unadjusted split (93% single-bar move on 2026-05-06)": [
+        "EVC"
+      ],
+      "suspected unadjusted split (98% single-bar move on 2025-04-02)": [
+        "SPWH"
+      ],
+      "suspected unadjusted split (9900% single-bar move on 2024-12-27)": [
+        "HALL"
+      ]
+    },
+    "note": "Every exclusion is counted. A universe you cannot audit is not evidence."
+  },
+  "study": {
+    "exit_policy": "STUDY_EXIT",
+    "symbols": 1196,
+    "symbols_traded": 1192,
+    "trade_count": 6044,
+    "cost_bps_per_side": 2.0,
+    "realized_r": {
+      "mean": -0.125,
+      "net_mean": -0.138,
+      "median": -0.896,
+      "p10": -2.919,
+      "p25": -2.005,
+      "p75": 0.837,
+      "p90": 3.579,
+      "best": 66.479,
+      "worst": -12.428,
+      "note": "This is what the trades ACTUALLY resolved to. The app displays R:R 2.0 as a constant because the study never targets it."
+    },
+    "win_rate": 0.346,
+    "expectancy_r": -0.138,
+    "profit_factor": 0.884,
+    "gross_win_r": 6363.634,
+    "gross_loss_r": 7200.586,
+    "mae": {
+      "mean": -1.843,
+      "median": -1.714,
+      "p10": -3.324,
+      "p05": -3.936,
+      "worst": -14.827,
+      "pct_beyond_1r": 0.731,
+      "pct_beyond_2r": 0.4022,
+      "note": "How far trades moved AGAINST the position before the exit fired, in R. If a large share exceed 1R, the displayed ATR stop would have been hit \u2014 and the study does not exit there."
+    },
+    "mfe": {
+      "mean": 2.816,
+      "median": 1.558,
+      "p90": 6.756,
+      "note": "Best favourable excursion before exit \u2014 the headroom that existed."
+    },
+    "drawdown": {
+      "max_drawdown_r": -1637.709,
+      "final_r": -836.952,
+      "trades_in_curve": 6044
+    },
+    "exit_reasons": {
+      "STUDY_EXIT": 5727,
+      "END_OF_DATA": 317
+    },
+    "bars_held": {
+      "mean": 20.039,
+      "median": 17.0,
+      "max": 133
+    },
+    "errors": 0,
+    "generated_at": "2026-10-13T15:06:18.076579+00:00"
+  },
+  "stopped": {
+    "exit_policy": "STOP_HIT",
+    "symbols": 1196,
+    "symbols_traded": 1192,
+    "trade_count": 11605,
+    "cost_bps_per_side": 2.0,
+    "realized_r": {
+      "mean": -0.152,
+      "net_mean": -0.165,
+      "median": -1.0,
+      "p10": -1.195,
+      "p25": -1.0,
+      "p75": -0.045,
+      "p90": 1.94,
+      "best": 66.479,
+      "worst": -13.372,
+      "note": "This is what the trades ACTUALLY resolved to. The app displays R:R 2.0 as a constant because the study never targets it."
+    },
+    "win_rate": 0.2423,
+    "expectancy_r": -0.165,
+    "profit_factor": 0.793,
+    "gross_win_r": 7350.675,
+    "gross_loss_r": 9270.507,
+    "mae": {
+      "mean": -0.714,
+      "median": -0.699,
+      "p10": -1.082,
+      "p05": -1.452,
+      "worst": -5.317,
+      "pct_beyond_1r": 0.1214,
+      "pct_beyond_2r": 0.0217,
+      "note": "How far trades moved AGAINST the position before the exit fired, in R. If a large share exceed 1R, the displayed ATR stop would have been hit \u2014 and the study does not exit there."
+    },
+    "mfe": {
+      "mean": 1.871,
+      "median": 0.83,
+      "p90": 4.71,
+      "note": "Best favourable excursion before exit \u2014 the headroom that existed."
+    },
+    "drawdown": {
+      "max_drawdown_r": -2754.996,
+      "final_r": -1919.832,
+      "trades_in_curve": 11605
+    },
+    "exit_reasons": {
+      "STUDY_EXIT": 3563,
+      "STOP_GAPPED": 1820,
+      "STOP_HIT": 5914,
+      "END_OF_DATA": 308
+    },
+    "bars_held": {
+      "mean": 9.837,
+      "median": 4.0,
+      "max": 133
+    },
+    "errors": 0,
+    "generated_at": "2026-10-13T15:07:03.157828+00:00"
+  },
+  "comparison": {
+    "study_exit_net_mean_r": -0.138,
+    "stop_enforced_net_mean_r": -0.165,
+    "study_exit_p05_mae": -3.936,
+    "stop_enforced_p05_mae": -1.452,
+    "verdict": "NO_MATERIAL_DIFFERENCE",
+    "note": "Both variants share identical entries; only the exit differs. This is the direct test of whether enforcing the displayed ATR stop would improve or damage the system."
+  },
+  "baseline": {
+    "symbols": 1196,
+    "mean_return": 0.4083,
+    "median_return": 0.1809,
+    "pct_positive": 0.6463,
+    "best": 46.016,
+    "worst": -0.8663,
+    "note": "Equal-weight buy-and-hold over the identical window, with the same per-side friction. A strategy that cannot beat this has not earned its complexity."
+  }
+}

@@ -44,6 +44,33 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
         # Formats: {"type": "PDL", "price": 5000.0, "id": "pdl_1"}
         liquidity_levels = []
 
+        for level in ctx.liquidity_levels:
+            role = str(getattr(level, "role", ""))
+            pool_type = str(getattr(level, "pool_type", ""))
+            level_type = {
+                "PROTECTED_HIGH": "SWING_HIGH",
+                "PROTECTED_LOW": "SWING_LOW",
+            }.get(role, pool_type)
+            if level_type not in {"SWING_HIGH", "SWING_LOW", "EQH", "EQL"}:
+                continue
+            liquidity_levels.append(
+                {
+                    "type": level_type,
+                    "price": float(level.price),
+                    "id": str(
+                        getattr(level, "pivot_id", "")
+                        or getattr(level, "pool_id", "")
+                    ),
+                    "source_pivot_ids": list(
+                        getattr(level, "source_pivot_ids", [])
+                        or [getattr(level, "pivot_id", "")]
+                    ),
+                    "knowledge_timestamp": str(
+                        getattr(level, "knowledge_timestamp", "") or ""
+                    ),
+                }
+            )
+
         if "PDH" in session_levels and session_levels["PDH"] is not None:
             liquidity_levels.append({"type": "PDH", "price": float(session_levels["PDH"]), "id": "pdh_level"})
         if "PDL" in session_levels and session_levels["PDL"] is not None:
@@ -87,6 +114,7 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
                 direction="NEUTRAL",
                 state=SignalState.NO_SETUP,
                 setup_detected=False,
+                reason_code="NO_LIQUIDITY_LEVELS",
                 publication_state=ctx.publication_state,
                 direction_score=dir_score,
                 direction_evidence_coverage=dir_cov,
@@ -118,10 +146,14 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
                             "sweep_dist_atr": sweep_dist,
                             "reclaim_condition": price >= lvl_px - 0.2 * atr,
                         }
-                        source_pivot_ids.append(lvl_id)
+                        source_pivot_ids.extend(
+                            source_id for source_id in lvl.get("source_pivot_ids", [lvl_id]) if source_id
+                        )
                 elif abs(price - lvl_px) <= max_approach_atr * atr:
                     bullish_approach = {"level": lvl, "distance_atr": abs(price - lvl_px) / atr}
-                    source_pivot_ids.append(lvl_id)
+                    source_pivot_ids.extend(
+                        source_id for source_id in lvl.get("source_pivot_ids", [lvl_id]) if source_id
+                    )
 
             # Upside liquidity (PDH, SWING_HIGH, EQH, ORB_HIGH)
             if lvl_type in ("PDH", "SWING_HIGH", "EQH", "ORB_HIGH"):
@@ -133,10 +165,14 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
                             "sweep_dist_atr": sweep_dist,
                             "reclaim_condition": price <= lvl_px + 0.2 * atr,
                         }
-                        source_pivot_ids.append(lvl_id)
+                        source_pivot_ids.extend(
+                            source_id for source_id in lvl.get("source_pivot_ids", [lvl_id]) if source_id
+                        )
                 elif abs(price - lvl_px) <= max_approach_atr * atr:
                     bearish_approach = {"level": lvl, "distance_atr": abs(price - lvl_px) / atr}
-                    source_pivot_ids.append(lvl_id)
+                    source_pivot_ids.extend(
+                        source_id for source_id in lvl.get("source_pivot_ids", [lvl_id]) if source_id
+                    )
 
         # Determine state
         if bullish_sweep or bearish_sweep:
@@ -168,6 +204,11 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
                 inval_src_id = str(lvl_info["id"])
                 target_candidates = [lvl_info["price"] - 2.0 * atr]
                 detail_msg = f"Bearish sweep of {lvl_info['type']} ({lvl_info['price']:.2f}) by {swp['sweep_dist_atr']:.2f} ATR"
+            level_knowledge_timestamp = str(
+                lvl_info.get("knowledge_timestamp")
+                or ctx.knowledge_timestamp
+                or ctx.event_timestamp
+            )
 
             rule_results.append(
                 RuleResult(
@@ -202,6 +243,11 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
             inval_src_type = ""
             inval_src_id = ""
             target_candidates = [lvl_info["price"]]
+            level_knowledge_timestamp = str(
+                lvl_info.get("knowledge_timestamp")
+                or ctx.knowledge_timestamp
+                or ctx.event_timestamp
+            )
 
             rule_results.append(
                 RuleResult(
@@ -216,7 +262,7 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
             )
         else:
             eval_state = SignalState.NO_SETUP
-            reason_code = "NO_STRUCTURAL_CONTEXT"
+            reason_code = "NO_LIQUIDITY_APPROACH_OR_SWEEP"
             pb_direction = "NEUTRAL"
             trigger_def = ""
             trigger_px = None
@@ -226,6 +272,7 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
             inval_src_type = ""
             inval_src_id = ""
             target_candidates = []
+            level_knowledge_timestamp = ctx.knowledge_timestamp or ctx.event_timestamp
 
             rule_results.append(
                 RuleResult(
@@ -258,11 +305,11 @@ class LiquiditySweepEvaluator(BasePlaybookEvaluator):
             trigger_price=trigger_px,
             trigger_source_type=trig_src_type,
             trigger_source_id=trig_src_id,
-            trigger_knowledge_timestamp=ctx.knowledge_timestamp or ctx.event_timestamp,
+            trigger_knowledge_timestamp=level_knowledge_timestamp,
             invalidation_price=inval_px,
             invalidation_source_type=inval_src_type,
             invalidation_source_id=inval_src_id,
-            invalidation_knowledge_timestamp=ctx.knowledge_timestamp or ctx.event_timestamp,
+            invalidation_knowledge_timestamp=level_knowledge_timestamp,
             structural_target_candidates=target_candidates,
             publication_state=ctx.publication_state,
             direction_score=dir_score,

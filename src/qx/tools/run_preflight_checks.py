@@ -14,10 +14,14 @@ BACKEND_URL = "http://127.0.0.1:8510"
 FRONTEND_URL = "http://127.0.0.1:5174"
 
 
-def check_url(url: str, is_json: bool = True) -> tuple[bool, Any]:
+def check_url(url: str, is_json: bool = True, method: str = "GET") -> tuple[bool, Any]:
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "QX-PreFlight-Checker/1.0"})
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "QX-PreFlight-Checker/1.0"},
+            method=method,
+        )
+        with urllib.request.urlopen(req, timeout=90) as resp:
             if resp.status != 200:
                 return False, f"HTTP {resp.status}"
             content = resp.read().decode("utf-8")
@@ -62,6 +66,73 @@ def run_preflight() -> bool:
         else:
             all_passed = False
             print(f"  [FAIL] {name:<32} -> FAIL: {res}")
+
+    canonical_checks = [("DAY", "5m"), ("SWING", "1h"), ("INVEST", "1d")]
+    for horizon, timeframe in canonical_checks:
+        ok, result = check_url(
+            f"{BACKEND_URL}/api/v2/qx/evaluate/SPY?timeframe={timeframe}",
+            method="POST",
+        )
+        bars = result.get("data_dependencies", {}).get("bars", {}) if ok else {}
+        passed = bool(
+            ok
+            and bars.get("available") is True
+            and bars.get("quality_status") in {"PASS", "PARTIAL"}
+            and result.get("publication_state") != "BLOCKED"
+        )
+        if passed:
+            print(
+                f"  [PASS] Canonical {horizon:<22} -> PASS "
+                f"(bars: {bars.get('data_as_of')})"
+            )
+        else:
+            all_passed = False
+            reason = bars.get("quality_reason_codes") or result
+            print(f"  [FAIL] Canonical {horizon:<22} -> FAIL: {reason}")
+
+    ok, research = check_url(f"{BACKEND_URL}/api/market/SPY/snapshot")
+    research_passed = bool(
+        ok
+        and research.get("status") == "SOURCE_BACKED"
+        and research.get("last_price") is not None
+        and research.get("data_as_of")
+    )
+    if research_passed:
+        print(
+            "  [PASS] Research Daily Freshness         -> PASS "
+            f"(bars: {research.get('data_as_of')})"
+        )
+    else:
+        all_passed = False
+        print(f"  [FAIL] Research Daily Freshness         -> FAIL: {research}")
+
+    ok, portfolio = check_url(f"{BACKEND_URL}/api/v2/qx/portfolio")
+    portfolio_passed = bool(
+        ok
+        and portfolio.get("status") in {"COMPLETE", "PARTIAL"}
+        and portfolio.get("read_only") is True
+        and isinstance(portfolio.get("positions"), list)
+    )
+    if portfolio_passed:
+        print(
+            "  [PASS] Read-Only Portfolio             -> PASS "
+            f"(positions: {len(portfolio.get('positions', []))})"
+        )
+    else:
+        all_passed = False
+        print(f"  [FAIL] Read-Only Portfolio             -> FAIL: {portfolio}")
+
+    ok, overview = check_url(f"{BACKEND_URL}/api/system/overview")
+    memory = next(
+        (item for item in overview.get("components", []) if item.get("name") == "process_memory"),
+        {},
+    ) if ok else {}
+    memory_passed = bool(ok and memory.get("status") == "OK")
+    if memory_passed:
+        print(f"  [PASS] Process Memory Verification      -> PASS ({memory.get('detail')})")
+    else:
+        all_passed = False
+        print(f"  [FAIL] Process Memory Verification      -> FAIL: {memory or overview}")
 
     print("---------------------------------------------------------")
     if all_passed:

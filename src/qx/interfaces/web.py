@@ -1,11 +1,13 @@
 """Read-only local dashboard API. No broker credentials or trading endpoints."""
 
 import json
-import sqlite3
+import logging
 import math
+import sqlite3
+import time
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
-from datetime import datetime, timezone, timedelta
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import PlainTextResponse
@@ -14,16 +16,24 @@ import pandas as pd
 from qx.data.cache import _read_cached_bars, _cache_symbol, CachedMarketDataProvider
 from qx.data.dashboard_refresh import DashboardRefresh, RefreshLockUnavailable
 from qx.data.stock_refresh import StockRefresh
-from qx.data.factory import build_market_data_provider, build_fallback_market_data_provider
+from qx.data.metadata import SymbolMetadataStore
+from qx.data.factory import (
+    build_canonical_account_snapshot_provider,
+    build_canonical_option_snapshot_provider,
+    build_fallback_market_data_provider,
+    build_market_data_provider,
+    build_quote_provider,
+)
+from qx.config.rules_config import RulesEngineConfig, load_rules_config
 from qx.models.market import BarDataRequest
 from qx.data.holdings import cached_top_holdings
 from qx.market.dashboard_metrics import DASHBOARD_ETFS, metrics
 from qx.market.holding_analytics import enrich_holdings
 from qx.market.stock_movers import stock_movers, UNIVERSES
 from qx.brokers.schwab.movers import fetch_top_movers
+from qx.brokers.schwab.quotes import SchwabQuoteProvider
 from qx.data.factory import _schwab_client
 from qx.config.settings import get_settings
-import time
 from pydantic import BaseModel, ConfigDict, Field
 from qx.market.ai_review import AIReviewer, ReviewUnavailable, build_rs_evidence, inspect_rs_evidence
 from qx.market.stock_evidence import (
@@ -45,9 +55,29 @@ from qx.streaming import ConnectionManager
 from qx.ops import HealthChecker, MetricsExporter, SystemHealthReport
 from qx.portfolio import evaluate_portfolio_summary, calculate_portfolio_greeks, PortfolioPosition, PortfolioSummary, PortfolioGreeks
 from qx.options_flow import analyze_option_flow, OptionFlowTrade, UnderlyingContext, MarketRegimeContext, OptionFlowAnalysis
+from qx.config.settings import get_settings
+from qx.interfaces.opportunities import (
+    OPPORTUNITY_STORE_SCHEMA_INVALID,
+    OPPORTUNITY_STORE_UNAVAILABLE,
+    create_opportunity_router,
+    create_unavailable_opportunity_router,
+)
+from qx.interfaces.qx_v2 import create_qx_v2_router, load_pipeline_bars
+from qx.opportunities.migrations import OpportunityMigrationError
+from qx.opportunities.publisher import OpportunityPublisher
+from qx.opportunities.repository import OpportunityRepository
+from qx.interfaces.schwab_system import create_schwab_system_router
+from qx.interfaces.market_quotes import create_market_quotes_router
+from qx.interfaces.system_status import create_system_status_router
+from qx.pipeline import orchestrator
+from qx.pipeline.market_data_quality import load_live_audited_bars
+from qx.pipeline.models import QXEvaluationContext, QXEvaluationResult
+from qx.pipeline.shadow_telemetry import ShadowTelemetryRepository, build_shadow_record
+from qx.pipeline.snapshot_store import CanonicalSnapshotRepository
 from qx.reports.daily_summary import generate_daily_system_summary
 
 
+logger = logging.getLogger(__name__)
 order_router_instance = OrderRouter()
 ws_manager_instance = ConnectionManager()
 health_checker_instance = HealthChecker()
@@ -118,7 +148,69 @@ def _validate_rows(rows: list[dict[str, Any]]) -> None:
                 raise ValueError("Invalid status")
 
 
-def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path = Path("data/cache/bars")) -> FastAPI:
+def _run_shadow_comparison(
+    *,
+    repository: ShadowTelemetryRepository,
+    config: RulesEngineConfig,
+    symbol: str,
+    timeframe: str,
+    evaluation_timestamp: datetime,
+    bars: Any,
+    legacy_result: Any,
+    legacy_latency_ms: float,
+    external_io_ms: float,
+    cache_hits: int,
+    cache_misses: int,
+) -> None:
+    if not config.shadow_mode.includes(symbol):
+        return
+
+    v2_result: QXEvaluationResult | None = None
+    v2_error: str | None = None
+    v2_started = time.perf_counter()
+    try:
+        context = QXEvaluationContext(
+            symbol=symbol,
+            timeframe=timeframe,
+            evaluation_timestamp=evaluation_timestamp,
+            bars=bars,
+            external_io_ms=external_io_ms,
+            cache_hits=cache_hits,
+            cache_misses=cache_misses,
+            config_version=config.version,
+            config=config,
+        )
+        v2_result = orchestrator.run_pipeline(context, config)
+    except Exception as exc:
+        v2_error = f"{type(exc).__name__}: {exc}"
+        logger.exception("Shadow v2 pipeline failed for %s", symbol)
+    v2_latency_ms = (time.perf_counter() - v2_started) * 1000.0
+
+    record = build_shadow_record(
+        symbol=symbol,
+        timeframe=timeframe,
+        evaluation_timestamp=evaluation_timestamp,
+        legacy_result=legacy_result,
+        legacy_latency_ms=legacy_latency_ms,
+        v2_result=v2_result,
+        v2_latency_ms=v2_latency_ms,
+        config_version=config.version,
+        v2_error=v2_error,
+    )
+    try:
+        repository.write(record)
+    except Exception:
+        logger.exception("Shadow telemetry write failed for %s", symbol)
+
+
+def create_app(
+    database: Path | None = None,
+    cache_dir: Path = Path("data/cache/bars"),
+    *,
+    configure_canonical_providers: bool = False,
+) -> FastAPI:
+    settings = get_settings()
+    database = Path(database) if database is not None else settings.runtime_database_path
     app = FastAPI(title="Scanner Dashboard", docs_url=None, redoc_url=None)
     app.add_middleware(
         CORSMiddleware,
@@ -129,7 +221,6 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             "http://localhost:5173",
             "http://127.0.0.1:8510",
             "http://localhost:8510",
-            "*"
         ],
         allow_credentials=True,
         allow_methods=["*"],
@@ -137,6 +228,57 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
     )
     refresh = DashboardRefresh(cache_dir, lambda: build_market_data_provider("schwab"))
     ai = AIReviewer()
+    shadow_repository = ShadowTelemetryRepository(database)
+    snapshot_repository = CanonicalSnapshotRepository(database)
+    opportunity_repository = OpportunityRepository(
+        database,
+        reconciliation_ttl=timedelta(
+            seconds=settings.opportunity_command_reconciliation_seconds
+        ),
+        initialize=False,
+    )
+    opportunity_router = create_unavailable_opportunity_router(
+        OPPORTUNITY_STORE_UNAVAILABLE
+    )
+    opportunity_publisher = None
+    if database.exists():
+        try:
+            opportunity_repository.initialize()
+        except OpportunityMigrationError as exc:
+            logger.warning("Opportunity store initialization unavailable: %s", type(exc).__name__)
+            opportunity_router = create_unavailable_opportunity_router(
+                OPPORTUNITY_STORE_SCHEMA_INVALID
+            )
+        else:
+            opportunity_router = create_opportunity_router(
+                opportunity_repository,
+                environment_id=settings.environment,
+            )
+            opportunity_publisher = OpportunityPublisher(
+                opportunity_repository,
+                environment_id=settings.environment,
+            )
+    option_snapshot_provider = (
+        build_canonical_option_snapshot_provider("schwab")
+        if configure_canonical_providers
+        else None
+    )
+    live_bar_provider = (
+        build_market_data_provider("schwab")
+        if configure_canonical_providers
+        else None
+    )
+    mover_metadata_store = SymbolMetadataStore(cache_dir.parent / "symbol_metadata.csv")
+    account_snapshot_provider = (
+        build_canonical_account_snapshot_provider("schwab", metadata_store=mover_metadata_store)
+        if configure_canonical_providers
+        else None
+    )
+    quote_provider = (
+        build_quote_provider("schwab")
+        if configure_canonical_providers
+        else None
+    )
     stock_refreshes = {key: StockRefresh(cache_dir, lambda: build_market_data_provider("schwab"), key) for key in UNIVERSES}
 
     @app.get("/api/stock-refresh/{universe}")
@@ -237,21 +379,29 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             raise HTTPException(500, f"Backtest execution failed: {exc}") from exc
 
     @app.post("/api/options-scanner/scan")
-    def run_options_scan(payload: OptionsScanRequest) -> dict[str, Any]:
+    def run_options_scan(payload: OptionsScanRequest, tasks: BackgroundTasks) -> dict[str, Any]:
         sym = payload.symbol.upper()
         signal_svc = SignalService()
         now = datetime.now(timezone.utc)
 
-        # Retrieve cached close price if available
-        cache_path = cache_dir / f"{_cache_symbol(sym)}_year.csv"
         price = 150.0
-        if cache_path.exists():
-            try:
-                bars = _read_cached_bars(cache_path)
-                if bars is not None and len(bars) > 0:
-                    price = float(bars["close"].iloc[-1])
-            except Exception:
-                pass
+        try:
+            active_cache_dir = refresh.active_cache()
+        except Exception:
+            active_cache_dir = None
+        try:
+            bars, external_io_ms, cache_hits, cache_misses = load_pipeline_bars(
+                cache_dir,
+                sym,
+                "5m",
+                now,
+                active_cache_dir,
+            )
+            if bars is not None and len(bars) > 0:
+                price = float(bars["close"].iloc[-1])
+        except Exception:
+            logger.exception("Cached bars could not be loaded for %s", sym)
+            bars, external_io_ms, cache_hits, cache_misses = None, 0.0, 0, 1
 
         quote = UnderlyingQuote(
             symbol=sym,
@@ -294,15 +444,36 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             contracts=[sample_call, sample_put],
         )
 
+        legacy_started = time.perf_counter()
         res = signal_svc.scan_ticker(
             quote=quote,
             chain=chain,
             account_equity=payload.account_equity,
         )
+        legacy_latency_ms = (time.perf_counter() - legacy_started) * 1000.0
         data = res.model_dump()
         data["publication_state"] = "SIMULATED"
         data["executable"] = False
         data["evidence_note"] = "Simulated option chain model. Live order routing requires verified provider chain."
+        try:
+            shadow_config = load_rules_config()
+            if shadow_config.shadow_mode.includes(sym):
+                tasks.add_task(
+                    _run_shadow_comparison,
+                    repository=shadow_repository,
+                    config=shadow_config,
+                    symbol=sym,
+                    timeframe="5m",
+                    evaluation_timestamp=now,
+                    bars=bars,
+                    legacy_result=res,
+                    legacy_latency_ms=legacy_latency_ms,
+                    external_io_ms=external_io_ms,
+                    cache_hits=cache_hits,
+                    cache_misses=cache_misses,
+                )
+        except Exception:
+            logger.exception("Shadow comparison setup failed for %s", sym)
         return data
 
     @app.get("/api/telemetry/signals")
@@ -315,6 +486,28 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
         sym = symbol.upper()
         clean_sym = _cache_symbol(sym)
         project_root = Path(__file__).resolve().parents[3]
+        retrieved_at = datetime.now(timezone.utc)
+        bars = None
+        source = None
+        data_as_of = None
+        freshness = "UNAVAILABLE"
+
+        if live_bar_provider is not None:
+            live_outcome = load_live_audited_bars(
+                live_bar_provider,
+                sym,
+                "1d",
+                retrieved_at,
+            )
+            if live_outcome.bars is not None:
+                bars = live_outcome.bars
+                source = live_outcome.quality_report.source_file
+                data_as_of = live_outcome.quality_report.data_as_of
+                freshness = (
+                    "FRESH"
+                    if "STALE_BARS" not in live_outcome.quality_report.reason_codes
+                    else "STALE"
+                )
         
         dirs_to_check: list[Path] = []
         try:
@@ -350,10 +543,17 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             ])
 
         cache_path = next((p for p in candidates if p.exists()), None)
-        bars = None
-        if cache_path is not None:
+        if bars is None and cache_path is not None:
             try:
                 bars = _read_cached_bars(cache_path)
+                source = bars.attrs.get("provenance", {}).get("actual_source", "cache")
+                last_index = bars.index[-1]
+                data_as_of = (
+                    last_index.isoformat()
+                    if hasattr(last_index, "isoformat")
+                    else str(last_index)
+                )
+                freshness = "UNVERIFIED"
             except Exception:
                 bars = None
 
@@ -362,27 +562,28 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             last_close = float(bars["close"].iloc[-1])
             return {
                 "symbol": sym,
-                "status": "LIVE",
+                "status": "SOURCE_BACKED",
                 "last_price": last_close,
-                "as_of": datetime.now(timezone.utc).isoformat(),
+                "as_of": data_as_of.isoformat() if isinstance(data_as_of, datetime) else data_as_of,
+                "data_as_of": data_as_of.isoformat() if isinstance(data_as_of, datetime) else data_as_of,
+                "retrieved_at": retrieved_at.isoformat(),
+                "source": source,
+                "source_class": "SOURCE_BACKED",
+                "freshness": freshness,
                 "structure": struct_res.model_dump(),
             }
 
-        # Fallback response for un-cached symbols to ensure UI renders smoothly
         return {
             "symbol": sym,
-            "status": "LIVE",
-            "last_price": 187.50,
-            "as_of": datetime.now(timezone.utc).isoformat(),
-            "structure": {
-                "current_trend": "BULLISH",
-                "structure_score": 78.5,
-                "latest_bos": "BULLISH_BOS",
-                "latest_choch": None,
-                "active_fvgs": [
-                    {"gap_type": "BULLISH_FVG", "top_price": 186.40, "bottom_price": 184.20, "bar_index": 250}
-                ]
-            }
+            "status": "UNAVAILABLE",
+            "last_price": None,
+            "as_of": None,
+            "data_as_of": None,
+            "retrieved_at": retrieved_at.isoformat(),
+            "source": None,
+            "source_class": "UNAVAILABLE",
+            "structure": None,
+            "reason_code": "SOURCE_BARS_UNAVAILABLE",
         }
 
     @app.get("/api/ai/status")
@@ -450,7 +651,12 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
         if hdr != "1" or request.headers.get("sec-fetch-site") == "cross-site":
             raise HTTPException(403, "Same-origin request required")
         try:
-            return fetch_top_movers(_schwab_client(get_settings()))
+            client = _schwab_client(get_settings())
+            return fetch_top_movers(
+                client,
+                metadata_store=mover_metadata_store,
+                benchmark_quote_provider=SchwabQuoteProvider(client),
+            )
         except Exception as exc:
             raise HTTPException(503, "Schwab movers unavailable; no fallback used") from exc
 
@@ -1085,8 +1291,23 @@ def create_app(database: Path = Path("data/scanner_history.db"), cache_dir: Path
             event_risk=request.event_risk,
         )
 
+    app.include_router(
+        create_qx_v2_router(
+            cache_dir,
+            refresh.active_cache,
+            option_snapshot_provider,
+            account_snapshot_provider,
+            snapshot_repository,
+            live_bar_provider,
+            opportunity_publisher,
+        )
+    )
+    app.include_router(opportunity_router)
+    app.include_router(create_market_quotes_router(quote_provider))
+    app.include_router(create_schwab_system_router())
+    app.include_router(create_system_status_router(database=database, cache_dir=cache_dir))
     return app
 
 
 
-app = create_app()
+app = create_app(configure_canonical_providers=True)

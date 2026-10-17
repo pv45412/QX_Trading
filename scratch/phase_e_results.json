@@ -1,0 +1,266 @@
+[
+  {
+    "finding": "E1",
+    "title": "a written file reads back intact",
+    "ok": true,
+    "detail": "{'a': 1}"
+  },
+  {
+    "finding": "E2",
+    "title": "a crashed write leaves the PREVIOUS content intact",
+    "ok": true,
+    "detail": "status=OK payload={'a': 1}"
+  },
+  {
+    "finding": "E3",
+    "title": "a crashed write leaves no temp file behind",
+    "ok": true,
+    "detail": "[]"
+  },
+  {
+    "finding": "E4",
+    "title": "a normal write leaves no temp file behind",
+    "ok": true,
+    "detail": "[]"
+  },
+  {
+    "finding": "E5",
+    "title": "the new content is what a reader sees",
+    "ok": true,
+    "detail": "{'c': 3}"
+  },
+  {
+    "finding": "E6",
+    "title": "a missing file reports MISSING",
+    "ok": true,
+    "detail": "MISSING"
+  },
+  {
+    "finding": "E7",
+    "title": "a truncated file reports CORRUPT, not MISSING",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E8",
+    "title": "the corruption carries a reason",
+    "ok": true,
+    "detail": "JSONDecodeError: Expecting value: line 1 column 12 (char 11)"
+  },
+  {
+    "finding": "E9",
+    "title": "corrupt is not confused with ok",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E10",
+    "title": "an empty file reports CORRUPT",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E11",
+    "title": "binary junk reports CORRUPT",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E12",
+    "title": "valid JSON of an unexpected shape reads OK at this layer",
+    "ok": true,
+    "detail": "OK"
+  },
+  {
+    "finding": "E13",
+    "title": "quarantine moves the file aside",
+    "ok": true,
+    "detail": "C:\\Project\\2026\\tmpf4d13dce\\orders.json.corrupt-20261013T185825Z"
+  },
+  {
+    "finding": "E14",
+    "title": "the original path is now free",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E15",
+    "title": "the quarantined file still holds the evidence",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E16",
+    "title": "quarantining a missing file is a no-op",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E17",
+    "title": "the first claim succeeds",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E18",
+    "title": "a second claim is refused",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E19",
+    "title": "state is visible while running",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E20",
+    "title": "release frees the job",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E21-0",
+    "title": "exactly one of 12 concurrent claims wins",
+    "ok": true,
+    "detail": "winners=[11]"
+  },
+  {
+    "finding": "E21-1",
+    "title": "exactly one of 12 concurrent claims wins",
+    "ok": true,
+    "detail": "winners=[11]"
+  },
+  {
+    "finding": "E21-2",
+    "title": "exactly one of 12 concurrent claims wins",
+    "ok": true,
+    "detail": "winners=[11]"
+  },
+  {
+    "finding": "E22",
+    "title": "1600 concurrent increments all land",
+    "ok": true,
+    "detail": "1600"
+  },
+  {
+    "finding": "E23",
+    "title": "no snapshot yet reports MISSING via the reader",
+    "ok": true,
+    "detail": "MISSING"
+  },
+  {
+    "finding": "E24",
+    "title": "a written snapshot reads back",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E25",
+    "title": "a corrupt snapshot is reported as CORRUPT",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E26",
+    "title": "status surfaces the corruption",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E27",
+    "title": "status does not claim a snapshot exists when corrupt",
+    "ok": true,
+    "detail": "False"
+  },
+  {
+    "finding": "E28",
+    "title": "an absent order store reports MISSING",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E29",
+    "title": "a saved order list reads back",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E30",
+    "title": "a corrupt order store is reported as CORRUPT",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E31",
+    "title": "list_orders surfaces the corruption",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E32",
+    "title": "a valid submission succeeds on a clean ledger",
+    "ok": true,
+    "detail": "{\"ok\": true, \"order\": {\"intent_id\": \"SIM-70D8E60B04\", \"request_id\": \"7269dd680ed2e5d4\", \"t"
+  },
+  {
+    "finding": "E33",
+    "title": "submission is REFUSED when the ledger is unreadable",
+    "ok": true,
+    "detail": "{\"ok\": false, \"error\": \"the simulated order ledger is unreadable, so duplicate suppression cannot be verified "
+  },
+  {
+    "finding": "E34",
+    "title": "the refusal names the store condition",
+    "ok": true,
+    "detail": "CORRUPT"
+  },
+  {
+    "finding": "E35",
+    "title": "the refusal explains why (duplicate suppression unverifiable)",
+    "ok": true,
+    "detail": "the simulated order ledger is unreadable, so duplicate suppression cannot be verified \u2014 su"
+  },
+  {
+    "finding": "E36",
+    "title": "the corrupt ledger is quarantined, not overwritten",
+    "ok": true,
+    "detail": "C:\\Project\\2026\\tmp7v29twww\\orders.json.corrupt-20261013T185827Z"
+  },
+  {
+    "finding": "E37",
+    "title": "the quarantined file still holds the original evidence",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "E38",
+    "title": "a fresh submission works once the damaged file is set aside",
+    "ok": true,
+    "detail": "{\"ok\": true, \"order\": {\"intent_id\": \"SIM-62200D4CB8\", \"request_id\": \"7269dd680ed2e5d4\", \"t"
+  },
+  {
+    "finding": "E39",
+    "title": "build_async refuses while a build is claimed",
+    "ok": true,
+    "detail": "{\"ok\": false, \"error\": \"a build is already running\", \"building\": {\"started_at\": \"t\", \"done"
+  },
+  {
+    "finding": "E40",
+    "title": "build() refuses while a build is claimed",
+    "ok": true,
+    "detail": "{\"ok\": false, \"error\": \"a build is already running\", \"building\": {\"started_at\": \"t\", \"done"
+  },
+  {
+    "finding": "E41",
+    "title": "the refusal reports the current job state",
+    "ok": true,
+    "detail": "{'started_at': 't', 'done': 0, 'total': 0, 'current': 'HELD', 'error': None, 'running': True}"
+  },
+  {
+    "finding": "E42",
+    "title": "after release the claim is free again",
+    "ok": true,
+    "detail": ""
+  }
+]

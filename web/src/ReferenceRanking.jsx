@@ -32,8 +32,9 @@ export default function ReferenceRanking({onSelect, data, error, busy, onRetry, 
  const quadrants = useMemo(() => {
   const result = { leading: [], weakening: [], lagging: [], improving: [] };
   available.forEach(r => {
-   const rs = r.rs_change || 0;
-   const days = r.days_off_high ?? 21;
+   if (!Number.isFinite(r.rs_change) || !Number.isFinite(r.days_off_high)) return;
+   const rs = r.rs_change;
+   const days = r.days_off_high;
    if (rs >= 0 && days <= 5) result.leading.push(r);
    else if (rs >= 0 && days > 5) result.weakening.push(r);
    else if (rs < 0 && days > 10) result.lagging.push(r);
@@ -169,9 +170,9 @@ export default function ReferenceRanking({onSelect, data, error, busy, onRetry, 
     <h3>21-Session Relative Strength Heatmap</h3>
     <div className="qx-heatmap-grid">
      {rows.map(r => {
-      const val = r.rs_change || 0;
-      const bg = val > 0.03 ? 'rgba(0, 230, 118, 0.25)' : val > 0 ? 'rgba(0, 230, 118, 0.12)' : val < -0.03 ? 'rgba(255, 23, 68, 0.25)' : 'rgba(255, 23, 68, 0.12)';
-      const border = val > 0 ? '#00e676' : '#ff1744';
+      const val = Number.isFinite(r.rs_change) ? r.rs_change : null;
+      const bg = val == null ? 'rgba(100, 116, 139, 0.12)' : val > 0.03 ? 'rgba(0, 230, 118, 0.25)' : val > 0 ? 'rgba(0, 230, 118, 0.12)' : val < -0.03 ? 'rgba(255, 23, 68, 0.25)' : 'rgba(255, 23, 68, 0.12)';
+      const border = val == null ? '#64748b' : val > 0 ? '#00e676' : '#ff1744';
       return (
        <div key={r.etf} className="qx-heatmap-cell" style={{ background: bg, borderColor: border }} onClick={() => onSelect(r.etf)}>
         <div className="qx-hm-symbol">{r.etf}</div>
@@ -204,11 +205,11 @@ export default function ReferenceRanking({onSelect, data, error, busy, onRetry, 
   {data&&!rows.length&&<div className="empty">No sectors match “{query}”. <button onClick={()=>setQuery('')}>Clear search</button></div>}
   
   <div className="qx-strategy-guide-box">
-   <h4><Info size={15}/> How Traders Use Sector Rotation Data</h4>
+   <h4><Info size={15}/> How To Read Sector Rotation Research</h4>
    <ul>
-    <li><strong>Leading Sector Focus:</strong> Look for long stock/option setups only in ETFs in the <em>Leading Quadrant</em> or with <em>21D High RS</em>. Outperforming sectors absorb market pullbacks significantly better.</li>
-    <li><strong>Up On Down Days (%):</strong> High percentages (&gt;60%) indicate aggressive institutional accumulation during market drops — prime candidates for trend continuation.</li>
-    <li><strong>Correction Excess Return:</strong> Sectors with positive excess returns during SPY drawdowns serve as market-defensive leaders when the index experiences volatile selling.</li>
+    <li><strong>Leading quadrant:</strong> Identifies sectors with positive relative strength near recent ratio highs; it does not publish a trade setup.</li>
+    <li><strong>Up on down days:</strong> Describes how often the ETF rose during SPY-negative sessions in the measured window.</li>
+    <li><strong>Correction excess return:</strong> Compares sector and SPY returns during the measured benchmark drawdown.</li>
    </ul>
   </div>
 

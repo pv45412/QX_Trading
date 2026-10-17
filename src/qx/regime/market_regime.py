@@ -31,12 +31,17 @@ def classify_trend_regime(
     """
     state_str = None
     if structure_result is not None:
-        if hasattr(structure_result, "state"):
+        if hasattr(structure_result, "regime"):
+            state_val = getattr(structure_result, "regime")
+            state_str = state_val.value if hasattr(state_val, "value") else str(state_val)
+        elif hasattr(structure_result, "state"):
             state_val = getattr(structure_result, "state")
             state_str = state_val.value if hasattr(state_val, "value") else str(state_val)
         elif isinstance(structure_result, dict):
-            state_str = str(structure_result.get("state", "NEUTRAL"))
-    elif structure_state is not None:
+            state_val = structure_result.get("regime", structure_result.get("state"))
+            if state_val is not None:
+                state_str = state_val.value if hasattr(state_val, "value") else str(state_val)
+    if state_str is None and structure_state is not None:
         state_str = str(structure_state)
 
     state_str = (state_str or "NEUTRAL").upper()
@@ -275,7 +280,7 @@ def evaluate_market_regime(
         config=config,
     )
 
-    now_iso = datetime.now().isoformat()
+    evaluation_iso = timestamp_str or data_as_of
 
     return MarketRegimeModel(
         trend=trend_reg,
@@ -286,8 +291,8 @@ def evaluate_market_regime(
         volatility_evidence=vol_ev,
         gamma_evidence=gamma_ev,
         session_evidence=sess_ev,
-        regime_generated_at=now_iso,
-        data_as_of=data_as_of or now_iso,
+        regime_generated_at=evaluation_iso,
+        data_as_of=data_as_of or evaluation_iso,
         config_version=rules_config.version,
         engine_version="v5.0.0",
     )

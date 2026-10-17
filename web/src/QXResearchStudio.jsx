@@ -39,13 +39,14 @@ export default function QXResearchStudio({ defaultSymbol = 'NVDA' }) {
   };
 
   const isBullish = snapshot?.structure?.current_trend === 'BULLISH';
+  const sourceBacked = snapshot?.status !== 'UNAVAILABLE' && snapshot?.source_class === 'SOURCE_BACKED';
 
   return (
     <section className="detail" id="research-studio" style={{ marginTop: '24px', marginBottom: '24px' }}>
       <div className="section-head" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
           <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'var(--qx-accent)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-            AI POSITION DECISION & STRENGTH MATRIX STUDIO
+            LEGACY / STATIC REFERENCE
           </span>
           <h2 style={{ margin: '4px 0 0 0', fontSize: '22px', color: 'var(--qx-text-heading)', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Sparkles size={22} color="var(--qx-accent)" /> AI Position Research & Decision Studio
@@ -103,7 +104,7 @@ export default function QXResearchStudio({ defaultSymbol = 'NVDA' }) {
           <div style={{ padding: '20px', color: 'var(--qx-negative)', background: 'rgba(239,68,68,0.1)', borderRadius: '8px' }}>
             {error}
           </div>
-        ) : snapshot ? (
+        ) : snapshot && sourceBacked ? (
           <div>
             {/* Top Overview Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '20px' }}>
@@ -116,20 +117,20 @@ export default function QXResearchStudio({ defaultSymbol = 'NVDA' }) {
               <div style={{ background: 'var(--qx-bg-canvas)', padding: '14px', borderRadius: '8px', border: '1px solid var(--qx-border-subtle)' }}>
                 <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', textTransform: 'uppercase' }}>Structural Trend</div>
                 <div style={{ fontSize: '20px', fontWeight: 'bold', color: isBullish ? 'var(--qx-positive)' : 'var(--qx-negative)', marginTop: '2px' }}>
-                  {snapshot.structure?.current_trend || 'NEUTRAL'}
+                  {snapshot.structure?.current_trend ?? 'UNAVAILABLE'}
                 </div>
                 <div style={{ fontSize: '12px', color: 'var(--qx-text-muted)', marginTop: '2px' }}>
-                  Structure Score: {snapshot.structure?.structure_score || 50}/100
+                  Structure Score: {snapshot.structure?.structure_score ?? 'UNAVAILABLE'}{snapshot.structure?.structure_score == null ? '' : '/100'}
                 </div>
               </div>
 
               <div style={{ background: 'var(--qx-bg-canvas)', padding: '14px', borderRadius: '8px', border: '1px solid var(--qx-border-subtle)' }}>
                 <div style={{ fontSize: '11px', color: 'var(--qx-text-muted)', textTransform: 'uppercase' }}>Fair Value Gaps (FVG)</div>
                 <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--qx-accent)', marginTop: '2px' }}>
-                  {snapshot.structure?.active_fvgs?.length || 0} Active Zones
+                  {Array.isArray(snapshot.structure?.active_fvgs) ? `${snapshot.structure.active_fvgs.length} Active Zones` : 'UNAVAILABLE'}
                 </div>
                 <div style={{ fontSize: '12px', color: 'var(--qx-text-muted)', marginTop: '2px' }}>
-                  BOS: {snapshot.structure?.latest_bos || 'None'}
+                  BOS: {snapshot.structure?.latest_bos ?? 'UNAVAILABLE'}
                 </div>
               </div>
             </div>
@@ -181,7 +182,7 @@ export default function QXResearchStudio({ defaultSymbol = 'NVDA' }) {
               padding: '18px'
             }}>
               <div style={{ fontSize: '13px', fontWeight: 'bold', color: 'var(--qx-accent)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>
-                AI POSITION DECISION MATRIX
+                LEGACY STATIC POSITION DECISION MATRIX
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '14px' }}>
@@ -211,7 +212,7 @@ export default function QXResearchStudio({ defaultSymbol = 'NVDA' }) {
               </div>
             </div>
           </div>
-        ) : null}
+        ) : snapshot ? <div role="status" style={{padding: '20px', color: 'var(--qx-text-muted)'}}>SOURCE DATA UNAVAILABLE</div> : null}
       </div>
     </section>
   );

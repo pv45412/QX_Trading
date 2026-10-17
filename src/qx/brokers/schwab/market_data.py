@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
-from typing import Any
+from datetime import UTC, datetime, timedelta
+from typing import Any, Callable
 
 import pandas as pd
 
@@ -16,8 +16,13 @@ class SchwabMarketDataProvider:
 
     provider_name = "schwab"
 
-    def __init__(self, client: SchwabApiClient) -> None:
+    def __init__(
+        self,
+        client: SchwabApiClient,
+        now_provider: Callable[[], datetime] | None = None,
+    ) -> None:
         self.client = client
+        self._now_provider = now_provider or (lambda: datetime.now(UTC))
 
     def get_daily_bars(self, request: BarDataRequest) -> pd.DataFrame:
         payload = self.client.get(
@@ -38,6 +43,11 @@ class SchwabMarketDataProvider:
         return normalize_ohlcv(_candles_frame(candles, daily=True))
 
     def get_intraday_bars(self, request: IntradayBarDataRequest) -> pd.DataFrame:
+        end = self._now_provider()
+        if end.utcoffset() is None:
+            end = end.replace(tzinfo=UTC)
+        end = end.astimezone(UTC)
+        start = end - timedelta(days=_intraday_period_days(request.period) + 4)
         payload = self.client.get(
             "/marketdata/v1/pricehistory",
             params={
@@ -46,6 +56,8 @@ class SchwabMarketDataProvider:
                 "period": _intraday_period_days(request.period),
                 "frequencyType": "minute",
                 "frequency": request.interval_minutes,
+                "startDate": int(start.timestamp() * 1000),
+                "endDate": int(end.timestamp() * 1000),
                 "needExtendedHoursData": "true" if request.include_extended_hours else "false",
                 "needPreviousClose": "false",
             },

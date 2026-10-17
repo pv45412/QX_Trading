@@ -288,6 +288,7 @@ def test_no_actual_sweep_returns_watch_or_no_setup():
     evaluator = LiquiditySweepEvaluator()
     res = evaluator.evaluate(ctx)
     assert res.state == SignalState.NO_SETUP
+    assert res.reason_code == "NO_LIQUIDITY_APPROACH_OR_SWEEP"
 
 
 def test_unrelated_old_liquidity_level_not_used():
@@ -642,4 +643,3 @@ def test_pullback_vwap_zone_trigger_and_invalidation():
     assert res.invalidation_source_type == "VWAP_BUFFER_BOUNDARY"
     assert res.invalidation_source_id == "vwap_ref"
     assert res.invalidation_price == 90.0  # 92.0 - 1.0 * 2.0
-

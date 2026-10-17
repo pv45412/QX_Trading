@@ -38,11 +38,16 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
         struct_state = "NEUTRAL"
         struct_invalidated = False
         if ctx.structure_result is not None:
-            if hasattr(ctx.structure_result, "state"):
+            if hasattr(ctx.structure_result, "regime"):
+                s_val = getattr(ctx.structure_result, "regime")
+                struct_state = s_val.value if hasattr(s_val, "value") else str(s_val)
+            elif hasattr(ctx.structure_result, "state"):
                 s_val = getattr(ctx.structure_result, "state")
                 struct_state = s_val.value if hasattr(s_val, "value") else str(s_val)
             elif isinstance(ctx.structure_result, dict):
-                struct_state = str(ctx.structure_result.get("state", "NEUTRAL"))
+                state_val = ctx.structure_result.get("regime", ctx.structure_result.get("state"))
+                if state_val is not None:
+                    struct_state = state_val.value if hasattr(state_val, "value") else str(state_val)
             if hasattr(ctx.structure_result, "invalidated"):
                 struct_invalidated = bool(getattr(ctx.structure_result, "invalidated"))
 
@@ -91,6 +96,12 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
         )
 
         if not (r1_passed and r2_passed and r3_passed):
+            if not r3_passed:
+                reason_code = "NO_STRUCTURAL_CONTEXT"
+            elif not r1_passed:
+                reason_code = "REGIME_NOT_TRENDING"
+            else:
+                reason_code = "INSUFFICIENT_EVIDENCE_COVERAGE"
             return PlaybookEvaluation(
                 playbook_id=self.playbook_id,
                 playbook_version=self.playbook_version,
@@ -99,6 +110,7 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
                 direction="NEUTRAL",
                 state=SignalState.NO_SETUP,
                 setup_detected=False,
+                reason_code=reason_code,
                 publication_state=ctx.publication_state,
                 direction_score=dir_score,
                 direction_evidence_coverage=dir_cov,
@@ -133,6 +145,7 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
                 direction="NEUTRAL",
                 state=SignalState.NO_SETUP,
                 setup_detected=False,
+                reason_code="DIRECTION_MISALIGNED",
                 publication_state=ctx.publication_state,
                 direction_score=dir_score,
                 direction_evidence_coverage=dir_cov,
@@ -152,7 +165,9 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
         for ob in ctx.order_blocks:
             ob_state = getattr(ob, "state", None) or (ob.get("state") if isinstance(ob, dict) else "CANDIDATE")
             ob_state_str = ob_state.value if hasattr(ob_state, "value") else str(ob_state)
-            ob_type = getattr(ob, "type", None) or (ob.get("type") if isinstance(ob, dict) else "")
+            ob_type = getattr(ob, "type", None) or getattr(ob, "direction", None)
+            if ob_type is None and isinstance(ob, dict):
+                ob_type = ob.get("type", ob.get("direction", ""))
             ob_type_str = ob_type.value if hasattr(ob_type, "value") else str(ob_type)
 
             # Filter non-expired and non-invalidated Order Blocks
@@ -187,6 +202,7 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
                 direction=pb_direction,
                 state=SignalState.NO_SETUP,
                 setup_detected=False,
+                reason_code="NO_RETRACEMENT_TARGET",
                 publication_state=ctx.publication_state,
                 direction_score=dir_score,
                 direction_evidence_coverage=dir_cov,
@@ -205,7 +221,9 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
 
         if valid_obs:
             for ob in valid_obs:
-                ob_id = getattr(ob, "ob_id", None) or (ob.get("ob_id") if isinstance(ob, dict) else "ob_1")
+                ob_id = getattr(ob, "ob_id", None) or getattr(ob, "order_block_id", None)
+                if ob_id is None and isinstance(ob, dict):
+                    ob_id = ob.get("ob_id", ob.get("order_block_id", "ob_1"))
                 source_ob_ids.append(str(ob_id))
                 px_prox = getattr(ob, "proximal_price", None) or (ob.get("proximal_price") if isinstance(ob, dict) else price)
                 px_dist = getattr(ob, "distal_price", None) or (ob.get("distal_price") if isinstance(ob, dict) else price)
@@ -261,7 +279,10 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
             # Deterministic trigger level: Zone proximal boundary
             primary_ob = valid_obs[0] if valid_obs else None
             if primary_ob:
-                ob_id_val = str(getattr(primary_ob, "ob_id", None) or (primary_ob.get("ob_id") if isinstance(primary_ob, dict) else "ob_1"))
+                ob_id = getattr(primary_ob, "ob_id", None) or getattr(primary_ob, "order_block_id", None)
+                if ob_id is None and isinstance(primary_ob, dict):
+                    ob_id = primary_ob.get("ob_id", primary_ob.get("order_block_id", "ob_1"))
+                ob_id_val = str(ob_id or "ob_1")
                 px_prox = float(getattr(primary_ob, "proximal_price", None) or (primary_ob.get("proximal_price") if isinstance(primary_ob, dict) else price))
                 px_dist = float(getattr(primary_ob, "distal_price", None) or (primary_ob.get("distal_price") if isinstance(primary_ob, dict) else price))
                 trig_know_ts = str(getattr(primary_ob, "candidate_available_at", None) or getattr(primary_ob, "knowledge_timestamp", None) or (primary_ob.get("candidate_available_at") if isinstance(primary_ob, dict) else None) or (primary_ob.get("knowledge_timestamp") if isinstance(primary_ob, dict) else None) or ctx.knowledge_timestamp or ctx.event_timestamp)
@@ -335,7 +356,7 @@ class TrendPullbackEvaluator(BasePlaybookEvaluator):
             )
         else:
             eval_state = SignalState.NO_SETUP
-            reason_code = "NO_STRUCTURAL_CONTEXT"
+            reason_code = "PRICE_NOT_NEAR_STRUCTURAL_TARGET"
             trigger_def = ""
             trigger_px = None
             trig_src_type = ""

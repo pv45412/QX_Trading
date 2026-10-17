@@ -122,9 +122,12 @@ class OrderBlock(BaseModel):
 
 
 class LiquidityPool(BaseModel):
+    pool_id: str = ""
     pool_type: str  # "EQH" or "EQL"
     price: float
     tolerance_pct: float = 0.075
+    source_pivot_ids: List[str] = Field(default_factory=list)
+    knowledge_timestamp: str = ""
 
 
 class StructuralPivot(BaseModel):
@@ -246,6 +249,21 @@ def find_qualified_rally_high(
     return None
 
 
+def _completion_timestamp(value: str, timeframe: str) -> str:
+    normalized = timeframe.strip().lower()
+    if not normalized.endswith("m") or not normalized[:-1].isdigit():
+        return value
+    try:
+        completed = pd.Timestamp(value.replace(" UTC", "+00:00")) + pd.Timedelta(
+            minutes=int(normalized[:-1])
+        )
+    except (TypeError, ValueError):
+        return value
+    if value.endswith(" UTC"):
+        return completed.strftime("%Y-%m-%d %H:%M UTC")
+    return str(completed)
+
+
 def detect_structural_pivots(
     bars: pd.DataFrame,
     ext_window: int = 21,
@@ -267,6 +285,7 @@ def detect_structural_pivots(
         timestamps = [str(ts) for ts in bars["timestamp"]]
     else:
         timestamps = [f"bar_{idx}" for idx in range(n)]
+    completion_timestamps = [_completion_timestamp(value, timeframe) for value in timestamps]
 
     pivots: List[StructuralPivot] = []
     eval_idx = n - 1 if evaluation_bar_index is None else evaluation_bar_index
@@ -288,8 +307,8 @@ def detect_structural_pivots(
                     pivot_type="HIGH",
                     pivot_price=round(float(h[i]), 2),
                     pivot_timestamp=timestamps[i],
-                    confirmation_timestamp=timestamps[confirm_idx],
-                    knowledge_timestamp=timestamps[confirm_idx],
+                    confirmation_timestamp=completion_timestamps[confirm_idx],
+                    knowledge_timestamp=completion_timestamps[confirm_idx],
                     classification="EXTERNAL",
                     timeframe=timeframe,
                     confirmed=True,
@@ -305,8 +324,8 @@ def detect_structural_pivots(
                     pivot_type="LOW",
                     pivot_price=round(float(l[i]), 2),
                     pivot_timestamp=timestamps[i],
-                    confirmation_timestamp=timestamps[confirm_idx],
-                    knowledge_timestamp=timestamps[confirm_idx],
+                    confirmation_timestamp=completion_timestamps[confirm_idx],
+                    knowledge_timestamp=completion_timestamps[confirm_idx],
                     classification="EXTERNAL",
                     timeframe=timeframe,
                     confirmed=True,
@@ -350,6 +369,7 @@ def extract_and_validate_order_block(
     bars: pd.DataFrame,
     atr_series: np.ndarray,
     timestamps: List[str],
+    completion_timestamps: Optional[List[str]] = None,
     symbol: str = "XLK",
     timeframe: str = "5m",
 ) -> Optional[OrderBlock]:
@@ -365,6 +385,7 @@ def extract_and_validate_order_block(
     c = bars["close"].to_numpy()
     o = bars["open"].to_numpy()
     n = len(c)
+    knowledge_timestamps = completion_timestamps or timestamps
 
     try:
         event_bar = int(evt.event_id.split("_")[2])
@@ -467,8 +488,8 @@ def extract_and_validate_order_block(
         validation_event_id=evt.event_id,
         validation_event_type=evt.event_type,
         validation_bar_index=event_bar if is_displaced else None,
-        validated_at=timestamps[event_bar] if is_displaced else None,
-        knowledge_timestamp=timestamps[event_bar] if is_displaced else cand_avail,
+        validated_at=knowledge_timestamps[event_bar] if is_displaced else None,
+        knowledge_timestamp=knowledge_timestamps[event_bar] if is_displaced else cand_avail,
         source_leg_start_pivot_id=evt.source_pivot_id,
         source_leg_end_event_id=evt.event_id,
         displacement_atr=round(displacement_atr, 2),
@@ -624,6 +645,7 @@ def analyze_smc_structure(
         timestamps = [str(ts) for ts in bars["timestamp"]]
     else:
         timestamps = [f"bar_{idx}" for idx in range(n)]
+    completion_timestamps = [_completion_timestamp(value, timeframe) for value in timestamps]
 
     ext_window = 5 if (is_fast_chart or n < 50) else 21
     pivots = detect_structural_pivots(bars, ext_window=ext_window, timeframe=timeframe, evaluation_bar_index=eval_idx)
@@ -669,7 +691,7 @@ def analyze_smc_structure(
                     pivot_id=piv.pivot_id,
                     pivot_timestamp=piv.pivot_timestamp,
                     knowledge_timestamp=piv.knowledge_timestamp,
-                    promoted_at=timestamps[i],
+                    promoted_at=completion_timestamps[i],
                     promoted_by_event_id=None,
                     timeframe=timeframe,
                     bar_index=piv.bar_index,
@@ -684,7 +706,7 @@ def analyze_smc_structure(
                     pivot_id=piv.pivot_id,
                     pivot_timestamp=piv.pivot_timestamp,
                     knowledge_timestamp=piv.knowledge_timestamp,
-                    promoted_at=timestamps[i],
+                    promoted_at=completion_timestamps[i],
                     promoted_by_event_id=None,
                     timeframe=timeframe,
                     bar_index=piv.bar_index,
@@ -722,7 +744,7 @@ def analyze_smc_structure(
                     direction="BEARISH",
                     level_broken=protected_low.price,
                     event_timestamp=timestamps[i],
-                    knowledge_timestamp=timestamps[i],
+                    knowledge_timestamp=completion_timestamps[i],
                     previous_structure_state=prev_state,
                     new_structure_state="BEARISH",
                     source_pivot_id=protected_low.pivot_id,
@@ -753,7 +775,7 @@ def analyze_smc_structure(
                         pivot_id=target_high.pivot_id,
                         pivot_timestamp=target_high.pivot_timestamp,
                         knowledge_timestamp=target_high.knowledge_timestamp,
-                        promoted_at=timestamps[i],
+                        promoted_at=completion_timestamps[i],
                         promoted_by_event_id=evt_id,
                         selection_reason="CHOCH_TRANSITION",
                         source_leg_start_pivot_id=retired_low_id,
@@ -777,7 +799,7 @@ def analyze_smc_structure(
                     direction="BULLISH",
                     level_broken=active_high.price,
                     event_timestamp=timestamps[i],
-                    knowledge_timestamp=timestamps[i],
+                    knowledge_timestamp=completion_timestamps[i],
                     previous_structure_state=prev_state,
                     new_structure_state="BULLISH",
                     source_pivot_id=active_high.pivot_id,
@@ -805,7 +827,7 @@ def analyze_smc_structure(
                         pivot_id=target_low.pivot_id,
                         pivot_timestamp=target_low.pivot_timestamp,
                         knowledge_timestamp=target_low.knowledge_timestamp,
-                        promoted_at=timestamps[i],
+                        promoted_at=completion_timestamps[i],
                         promoted_by_event_id=evt_id,
                         selection_reason="PULLBACK_BEFORE_BOS",
                         source_leg_start_pivot_id=active_high.pivot_id,
@@ -830,7 +852,7 @@ def analyze_smc_structure(
                     direction="BULLISH",
                     level_broken=protected_high.price,
                     event_timestamp=timestamps[i],
-                    knowledge_timestamp=timestamps[i],
+                    knowledge_timestamp=completion_timestamps[i],
                     previous_structure_state=prev_state,
                     new_structure_state="BULLISH",
                     source_pivot_id=protected_high.pivot_id,
@@ -861,7 +883,7 @@ def analyze_smc_structure(
                         pivot_id=target_low.pivot_id,
                         pivot_timestamp=target_low.pivot_timestamp,
                         knowledge_timestamp=target_low.knowledge_timestamp,
-                        promoted_at=timestamps[i],
+                        promoted_at=completion_timestamps[i],
                         promoted_by_event_id=evt_id,
                         selection_reason="CHOCH_TRANSITION",
                         source_leg_start_pivot_id=retired_high_id,
@@ -885,7 +907,7 @@ def analyze_smc_structure(
                     direction="BEARISH",
                     level_broken=active_low.price,
                     event_timestamp=timestamps[i],
-                    knowledge_timestamp=timestamps[i],
+                    knowledge_timestamp=completion_timestamps[i],
                     previous_structure_state=prev_state,
                     new_structure_state="BEARISH",
                     source_pivot_id=active_low.pivot_id,
@@ -913,7 +935,7 @@ def analyze_smc_structure(
                         pivot_id=target_high.pivot_id,
                         pivot_timestamp=target_high.pivot_timestamp,
                         knowledge_timestamp=target_high.knowledge_timestamp,
-                        promoted_at=timestamps[i],
+                        promoted_at=completion_timestamps[i],
                         promoted_by_event_id=evt_id,
                         selection_reason="RALLY_BEFORE_BOS",
                         source_leg_start_pivot_id=active_low.pivot_id,
@@ -938,7 +960,7 @@ def analyze_smc_structure(
                     direction="BULLISH",
                     level_broken=active_high.price,
                     event_timestamp=timestamps[i],
-                    knowledge_timestamp=timestamps[i],
+                    knowledge_timestamp=completion_timestamps[i],
                     previous_structure_state=prev_state,
                     new_structure_state="BULLISH",
                     source_pivot_id=active_high.pivot_id,
@@ -966,7 +988,7 @@ def analyze_smc_structure(
                         pivot_id=target_low.pivot_id,
                         pivot_timestamp=target_low.pivot_timestamp,
                         knowledge_timestamp=target_low.knowledge_timestamp,
-                        promoted_at=timestamps[i],
+                        promoted_at=completion_timestamps[i],
                         promoted_by_event_id=evt_id,
                         selection_reason="INITIAL_BREAK_BASE",
                         source_leg_start_pivot_id=active_high.pivot_id,
@@ -990,7 +1012,7 @@ def analyze_smc_structure(
                     direction="BEARISH",
                     level_broken=active_low.price,
                     event_timestamp=timestamps[i],
-                    knowledge_timestamp=timestamps[i],
+                    knowledge_timestamp=completion_timestamps[i],
                     previous_structure_state=prev_state,
                     new_structure_state="BEARISH",
                     source_pivot_id=active_low.pivot_id,
@@ -1018,7 +1040,7 @@ def analyze_smc_structure(
                         pivot_id=target_high.pivot_id,
                         pivot_timestamp=target_high.pivot_timestamp,
                         knowledge_timestamp=target_high.knowledge_timestamp,
-                        promoted_at=timestamps[i],
+                        promoted_at=completion_timestamps[i],
                         promoted_by_event_id=evt_id,
                         selection_reason="INITIAL_BREAK_BASE",
                         source_leg_start_pivot_id=active_low.pivot_id,
@@ -1039,6 +1061,7 @@ def analyze_smc_structure(
                 bars=bars,
                 atr_series=atr_series,
                 timestamps=timestamps,
+                completion_timestamps=completion_timestamps,
                 symbol=symbol,
                 timeframe=timeframe,
             )
@@ -1080,13 +1103,31 @@ def analyze_smc_structure(
     low_pivots = [p for p in pivots if p.pivot_type == "LOW"]
 
     if len(high_pivots) >= 2:
-        h1, h2 = high_pivots[-1].pivot_price, high_pivots[-2].pivot_price
+        latest_high, prior_high = high_pivots[-1], high_pivots[-2]
+        h1, h2 = latest_high.pivot_price, prior_high.pivot_price
         if abs(h1 - h2) / h2 <= 0.0015:
-            liquidity_pools.append(LiquidityPool(pool_type="EQH", price=round((h1 + h2) / 2, 2)))
+            liquidity_pools.append(
+                LiquidityPool(
+                    pool_id=f"EQH_{prior_high.pivot_id}_{latest_high.pivot_id}",
+                    pool_type="EQH",
+                    price=round((h1 + h2) / 2, 2),
+                    source_pivot_ids=[prior_high.pivot_id, latest_high.pivot_id],
+                    knowledge_timestamp=latest_high.knowledge_timestamp,
+                )
+            )
     if len(low_pivots) >= 2:
-        l1, l2 = low_pivots[-1].pivot_price, low_pivots[-2].pivot_price
+        latest_low, prior_low = low_pivots[-1], low_pivots[-2]
+        l1, l2 = latest_low.pivot_price, prior_low.pivot_price
         if abs(l1 - l2) / l2 <= 0.0015:
-            liquidity_pools.append(LiquidityPool(pool_type="EQL", price=round((l1 + l2) / 2, 2)))
+            liquidity_pools.append(
+                LiquidityPool(
+                    pool_id=f"EQL_{prior_low.pivot_id}_{latest_low.pivot_id}",
+                    pool_type="EQL",
+                    price=round((l1 + l2) / 2, 2),
+                    source_pivot_ids=[prior_low.pivot_id, latest_low.pivot_id],
+                    knowledge_timestamp=latest_low.knowledge_timestamp,
+                )
+            )
 
     # Structure Score Calculation
     score = 50.0

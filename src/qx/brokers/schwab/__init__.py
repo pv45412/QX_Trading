@@ -5,6 +5,7 @@ from qx.brokers.schwab.client import SchwabApiClient
 from qx.brokers.schwab.config import DEFAULT_SCHWAB_ENV_VALUES, save_schwab_env
 from qx.brokers.schwab.movers import fetch_top_movers, normalize_screeners
 from qx.brokers.schwab.options import SchwabOptionsChainProvider
+from qx.brokers.schwab.accounts import SchwabReadOnlyAccountSnapshotProvider
 from qx.brokers.schwab.quotes import SchwabQuoteProvider
 
 __all__ = [
@@ -14,6 +15,7 @@ __all__ = [
     "save_schwab_env",
     "SchwabApiClient",
     "SchwabOptionsChainProvider",
+    "SchwabReadOnlyAccountSnapshotProvider",
     "SchwabQuoteProvider",
     "SchwabTokenManager",
 ]

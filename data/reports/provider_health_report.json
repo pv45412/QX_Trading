@@ -1,0 +1,34 @@
+{
+  "report_type": "ProviderHealthInvestigationReport",
+  "generated_at": "2026-09-16T17:09:36.6458641Z",
+  "workspace_scope": "C:/Project/2026",
+  "provider": "schwab",
+  "status": "UNAUTHENTICATED",
+  "market_data_probe": "NOT_RUN_WITH_VALID_AUTH",
+  "blocking_reason": "CURRENT_WORKSPACE_HAS_NO_CONFIGURED_SCHWAB_CREDENTIAL_OR_TOKEN_SOURCE",
+  "ui_finding": {
+    "displayed_status": "NON_AUTHORITATIVE_STATIC_STATE",
+    "initial_connected_value": true,
+    "verification_endpoint": "/api/terminal/watchlist",
+    "verification_defect": "Any HTTP 200 is treated as OAuth success, while provider failures are replaced by cached benchmark closes.",
+    "preflight_defect": "The Schwab OAuth check is hardcoded as passed in the frontend."
+  },
+  "current_workspace_sources": {
+    "environment_variables": "NOT_PRESENT",
+    "local_env_file": "NOT_PRESENT",
+    "configured_token_cache": "NOT_PRESENT",
+    "database_credential_store": "NOT_FOUND_IN_CURRENT_WORKSPACE_SQLITE_SCHEMAS",
+    "encrypted_credential_store": "NOT_FOUND",
+    "legacy_provider_source": "NOT_AUTHENTICATED",
+    "watchlist_response_source": "CACHED_BENCHMARK_CLOSES"
+  },
+  "canonical_comparison": {
+    "provider_stack": "SchwabTokenManager -> SchwabApiClient -> canonical option/account adapters",
+    "requires_configured_client_credentials": true,
+    "requires_token_cache": true,
+    "authenticated_current_workspace_source_available": false
+  },
+  "human_required": true,
+  "required_decision": "Identify an approved credential/token source inside C:/Project/2026, or approve use of the existing QX OAuth setup flow in this workspace. No external project will be used.",
+  "security_note": "No external project is used or referenced. No account numbers, OAuth tokens, API secrets, refresh tokens, credential values, or token hashes are persisted in this report."
+}

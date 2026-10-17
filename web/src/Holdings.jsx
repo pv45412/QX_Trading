@@ -3,7 +3,7 @@ import {ExternalLink, RefreshCw, PieChart, TrendingUp, Info} from 'lucide-react'
 import {summarizeHoldings, strengthOrder} from './holdings-utils';
 import {formatTimestampET} from './data-utils';
 
-export default function Holdings({symbol}){
+export default function Holdings({symbol,onAvailabilityChange}){
  const [data,setData]=useState(null),[error,setError]=useState(''),[attempt,setAttempt]=useState(0);
  const [loading,setLoading]=useState(true),[refreshing,setRefreshing]=useState(false),[refreshError,setRefreshError]=useState('');
  const refreshRequest=useRef(null);
@@ -28,6 +28,9 @@ export default function Holdings({symbol}){
  },[symbol,attempt]);
 
  const currentData=data?.symbol===symbol?data:null;
+ useEffect(()=>{
+  onAvailabilityChange?.(currentData ? 'SOURCE_BACKED' : error && !loading ? 'UNAVAILABLE' : 'LOADING');
+ },[currentData,error,loading,onAvailabilityChange]);
  
  const refresh=async()=>{
   if(refreshRequest.current||loading)return;
@@ -66,8 +69,8 @@ export default function Holdings({symbol}){
  return <section className="detail" id="holdings">
   <div className="section-head">
    <div>
-    <h2>{symbol} Fund Holdings & Weight Analysis</h2>
-    <p>Top Portfolio Constituents · Weight Distribution & Single-Stock RS Contributions</p>
+    <h2>{symbol} ETF Constituents & Weight Analysis</h2>
+    <p>Fund constituents · ETF weight distribution and single-stock RS context · not broker Portfolio positions</p>
    </div>
    <div className="tools">
     <a className="reference-link" href={`https://etfdb.com/etf/${encodeURIComponent(symbol)}/#holdings`} target="_blank" rel="noreferrer">ETFdb reference <ExternalLink size={13}/></a>
@@ -77,7 +80,7 @@ export default function Holdings({symbol}){
 
   <div className="holdings-view" role="group" aria-label="Holdings view">
    <button aria-pressed={view==='strength'} onClick={()=>setView('strength')}>Relative strength</button>
-   <button aria-pressed={view==='weights'} onClick={()=>setView('weights')}>Portfolio weights</button>
+   <button aria-pressed={view==='weights'} onClick={()=>setView('weights')}>Fund weights</button>
   </div>
 
   {refreshing&&<p role="status">Refreshing fund holdings...</p>}
@@ -88,7 +91,7 @@ export default function Holdings({symbol}){
   {currentData&&<>
   {!summary?<p role="status">Holdings data is empty or inconsistent. Concentration cannot be calculated.</p>:<div className="holdings-layout">
   <div>
-   {view==='weights'?<div className="table-scroll"><table className="holdings-table"><thead><tr><th>#</th><th>Symbol</th><th>Company</th><th>% Assets</th></tr></thead><tbody>{summary.ranked.map((r,i)=><tr key={r.symbol}><td>{i+1}</td><td><b>{r.symbol}</b></td><td>{r.name || 'Name unavailable'}</td><td><span className="holding-weight"><meter min="0" max="1" value={r.weight} aria-label={`${r.symbol} portfolio weight`}/>{percentage(r.weight)}</span></td></tr>)}</tbody></table></div>:<div className="table-scroll"><table className="holdings-strength"><thead><tr><th>Holding</th><th>% Assets</th><th title="Change in stock close / SPY close over 21 sessions">RS line 21D</th><th title="Sessions when the stock outperformed SPY">RS days</th><th title="Stock-positive sessions among SPY-negative sessions">Up / Down</th></tr></thead><tbody>{strengthOrder(summary.ranked).map(r=><tr key={r.symbol}><td><b>{r.symbol}</b><small>{r.name}</small></td><td>{percentage(r.weight)}</td><td className={r.analytics?(r.analytics.rs_change>=0?'positive':'negative'):'muted'}>{r.analytics?`${r.analytics.rs_change>=0?'+':''}${percentage(r.analytics.rs_change)}`:'—'}</td><td>{r.analytics?`${r.analytics.rs_days}/21`:'—'}</td><td>{r.analytics?.up_down!=null?`${Math.round(r.analytics.up_down*100)}% (${r.analytics.up_days}/${r.analytics.down_days})`:'—'}</td></tr>)}</tbody></table></div>}
+   {view==='weights'?<div className="table-scroll"><table className="holdings-table"><thead><tr><th>#</th><th>Symbol</th><th>Company</th><th>% Assets</th></tr></thead><tbody>{summary.ranked.map((r,i)=><tr key={r.symbol}><td>{i+1}</td><td><b>{r.symbol}</b></td><td>{r.name || 'Name unavailable'}</td><td><span className="holding-weight"><meter min="0" max="1" value={r.weight} aria-label={`${r.symbol} fund weight`}/>{percentage(r.weight)}</span></td></tr>)}</tbody></table></div>:<div className="table-scroll"><table className="holdings-strength"><thead><tr><th>Holding</th><th>% Assets</th><th title="Change in stock close / SPY close over 21 sessions">RS line 21D</th><th title="Sessions when the stock outperformed SPY">RS days</th><th title="Stock-positive sessions among SPY-negative sessions">Up / Down</th></tr></thead><tbody>{strengthOrder(summary.ranked).map(r=><tr key={r.symbol}><td><b>{r.symbol}</b><small>{r.name}</small></td><td>{percentage(r.weight)}</td><td className={r.analytics?(r.analytics.rs_change>=0?'positive':'negative'):'muted'}>{r.analytics?`${r.analytics.rs_change>=0?'+':''}${percentage(r.analytics.rs_change)}`:'—'}</td><td>{r.analytics?`${r.analytics.rs_days}/21`:'—'}</td><td>{r.analytics?.up_down!=null?`${Math.round(r.analytics.up_down*100)}% (${r.analytics.up_days}/${r.analytics.down_days})`:'—'}</td></tr>)}</tbody></table></div>}
    <p className="coverage-note">Aligned price coverage: {data.analytics_coverage??0}/{summary.ranked.length}. {data.analytics_coverage>0?`Through ${summary.ranked.find(r=>r.analytics)?.analytics.as_of.slice(0,10)} · cached prices, freshness unverified.`:'Date-aligned stock caches unavailable.'}</p>
   </div>
 
@@ -115,7 +118,7 @@ export default function Holdings({symbol}){
    
    <div className="qx-holdings-strategy-note">
     <h4><Info size={12}/> ETF vs Single Stock Strategy</h4>
-    <p>When an ETF has high top-3 concentration (&gt;35%), single stock earnings or news events in the top constituent will move the entire ETF. High RS holdings make ideal single-stock long candidates.</p>
+    <p>Top-three concentration helps explain how single-stock events can influence the ETF. Relative-strength fields provide comparative research context, not a trade recommendation.</p>
    </div>
   </aside>
   </div>}
@@ -126,4 +129,3 @@ export default function Holdings({symbol}){
   </>}
  </section>;
 }
-

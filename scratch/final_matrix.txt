@@ -1,0 +1,19 @@
+﻿===== SERVICE =====
+  test_phase_a         RESULT: 20 passed, 0 failed  (failures on this run = defects still present)
+  test_phase_b         RESULT: 31 passed, 0 failed
+  test_phase_b2        RESULT: 23 passed, 0 failed
+  test_phase_b3        RESULT: 18 passed, 0 failed
+  audit_momo_trend     RESULT: 29 passed, 0 failed
+  audit_market_phases  RESULT: 31 passed, 0 failed
+  audit_master_auto    RESULT: 37 passed, 0 failed
+  audit_explorer       RESULT: 39 passed, 0 failed  (14.9s for the last explore)
+  audit_ideas          RESULT: 39 passed, 0 failed
+===== HTTP =====
+  audit_explorer_http  RESULT: 32 passed, 0 failed
+  audit_ideas_http     RESULT: 33 passed, 0 failed
+===== BROWSER =====
+  qx-explorer                RESULT: 25 passed, 0 failed
+  qx-trade-ideas             RESULT: 32 passed, 0 failed
+  qx-workspace-integration     PASS  results table populated 10 rows   PASS  side filter narrows results LONG=4 all=10 RESULT: 61 passed, 0 failed
+  qx-reports-drilldown       RESULT: 19 passed, 0 failed
+  qx-context-settings        RESULT: 20 passed, 0 failed

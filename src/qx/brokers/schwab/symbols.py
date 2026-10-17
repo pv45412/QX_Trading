@@ -31,6 +31,7 @@ def schwab_market_data_symbol(symbol: str) -> str:
     """
     normalized = symbol.strip().upper()
     return {
+        "SPX": "$SPX",
         "ES=F": "/ES",
         "NQ=F": "/NQ",
         "RTY=F": "/RTY",

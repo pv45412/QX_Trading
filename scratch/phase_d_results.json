@@ -1,0 +1,146 @@
+[
+  {
+    "finding": "D1",
+    "title": "study_exit_rule is present on the payload",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D2",
+    "title": "it names the wave centre as an exit",
+    "ok": true,
+    "detail": "MASTER AUTO exits on a signal reversal: close crosses back through the"
+  },
+  {
+    "finding": "D3",
+    "title": "it explicitly says the ATR stop is NOT the exit",
+    "ok": true,
+    "detail": "MASTER AUTO exits on a signal reversal: close crosses back through the wave centre, the in"
+  },
+  {
+    "finding": "D4",
+    "title": "invalidation_basis is REFERENCE_ONLY",
+    "ok": true,
+    "detail": "REFERENCE_ONLY"
+  },
+  {
+    "finding": "D5",
+    "title": "risk_note says the study will not exit here",
+    "ok": true,
+    "detail": "This level is a REFERENCE computed from ATR. The study will not exit here, so it"
+  },
+  {
+    "finding": "D6",
+    "title": "a payload with no level reports basis None",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D7",
+    "title": "a breached reference is detected",
+    "ok": true,
+    "detail": "{\"evaluated\": true, \"breached\": true, \"breached_on_latest_close\": true, \"closes_beyond\": 20, \"lookback\": 20, \"note\": \"20 of the last 20 completed closes are beyond the reference level\"}"
+  },
+  {
+    "finding": "D8",
+    "title": "the count of closes beyond is reported",
+    "ok": true,
+    "detail": "20"
+  },
+  {
+    "finding": "D9",
+    "title": "the breach note is human-readable",
+    "ok": true,
+    "detail": "20 of the last 20 completed closes are beyond the reference level"
+  },
+  {
+    "finding": "D10",
+    "title": "an unbreached reference reports breached False",
+    "ok": true,
+    "detail": "{\"evaluated\": true, \"breached\": false, \"breached_on_latest_close\": false, \"closes_beyond\": 0, \"lookback\": 20, \"note\": \"none of the last 20 completed closes are beyond the reference level\"}"
+  },
+  {
+    "finding": "D11",
+    "title": "no bars means the breach is NOT evaluated, not assumed",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D12",
+    "title": "all five return paths carry the risk annotation",
+    "ok": true,
+    "detail": "[]"
+  },
+  {
+    "finding": "D13",
+    "title": "MASTER AUTO still evaluates without error after the F23 change",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D14",
+    "title": "the study still exposes active_stop for display",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D15",
+    "title": "the exit branch still uses call_exit_base / put_exit_base",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D16",
+    "title": "no new exit branch compares price against active_stop",
+    "ok": true,
+    "detail": "exit region should not reference active_stop"
+  },
+  {
+    "finding": "D17",
+    "title": "live rows carry study_exit_rule",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D18",
+    "title": "live rows carry invalidation_basis",
+    "ok": true,
+    "detail": "['chase_limit', 'direction', 'eligibility', 'freshness', 'invalidation', 'invalidation_basis', 'playbook', 'reason', 'reward_risk', 'risk_note']"
+  },
+  {
+    "finding": "D19",
+    "title": "live rows carry stop_breach",
+    "ok": true,
+    "detail": "{'evaluated': False, 'breached': None, 'closes_beyond': 0, '"
+  },
+  {
+    "finding": "D20",
+    "title": "no 'Invalid.' column header remains",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D21",
+    "title": "no bare 'Invalidation' KPI label remains",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D22",
+    "title": "no 'close through X' phrasing implying enforcement remains",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D23",
+    "title": "the UI labels the level 'Ref. stop'",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "finding": "D24",
+    "title": "the UI states the level is not enforced",
+    "ok": true,
+    "detail": ""
+  }
+]

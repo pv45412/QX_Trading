@@ -53,5 +53,15 @@ data/exports/*
 *.db-wal
 data/*.db
 
+# Review / build archives. These are generated bundles, not source. Several exceed
+# GitHub's 100 MB per-file hard limit, so committing them makes `git push` fail.
+qx_full_project_review.zip
+QX_review_package.zip
+QX_code_review.zip
+qx_platform_complete_build.zip
+qx_platform_phase9_build.zip
+data/reports/*review_package.zip
+data/reports/*.zip
+
 
 
