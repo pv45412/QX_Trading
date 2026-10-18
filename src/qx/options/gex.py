@@ -14,7 +14,8 @@ class GammaExposureSnapshot:
     symbol: str
     current_price: float
     net_gamma: float
-    gamma_flip_price: float
+    gamma_flip_price: float | None
+    flip_crossed: bool
     regime: str  # 'Long Gamma (Volatility Suppressed)' vs 'Short Gamma (Volatility Accelerated)'
     expected_move_1sigma: float
     expected_move_2sigma: float
@@ -102,14 +103,32 @@ def calculate_gamma_exposure(
     put_gex_abs = float(put_df["gex"].abs().sum()) if not put_df.empty else 1.0
     cp_ratio = call_gex_total / put_gex_abs if put_gex_abs > 0 else 1.0
 
-    # Gamma Flip estimation: Find strike where cumulative gamma crosses zero
+    # Gamma Flip estimation: the strike where cumulative gamma crosses zero.
+    # A flip is only meaningful when cumulative gamma actually changes sign across
+    # the strike ladder. When dealers are net short (or long) across EVERY strike in
+    # the observed chain there is no flip. The previous argmin(|cum|) then returned
+    # the window EDGE (the strike with the least-negative running total) — a
+    # truncation artifact, e.g. a flip reported 8-33% away from spot. Report None
+    # (flip_crossed=False) instead of fabricating a level.
     strikes = np.sort(df["strike"].unique())
     gex_by_strike = df.groupby("strike")["gex"].sum().reindex(strikes, fill_value=0.0)
     cum_gex = gex_by_strike.cumsum()
-    
-    # Locate zero crossing nearest spot price
-    flip_idx = (np.abs(cum_gex.values)).argmin()
-    gamma_flip_price = float(strikes[flip_idx]) if len(strikes) > 0 else current_price
+
+    signs = np.sign(cum_gex.values)
+    crossings = np.where(np.diff(signs) != 0)[0]
+    if crossings.size > 0:
+        i = int(crossings[0])
+        y0, y1 = float(cum_gex.values[i]), float(cum_gex.values[i + 1])
+        x0, x1 = float(strikes[i]), float(strikes[i + 1])
+        if y1 != y0:
+            frac = -y0 / (y1 - y0)
+            gamma_flip_price = x0 + frac * (x1 - x0)
+        else:
+            gamma_flip_price = x0
+        flip_crossed = True
+    else:
+        gamma_flip_price = None
+        flip_crossed = False
 
     # 1-Sigma & 2-Sigma expected 1-day move calculation
     daily_vol = (volatility_annual / np.sqrt(252))
@@ -135,7 +154,8 @@ def calculate_gamma_exposure(
         symbol=symbol.upper(),
         current_price=round(current_price, 2),
         net_gamma=round(net_gamma, 2),
-        gamma_flip_price=round(gamma_flip_price, 2),
+        gamma_flip_price=round(gamma_flip_price, 2) if gamma_flip_price is not None else None,
+        flip_crossed=flip_crossed,
         regime=regime,
         expected_move_1sigma=round(expected_1sig, 2),
         expected_move_2sigma=round(expected_2sig, 2),
@@ -164,6 +184,7 @@ def _empty_gex_snapshot(symbol: str, price: float) -> GammaExposureSnapshot:
         current_price=price,
         net_gamma=0.0,
         gamma_flip_price=price,
+        flip_crossed=False,
         regime="Neutral",
         expected_move_1sigma=round(price * 0.01, 2),
         expected_move_2sigma=round(price * 0.02, 2),

@@ -15,14 +15,20 @@ function check(l, c, e = "") { if (c) { pass++; console.log(`  PASS  ${l} ${e}`)
   console.log("== context ==");
   await page.goto("http://127.0.0.1:8790/context", { waitUntil: "domcontentloaded" });
   const ready = await page.waitForFunction(() => {
-    const lv = document.querySelector("#lv"), gx = document.querySelector("#gx");
-    return lv && gx && /Price/.test(lv.textContent) && (/Net gamma/.test(gx.textContent) || /failed|error/i.test(gx.textContent));
+    const hero = document.querySelector("#herobody"), gx = document.querySelector("#gx");
+    return hero && gx && /[0-9]/.test(hero.textContent)
+      && (/Net gamma/.test(gx.textContent) || /failed|error/i.test(gx.textContent));
   }, { timeout: 300000 }).then(() => true).catch(() => false);
   check("context data loaded", ready);
 
+  const hero = await page.$eval("#herobody", (e) => e.textContent);
+  check("hero shows price + level chips", /Prior close/.test(hero) && /ATR/.test(hero));
+  // Regression: position_vs was double-multiplied (displayed -136.00% instead of
+  // -1.36%). Deltas must be single-digit percent, never a triple-digit "-NNN.%".
+  check("level deltas are honest single-digit %", /%/.test(hero) && !/-[1-9][0-9]{2}\./.test(hero), hero.match(/-\d+\.?\d*%/)?.[0] || "");
+
   const lv = await page.$eval("#lv", (e) => e.textContent);
-  check("levels show prior day + ATR", /Prior close/.test(lv) && /ATR/.test(lv));
-  check("levels show VWAP bands", /VWAP \+2/.test(lv) && /VWAP -2/.test(lv));
+  check("levels detail shows VWAP bands", /VWAP \+2/.test(lv) && /VWAP -2/.test(lv));
   // The futures panel now resolves 7 roots (index + energy + metals + crypto), so
   // wait for it to finish rather than sampling it mid-load.
   await page.waitForFunction(() => {
@@ -32,19 +38,27 @@ function check(l, c, e = "") { if (c) { pass++; console.log(`  PASS  ${l} ${e}`)
   const fut = await page.$eval("#fut", (e) => e.textContent);
   check("futures panel shows /ES and /NQ", /\/ES/.test(fut) && /\/NQ/.test(fut), fut.slice(0, 60));
   check("futures panel includes the new roots", /\/CL/.test(fut) && /\/BTC/.test(fut), fut.slice(0, 90));
+  // Regression: /YM basis used $DJX (Dow /100) -> ~9,938%. Must be $DJI, basis < 2%.
+  check("/YM uses $DJI and a sane basis", /\$DJI/.test(fut) && !/9,?93[0-9]%/.test(fut), (fut.match(/\/YM[^C]*DJI[^%]*%/) || [""])[0].slice(0, 60));
   const gx = await page.$eval("#gx", (e) => e.textContent);
   check("gamma panel shows flip + walls", /Gamma flip/.test(gx) && /Call wall/.test(gx) && /Put wall/.test(gx));
   check("gamma declares settlement provenance", /Settlement provenance/.test(gx));
+  check("expected move labeled as a model", /vol model/.test(gx));
+  // Regression: a fabricated flip must not render as a number. When flip_crossed=false
+  // the flip KPI shows "—" and a "no ... flip" note.
+  check("flip is honest (no fabricated level)", /no zero-crossing|no flip|—/.test(gx));
   const profRows = await page.$$eval("#gxprofile tbody tr", (rs) => rs.length);
   check("strike profile table rendered", profRows > 10, `${profRows} strikes`);
   const kpiCount = await page.$$eval("#gx .kpi", (ks) => ks.length);
-  check("four gamma KPIs", kpiCount === 4, `${kpiCount}`);
+  check("six gamma KPIs", kpiCount === 6, `${kpiCount}`);
+  const session = await page.$eval("#ctxsession", (e) => e.textContent.trim());
+  check("session badge populated", session !== "" && session !== "—", session);
 
-  // Switching symbol must reload.
+  // Switching symbol must reload the hero.
   await page.selectOption("#csym", "QQQ");
   await page.waitForTimeout(9000);
-  const lv2 = await page.$eval("#lv", (e) => e.textContent);
-  check("symbol switch reloads levels", /Price/.test(lv2));
+  const hero2 = await page.$eval("#herobody", (e) => e.textContent);
+  check("symbol switch reloads hero", /QQQ/.test(hero2));
 
   console.log("== settings ==");
   await page.goto("http://127.0.0.1:8790/settings", { waitUntil: "domcontentloaded" });

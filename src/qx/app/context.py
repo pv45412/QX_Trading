@@ -16,15 +16,28 @@ from qx.scanner.engine import MarketData
 FUTURES = (
     ("/ES", "E-mini S&P 500", "$SPX"),
     ("/NQ", "E-mini Nasdaq 100", "$NDX"),
-    ("/YM", "E-mini Dow", "$DJX"),
+    ("/YM", "E-mini Dow", "$DJI"),
     ("/RTY", "E-mini Russell 2000", "$RUT"),
     ("/CL", "Crude Oil", None),
     ("/GC", "Gold", None),
     ("/BTC", "Bitcoin", None),
 )
 
-# (root, label, cash proxy) — the cash proxy is what GEX can actually use.
-FUTURES_PROXIES = FUTURES
+# Chain proxy for gamma. This is DELIBERATELY SEPARATE from the cash index used
+# for futures basis, because the two have different data requirements:
+#   * basis needs a 1:1 index — /YM (~52,200) maps to $DJI (52,002), NOT $DJX.
+#     $DJX is the Dow quoted /100 (520.02), so comparing it to /YM produced a
+#     bogus ~9,938% basis.
+#   * the gamma chain proxy needs a root the options endpoint actually SERVES —
+#     $DJX has a chain; $DJI does not (KeyError on the chain payload).
+#     ( /YM's $DJX chain still reads 0 OI outside RTH, which gamma() already
+#       reports as an explicit source-data error rather than a wall profile.)
+FUTURES_PROXIES = (
+    ("/ES", "E-mini S&P 500", "$SPX"),
+    ("/NQ", "E-mini Nasdaq 100", "$NDX"),
+    ("/YM", "E-mini Dow", "$DJX"),
+    ("/RTY", "E-mini Russell 2000", "$RUT"),
+)
 
 
 def _number(value: Any, default: float = 0.0) -> float:
@@ -423,6 +436,10 @@ def gamma(symbol: str = "SPY", max_expiries: int = 2) -> dict[str, Any]:
         "net_gamma": snapshot.net_gamma,
         "regime": snapshot.regime,
         "gamma_flip_price": snapshot.gamma_flip_price,
+        "flip_crossed": snapshot.flip_crossed,
+        "flip_note": (None if snapshot.flip_crossed else
+                      "no zero-crossing in the observed chain — net gamma is one-sided "
+                      "across the traded strikes, so no flip level is computable"),
         "call_wall": snapshot.top_call_gamma_strike,
         "put_wall": snapshot.top_put_gamma_strike,
         "call_put_gamma_ratio": snapshot.call_put_gamma_ratio,

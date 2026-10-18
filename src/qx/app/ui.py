@@ -846,8 +846,12 @@ def reports_page() -> str:
 # --------------------------------------------------------------------------- #
 
 CONTEXT_BODY = """
-<div class="row" style="justify-content:space-between">
-  <h1 style="font-size:17px;margin:0">Context <span class="mut" style="font-size:12px" id="ctxstamp"></span></h1>
+<div class="row" style="justify-content:space-between;align-items:center">
+  <div class="row" style="gap:10px;align-items:center">
+    <h1 style="font-size:17px;margin:0">Context</h1>
+    <span class="chip" id="ctxsession">—</span>
+    <span class="mut" style="font-size:12px" id="ctxstamp"></span>
+  </div>
   <div class="row">
     <select id="csym">
       <optgroup label="ETF">
@@ -866,44 +870,57 @@ CONTEXT_BODY = """
   </div>
 </div>
 <div id="warn"></div>
-<div class="card"><h2>Levels <span class="mut" id="lvsrc"></span></h2><div id="lv"><span class="mut">Loading…</span></div></div>
-<div class="two">
-  <div class="card"><h2>Index futures &amp; basis</h2><div id="fut"><span class="mut">Loading…</span></div></div>
-  <div class="card"><h2>Dealer gamma (GEX) <span class="mut" id="gxmeta"></span></h2><div id="gx"><span class="mut">Loading…</span></div></div>
-</div>
+<div class="card"><div id="herobody"><span class="mut">Loading…</span></div></div>
+<div class="card"><h2>Dealer gamma (GEX) <span class="mut" id="gxmeta"></span></h2><div id="gx"><span class="mut">Loading…</span></div></div>
 <div class="card"><h2>Gamma by strike <span class="mut">net dealer gamma · calls positive · puts negative</span></h2><div id="gxprofile"><span class="mut">Loading…</span></div></div>
+<details class="card" style="cursor:pointer"><summary><b>Levels detail</b> <span class="mut" id="lvsrc"></span></summary><div id="lv" style="margin-top:8px"><span class="mut">Loading…</span></div></details>
+<details class="card" style="cursor:pointer"><summary><b>Index futures &amp; basis</b> <span class="mut">spread / arbitrage context</span></summary><div id="fut" style="margin-top:8px"><span class="mut">Loading…</span></div></details>
 <script>
 """ + HELPERS + """
 let LV=null, GX=null;
 function row(label,value,klass){return '<div class="kv" style="display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:4px 0"><span class="mut">'+esc(label)+'</span><b class="'+(klass||'')+'">'+value+'</b></div>'}
+function lvlChip(label, value, deltaPct){
+  // deltaPct is already a PERCENT number (-1.36 = -1.36%); never re-multiply.
+  const d=(deltaPct==null)?'':'<em class="'+(deltaPct>0?'up':deltaPct<0?'dn':'')+'" style="font-style:normal;font-size:10.5px">'+(deltaPct>0?'+':'')+String(deltaPct.toFixed(2))+'%</em>';
+  return '<div class="kpi" style="flex:1 1 0;min-width:110px"><span>'+esc(label)+'</span><b>'+value+'</b>'+d+'</div>';
+}
 function loadLevels(){
   const sym=$('#csym').value;
-  $('#lv').innerHTML='<span class="mut">Loading levels…</span>';
   j('/api/context/levels?symbol='+encodeURIComponent(sym)).then(function(d){
     LV=d;
-    if(d.error){$('#lv').innerHTML='<div class="banner err">'+esc(d.error)+'</div>';return}
+    if(d.error){$('#herobody').innerHTML='<div class="banner err">'+esc(d.error)+'</div>';return}
+    $('#ctxstamp').textContent='as of '+exStamp(d.as_of);
     $('#lvsrc').textContent=d.source+' · '+(d.quote_source||'')+(d.realtime?' · realtime':'')+' · '+exStamp(d.as_of);
-    const p=d.prior_day||{},t=d.today||{},b=d.vwap_bands_20d||{};
+    const p=d.prior_day||{},t=d.today||{},b=d.vwap_bands_20d||{},pv=d.position_vs||{};
+    let hero='<div class="row" style="justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap">'
+      +'<div><div class="mut" style="font-size:11px;text-transform:uppercase;letter-spacing:.06em">'+esc(d.symbol||sym)+' · live</div>'
+      +'<div class="row" style="align-items:baseline;gap:12px">'
+      +'<span style="font-size:38px;font-weight:700;line-height:1">'+num(d.price,2)+'</span>'
+      +'<span class="'+cls(d.change_pct)+'" style="font-size:15px;font-weight:600">'+pctS(d.change_pct)+' today</span>'
+      +'</div></div>'
+      +'<div class="mut" style="font-size:11px;text-align:right">20d range<br>'+num((d.range_20d||{}).low,2)+' – '+num((d.range_20d||{}).high,2)+'</div></div>';
+    hero+='<div class="row" style="margin-top:12px;gap:8px;flex-wrap:wrap">'
+      +lvlChip('Prior close',num(p.close,2),pv.vs_prior_close)
+      +lvlChip('Prior high',num(p.high,2),pv.vs_prior_high)
+      +lvlChip('Prior low',num(p.low,2),pv.vs_prior_low)
+      +lvlChip('20d VWAP',num(b.vwap,2),pv.vs_vwap)
+      +lvlChip('ATR (14)',num(d.atr_14,2),null)
+      +lvlChip('52w high',num((d.fifty_two_week||{}).high,2),null)
+      +lvlChip('52w low',num((d.fifty_two_week||{}).low,2),null)
+      +'</div>';
+    $('#herobody').innerHTML=hero;
     let h='<div class="kpis" style="margin-bottom:10px">'
-      +kpi('Price',num(d.price,2),(d.change_pct==null?'':pctS(d.change_pct))+' today',cls(d.change_pct))
-      +kpi('Prior close',num(p.close,2),'yesterday',cls(d.position_vs?d.position_vs.vs_prior_close:null))
-      +kpi('Prior high',num(p.high,2),'resistance ref')
-      +kpi('Prior low',num(p.low,2),'support ref')
-      +kpi('ATR (14)',num(d.atr_14,2),'daily range')
-      +kpi('20d VWAP',num(b.vwap,2),'anchored')+'</div>';
+      +kpi('Today open',num(t.open,2))+kpi('Today high',num(t.high,2))
+      +kpi('Today low',num(t.low,2))+kpi('Prior close',num(p.close,2))+'</div>';
     h+='<div class="two"><div>'
-      +row('Today open',num(t.open,2))+row('Today high',num(t.high,2))+row('Today low',num(t.low,2))
       +row('20-day high',num((d.range_20d||{}).high,2))+row('20-day low',num((d.range_20d||{}).low,2))
+      +row('52-week high',num((d.fifty_two_week||{}).high,2))+row('52-week low',num((d.fifty_two_week||{}).low,2))
       +'</div><div>'
       +row('VWAP +2\u03c3',num(b.upper_2,2),'up')+row('VWAP +1\u03c3',num(b.upper_1,2),'up')
       +row('VWAP -1\u03c3',num(b.lower_1,2),'dn')+row('VWAP -2\u03c3',num(b.lower_2,2),'dn')
-      +row('52-week high',num((d.fifty_two_week||{}).high,2))+row('52-week low',num((d.fifty_two_week||{}).low,2))
       +'</div></div>';
-    const pv=d.position_vs||{};
-    h+='<div class="mut" style="margin-top:9px;font-size:12px">Position vs: prior close '+pctS(pv.vs_prior_close)
-      +' · prior high '+pctS(pv.vs_prior_high)+' · prior low '+pctS(pv.vs_prior_low)+' · 20d VWAP '+pctS(pv.vs_vwap)+'</div>';
     $('#lv').innerHTML=h;
-  }).catch(function(e){$('#lv').innerHTML='<div class="banner err">'+esc(e.message)+'</div>'});
+  }).catch(function(e){$('#herobody').innerHTML='<div class="banner err">'+esc(e.message)+'</div>'});
 }
 function loadFutures(){
   $('#fut').innerHTML='<span class="mut">Loading futures…</span>';
@@ -919,6 +936,11 @@ function loadFutures(){
        {h:'Src',f:r=>'<span class="mut">'+esc(r.source||'')+'</span>'}],d.futures,'No futures data.');
   }).catch(function(e){$('#fut').innerHTML='<div class="banner err">'+esc(e.message)+'</div>'});
 }
+function wallSub(wall, spot){
+  if(wall==null||spot==null)return '';
+  const pct=(wall/spot-1)*100;
+  return (pct>0?'+':'')+pct.toFixed(2)+'% '+(pct>=0?'overhead':'below');
+}
 function loadGamma(){
   const sym=$('#csym').value;
   $('#gx').innerHTML='<span class="mut">Loading option chain…</span>';
@@ -930,17 +952,20 @@ function loadGamma(){
     $('#gxmeta').textContent=(ch.contracts||0)+' contracts · '+(ch.expiries||[]).length+' expiries · '
       +(ch.is_delayed?'DELAYED':'not delayed')+(ch.is_truncated?' · TRUNCATED':'');
     const short=d.net_gamma<0;
+    const wallNote=short?'short γ — walls accelerate':'long γ — walls pin';
+    const flip=d.flip_crossed?num(d.gamma_flip_price,2):'—';
+    const flipSub=d.flip_crossed?'regime pivot':(d.flip_note||'no flip in chain');
     let h='<div class="kpis" style="margin-bottom:10px">'
       +kpi('Net gamma',(d.net_gamma/1e9).toFixed(2)+'B',short?'dealers short gamma':'dealers long gamma',short?'dn':'up')
-      +kpi('Gamma flip',num(d.gamma_flip_price,2),'regime pivot')
-      +kpi('Call wall',num(d.call_wall,2),'resistance')
-      +kpi('Put wall',num(d.put_wall,2),'support')+'</div>';
-    h+=row('Regime',esc(d.regime),short?'dn':'up')
-      +row('Call / put gamma ratio',num(d.call_put_gamma_ratio,2))
+      +kpi('Regime',short?'SHORT γ':'LONG γ',esc(d.regime)+' · '+wallNote,short?'dn':'up')
+      +kpi('Gamma flip',flip,esc(flipSub),d.flip_crossed?'':'warn')
+      +kpi('Call wall',num(d.call_wall,2),wallSub(d.call_wall,d.spot),d.call_wall>d.spot?'up':'dn')
+      +kpi('Put wall',num(d.put_wall,2),wallSub(d.put_wall,d.spot),d.put_wall<d.spot?'up':'dn')
+      +kpi('Spot',num(d.spot,2),'chain underlying')+'</div>';
+    h+=row('Call / put gamma ratio',num(d.call_put_gamma_ratio,2))
       +row('0DTE volume share',pct(d.zero_dte_volume_ratio))
-      +row('Expected move 1\u03c3',num(d.expected_move_1sigma,2))
+      +row('Expected move 1\u03c3',num(d.expected_move_1sigma,2)+' (16% vol model)')
       +row('Expected move 2\u03c3',num(d.expected_move_2sigma,2))
-      +row('Spot',num(d.spot,2))
       +row('Settlement provenance',esc(d.settlement_source)+' / '+esc(d.settlement_confidence),
            d.settlement_confidence==='VERIFIED'?'up':'warn');
     $('#gx').innerHTML=h;
@@ -952,7 +977,7 @@ function loadGamma(){
     $('#gxprofile').innerHTML='<div class="row" style="justify-content:space-between;margin-bottom:6px">'
       +'<span class="mut" style="font-size:12px">30 strikes nearest spot of '+prof.length+' with open interest</span>'
       +'<span class="mut" style="font-size:12px">max |GEX| '+(maxAbs/1e6).toFixed(1)+'M</span></div>'
-      +'<div class="scroll" style="max-height:320px">'+table(
+      +'<div class="scroll" style="max-height:380px">'+table(
       [{h:'Strike',f:r=>'<b>'+num(r.strike,2)+'</b>'},
        {h:'Net GEX',num:1,f:r=>'<span class="'+cls(r.gex)+'">'+(r.gex/1e6).toFixed(2)+'M</span>'},
        {h:'Bar',f:r=>bar(r.gex,maxAbs)},
@@ -964,6 +989,7 @@ function loadGamma(){
 }
 function loadAll(){loadLevels();loadFutures();loadGamma()}
 $('#csym').addEventListener('change',loadAll);
+$('#ctxsession').textContent = exSession().replace('_',' ').toLowerCase();
 loadAll();
 </script>
 """
